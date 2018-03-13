@@ -220,7 +220,7 @@ def put(url, payload, auth):
 
 
 def post(url, payload, auth):
-    """Send to the SC REST API using the PUT method."""
+    """Send to the SC REST API using the POST method."""
     return send(url, payload, auth, requests.post)
 
 
