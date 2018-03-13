@@ -1,4 +1,4 @@
-#!/opt/support/bin/python3
+#!/usr/bin/env python
 
 
 """Update SteelConnect nodes within a specified Org
@@ -42,6 +42,7 @@ def main(argv):
 
 
 def update_nodes(nodes, baseurl, auth, organization, org_id, sites):
+    """Loop through nodes and push location to SCM where applicable."""
     for node in nodes:
         print('\n' + '=' * 79, '\n')
         print('Node:', node['id'], node['serial'], node['model'])
@@ -114,6 +115,7 @@ def find_nodes(baseurl, auth, organization, org_id):
 
 
 def status(category, values, suffix=''):
+    """Return status in human-readable format."""
     size = len(values)
     pluralization = '' if size == 1 else 's'
     return '* Found {0} {1}{2} {3}.'.format(
