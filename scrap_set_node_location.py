@@ -157,9 +157,9 @@ def arguments(argv):
     return parser.parse_args()
 
 
-def get_username():
+def get_username(prompt=None):
     """Get username in a Python 2/3 compatible way."""
-    prompt = 'Enter SCM username: '
+    prompt = 'Enter SCM username: ' if prompt is None else prompt
     try:
         username = raw_input(prompt)
     except NameError:
