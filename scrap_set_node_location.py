@@ -211,7 +211,14 @@ def send(url, payload, auth, method):
         print(e)
         sys.exit(1)
     else:
-        return response
+        if response.status_code == 200:
+            return response
+        else:
+            print('=' * 79, file=sys.stderr)
+            print('Access to SteelConnect Manager failed:', file=sys.stderr)
+            print(response, response.reason, file=sys.stderr)
+            print('=' * 79, file=sys.stderr)
+            sys.exit(1)
 
 
 def put(url, payload, auth):
@@ -222,7 +229,6 @@ def put(url, payload, auth):
 def post(url, payload, auth):
     """Send to the SC REST API using the POST method."""
     return send(url, payload, auth, requests.post)
-
 
 if __name__ == '__main__':
     result = main(sys.argv[1:])
