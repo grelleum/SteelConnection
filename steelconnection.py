@@ -134,21 +134,30 @@ class _SteelConnection(object):
                 verified = getpass.getpass('Retype password: ')
         return password
 
-    def __repr__(self):
-        """Return a string consisting of class name, controller, and api."""
-        details = ', '.join([
-            "controller: '{0}'".format(self.controller),
-            "api: '{0}'".format(self.api),
-            "version (api): '{0}'".format(self.version),
-            "response: '{0}'".format(self.response),
-        ])
-        return '{0}({1})'.format(self.__class__.__name__, details)
-
     def __bool__(self):
         """Return the success of the last request."""
         if self.response is None:
             return False
         return True if self.response.status_code == 200 else False
+
+    def __repr__(self):
+        """Return a string consisting of class name, controller, and api."""
+        details = ', '.join([
+            "controller: '{0}'".format(self.controller),
+            "version (api): '{0}'".format(self.version),
+            "response: '{0}'".format(self.response),
+        ])
+        return '{0}({1})'.format(self.__class__.__name__, details)
+
+    # def __repr__(self):
+    #     """Return a string consisting of class name, controller, and api."""
+    #     details = ', '.join([
+    #         "controller: '{0}'".format(self.controller),
+    #         "api: '{0}'".format(self.api),
+    #         "version (api): '{0}'".format(self.version),
+    #         "response: '{0}'".format(self.response),
+    #     ])
+    #     return '{0}({1})'.format(self.__class__.__name__, details)
 
 
 class Config(_SteelConnection):
