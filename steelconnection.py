@@ -144,20 +144,10 @@ class _SteelConnection(object):
         """Return a string consisting of class name, controller, and api."""
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
-            "version (api): '{0}'".format(self.version),
+            "api version: '{0}'".format(self.version),
             "response: '{0}'".format(self.response),
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
-
-    # def __repr__(self):
-    #     """Return a string consisting of class name, controller, and api."""
-    #     details = ', '.join([
-    #         "controller: '{0}'".format(self.controller),
-    #         "api: '{0}'".format(self.api),
-    #         "version (api): '{0}'".format(self.version),
-    #         "response: '{0}'".format(self.response),
-    #     ])
-    #     return '{0}({1})'.format(self.__class__.__name__, details)
 
 
 class Config(_SteelConnection):
