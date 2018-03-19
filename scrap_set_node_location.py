@@ -20,6 +20,7 @@ import getpass
 import json
 import requests
 import sys
+import SteelConnection
 
 
 def main(argv):
