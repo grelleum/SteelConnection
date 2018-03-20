@@ -133,23 +133,19 @@ def arguments(argv):
     )
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        'cloud_controller',
-        type=str,
+        'cloud_controller', type=str,
         help='Domain name of SteelConnect Manager',
     )
     parser.add_argument(
-        'organization',
-        type=str,
+        'organization', type=str,
         help='Name of target organization',
     )
     parser.add_argument(
-        '-u',
-        '--username',
+        '-u', '--username',
         help='Username for SteelConnect Manager: prompted if not supplied',
     )
     parser.add_argument(
-        '-p',
-        '--password',
+        '-p', '--password',
         help='Password for SteelConnect Manager: prompted if not supplied',
     )
     return parser.parse_args()
