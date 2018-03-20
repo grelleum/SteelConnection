@@ -32,8 +32,8 @@ def main(argv):
         scm, organization = organization, scm
     baseurl = 'https://' + scm + '/api/scm.config/1.0/'
 
-    username = args.username if args.username else get_username()
-    password = args.password if args.password else get_password(username)
+    username = args.username if args.username else SteelConnection.get_username()
+    password = args.password if args.password else SteelConnection.get_password(username)
     auth = (username, password)
 
     org_id = find_org(baseurl, auth, organization)
@@ -158,28 +158,28 @@ def arguments(argv):
     return parser.parse_args()
 
 
-def get_username(prompt=None):
-    """Get username in a Python 2/3 compatible way."""
-    prompt = 'Enter SCM username: ' if prompt is None else prompt
-    try:
-        username = raw_input(prompt)
-    except NameError:
-        username = input(prompt)
-    finally:
-        return username
-
-
-def get_password(username, password=None):
-    """Get password from terminal with discretion."""
-    prompt = 'Enter SCM password for {0}:'.format(username)
-    while not password:
-        verify = False
-        while password != verify:
-            if verify:
-                print('Passwords do not match. Try again', file=sys.stderr)
-            password = getpass.getpass(prompt)
-            verify = getpass.getpass('Retype password: ')
-    return password
+# def get_username(prompt=None):
+#     """Get username in a Python 2/3 compatible way."""
+#     prompt = 'Enter SCM username: ' if prompt is None else prompt
+#     try:
+#         username = raw_input(prompt)
+#     except NameError:
+#         username = input(prompt)
+#     finally:
+#         return username
+#
+#
+# def get_password(username, password=None):
+#     """Get password from terminal with discretion."""
+#     prompt = 'Enter SCM password for {0}:'.format(username)
+#     while not password:
+#         verify = False
+#         while password != verify:
+#             if verify:
+#                 print('Passwords do not match. Try again', file=sys.stderr)
+#             password = getpass.getpass(prompt)
+#             verify = getpass.getpass('Retype password: ')
+#     return password
 
 
 def get(url, auth):
