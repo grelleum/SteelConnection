@@ -158,30 +158,6 @@ def arguments(argv):
     return parser.parse_args()
 
 
-# def get_username(prompt=None):
-#     """Get username in a Python 2/3 compatible way."""
-#     prompt = 'Enter SCM username: ' if prompt is None else prompt
-#     try:
-#         username = raw_input(prompt)
-#     except NameError:
-#         username = input(prompt)
-#     finally:
-#         return username
-#
-#
-# def get_password(username, password=None):
-#     """Get password from terminal with discretion."""
-#     prompt = 'Enter SCM password for {0}:'.format(username)
-#     while not password:
-#         verify = False
-#         while password != verify:
-#             if verify:
-#                 print('Passwords do not match. Try again', file=sys.stderr)
-#             password = getpass.getpass(prompt)
-#             verify = getpass.getpass('Retype password: ')
-#     return password
-
-
 def get(url, auth):
     """Return the items request from the SC REST API."""
     try:
