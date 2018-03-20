@@ -16,9 +16,7 @@ USAGE:
 
 from __future__ import print_function
 import argparse
-import getpass
 import json
-import requests
 import sys
 import steelconnection
 
