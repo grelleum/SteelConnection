@@ -20,7 +20,7 @@ import getpass
 import json
 import requests
 import sys
-import SteelConnection
+import steelconnection
 
 
 def main(argv):
@@ -30,19 +30,18 @@ def main(argv):
     scm, organization = args.cloud_controller, args.organization
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
-    baseurl = 'https://' + scm + '/api/scm.config/1.0/'
 
-    username = args.username if args.username else SteelConnection.get_username()
-    password = args.password if args.password else SteelConnection.get_password(username)
-    auth = (username, password)
+    config = steelconnection.Config(
+        scm, username=args.username, password=args.password,
+    )
 
-    org_id = find_org(baseurl, auth, organization)
-    sites = find_sites(baseurl, auth, organization, org_id)
-    nodes = find_nodes(baseurl, auth, organization, org_id)
-    return update_nodes(nodes, baseurl, auth, organization, org_id, sites)
+    org_id = find_org(config, organization)
+    sites = find_sites(config, organization, org_id)
+    nodes = find_nodes(config, organization, org_id)
+    return update_nodes(nodes, config, organization, org_id, sites)
 
 
-def update_nodes(nodes, baseurl, auth, organization, org_id, sites):
+def update_nodes(nodes, config, organization, org_id, sites):
     """Loop through nodes and push location to SCM where applicable."""
     for node in nodes:
         print('\n' + '=' * 79, '\n')
@@ -64,16 +63,16 @@ def update_nodes(nodes, baseurl, auth, organization, org_id, sites):
             'model': node['model'],
             'location': site['name'],
         })
-        url = baseurl + 'node/' + node['id']
-        response = put(url, payload=payload, auth=auth)
+        resource = 'node/' + node['id']
+        response = config.put(resource, data=payload)
         print('Response:', response.status_code, response.reason)
         print(response.text)
 
 
-def find_org(baseurl, auth, organization):
+def find_org(config, organization):
     """Find the org id for the target organization."""
     print('\nFinding organization:')
-    orgs = get(baseurl + 'orgs', auth=auth)
+    orgs = config.get('orgs')
     org_found = [org for org in orgs if org['name'] == organization]
     if not org_found:
         org_found = [org for org in orgs if org['longname'] == organization]
@@ -88,20 +87,20 @@ def find_org(baseurl, auth, organization):
     return org_id
 
 
-def find_sites(baseurl, auth, organization, org_id):
+def find_sites(config, organization, org_id):
     """Get list of sites for specified organization."""
     print('\nGathering Sites:')
-    sites = get(baseurl + 'sites', auth=auth)
+    sites = config.get('sites')
     sites = [site for site in sites if site['org'] == org_id]
     print(status('site', sites, "in '{0}'".format(organization)))
     return sites
 
 
-def find_nodes(baseurl, auth, organization, org_id):
+def find_nodes(config, organization, org_id):
     """Get nodes that require modification."""
     print('\nGathering Nodes:')
 
-    nodes = get(baseurl + 'nodes', auth=auth)
+    nodes = config.get('nodes')
     print(status('node', nodes, 'in Total'))
 
     nodes = [node for node in nodes if node['org'] == org_id]
@@ -157,55 +156,6 @@ def arguments(argv):
     )
     return parser.parse_args()
 
-
-def get(url, auth):
-    """Return the items request from the SC REST API."""
-    try:
-        response = requests.get(url, auth=auth)
-    except requests.RequestException as e:
-        print(e)
-        sys.exit(1)
-    else:
-        if response.status_code == 200:
-            return response.json()['items']
-        else:
-            print('=' * 79, file=sys.stderr)
-            print('Access to SteelConnect Manager failed:', file=sys.stderr)
-            print(response, response.reason, file=sys.stderr)
-            print('=' * 79, file=sys.stderr)
-            sys.exit(1)
-
-
-def send(url, payload, auth, method):
-    """Send to the SC REST API using either the put or post method."""
-    headers = {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-    }
-    try:
-        response = method(url, auth=auth, headers=headers, data=payload)
-    except requests.RequestException as e:
-        print(e)
-        sys.exit(1)
-    else:
-        if response.status_code == 200:
-            return response
-        else:
-            print('=' * 79, file=sys.stderr)
-            print('Access to SteelConnect Manager failed:', file=sys.stderr)
-            print(response, response.reason, file=sys.stderr)
-            print('=' * 79, file=sys.stderr)
-            sys.exit(1)
-
-
-def put(url, payload, auth):
-    """Send to the SC REST API using the PUT method."""
-    return send(url, payload, auth, requests.put)
-
-
-def post(url, payload, auth):
-    """Send to the SC REST API using the POST method."""
-    return send(url, payload, auth, requests.post)
 
 if __name__ == '__main__':
     result = main(sys.argv[1:])
