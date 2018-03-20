@@ -54,8 +54,8 @@ class _SteelConnection(object):
         self.version = version
         self.controller = controller
         self.response = None
-        self.username = self._get_username(username)
-        self.password = self._get_password(password)
+        self.username = get_username() if username is None else username
+        self.password = get_password() if password is None else password
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
@@ -110,30 +110,6 @@ class _SteelConnection(object):
             kwargs['data'] = data
         return kwargs
 
-    def _get_username(self, username):
-        """Get username in a Python 2/3 compatible way."""
-        if username is not None:
-            return username
-        prompt = 'Enter SCM username: '
-        try:
-            username = raw_input(prompt)
-        except NameError:
-            username = input(prompt)
-        finally:
-            return username
-
-    def _get_password(self, password):
-        """Get password from terminal with discretion."""
-        prompt = 'Enter SCM password for {0}:'.format(self.username)
-        while not password:
-            verified = False
-            while password != verified:
-                if verified:
-                    print('Passwords do not match. Try again', file=sys.stderr)
-                password = getpass.getpass(prompt)
-                verified = getpass.getpass('Retype password: ')
-        return password
-
     def __bool__(self):
         """Return the success of the last request."""
         if self.response is None:
@@ -176,3 +152,27 @@ class Reporting(_SteelConnection):
             password=password,
             version=version,
         )
+
+
+def get_username(prompt=None):
+    """Get username in a Python 2/3 compatible way."""
+    prompt = 'Enter username: ' if prompt is None else prompt
+    try:
+        username = raw_input(prompt)
+    except NameError:
+        username = input(prompt)
+    finally:
+        return username
+
+
+def get_password(prompt=None, password=None):
+    """Get password from terminal with discretion."""
+    prompt = 'Enter password: ' if prompt is None else prompt
+    while not password:
+        verify = False
+        while password != verify:
+            if verify:
+                print('Passwords do not match. Try again', file=sys.stderr)
+            password = getpass.getpass(prompt)
+            verify = getpass.getpass('Retype password: ')
+    return password
