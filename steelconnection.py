@@ -44,7 +44,7 @@ class _SteelConnection(object):
             password=None,
             api=None,
             version='1.0',
-            exit_on_error = False
+            exit_on_error = False,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
@@ -146,7 +146,14 @@ class _SteelConnection(object):
 class Config(_SteelConnection):
     """Make config calls via REST API calls to Riverbed SteelConnect Manager."""
 
-    def __init__(self, controller, username=None, password=None, version='1.0'):
+    def __init__(
+        self,
+        controller,
+        username=None,
+        password=None,
+        version='1.0',
+        exit_on_error = False,
+    ):
         """Invoke parent class initialization with 'config' API."""
         super().__init__(
             controller,
@@ -160,7 +167,14 @@ class Config(_SteelConnection):
 class Reporting(_SteelConnection):
     """Get reporting via REST API calls to Riverbed SteelConnect Manager."""
 
-    def __init__(self, controller, username=None, password=None, version='1.0'):
+    def __init__(
+        self,
+        controller,
+        username=None,
+        password=None,
+        version='1.0',
+        exit_on_error = False,
+    ):
         """Invoke parent class initialization with 'reporting' API."""
         super().__init__(
             controller,
