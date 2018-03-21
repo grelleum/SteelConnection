@@ -44,6 +44,7 @@ class _SteelConnection(object):
             password=None,
             api=None,
             version='1.0',
+            exit_on_error = False
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
@@ -54,6 +55,7 @@ class _SteelConnection(object):
         self.version = version
         self.controller = controller
         self.response = None
+        self.exit_on_error = exit_on_error
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.headers = {
@@ -87,9 +89,24 @@ class _SteelConnection(object):
     def _request(self, request_method, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
         kwargs = self._request_kwargs(resource, data)
-        self.response = request_method(**kwargs)
+        try:
+            self.response = request_method(**kwargs)
+        except Exception as e:
+            if self.exit_on_error:
+                print('SteelConnect connection failed:', file=sys.stderr)
+                print(e, file=sys.stderr)
+                sys.exit(1)
+            else:
+                raise e
         if not self.response.ok:
-            self.response.raise_for_status()
+            if self.exit_on_error:
+                text = 'SteelConnect Response: <{0}> {1}'.format(
+                    response.status_code, response.reason
+                )
+                print(text, file=sys.stderr)
+                sys.exit(1)
+            else:
+                self.response.raise_for_status()
             return
         if not self.response.json():
             return self.response
