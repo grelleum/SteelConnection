@@ -29,19 +29,23 @@ def main(argv):
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
 
-    config = steelconnection.Config(
-        scm, username=args.username, password=args.password,
+    sconnect = steelconnection.Config(
+        scm,
+        username=args.username,
+        password=args.password,
+        exit_on_error = True,
     )
 
-    org_id = find_org(config, organization)
-    sites = find_sites(config, organization, org_id)
-    nodes = find_nodes(config, organization, org_id)
-    return update_nodes(nodes, config, organization, org_id, sites)
+
+    org_id = find_org(sconnect, organization)
+    sites = find_sites(sconnect, organization, org_id)
+    nodes = find_nodes(sconnect, organization, org_id)
+    return update_nodes(nodes, sconnect, organization, org_id, sites)
 
 
-def update_nodes(nodes, config, organization, org_id, sites):
+def update_nodes(nodes, sconnect, organization, org_id, sites):
     """Loop through nodes and push location to SCM where applicable."""
-    for node in nodes:
+    for node in nodes[:3]:
         print('\n' + '=' * 79, '\n')
         print('Node:', node['id'], node['serial'], node['model'])
         print('org:', node['org'], organization)
@@ -62,15 +66,16 @@ def update_nodes(nodes, config, organization, org_id, sites):
             'location': site['name'],
         })
         resource = 'node/' + node['id']
-        response = config.put(resource, data=payload)
-        print('Response:', response.status_code, response.reason)
-        print(response.text)
+        response = sconnect.put(resource, data=payload)
+        print('Response:', sconnect.response.status_code, sconnect.response.reason)
+        print()
+        print(response)
 
 
-def find_org(config, organization):
+def find_org(sconnect, organization):
     """Find the org id for the target organization."""
     print('\nFinding organization:')
-    orgs = config.get('orgs')
+    orgs = sconnect.get('orgs')
     org_found = [org for org in orgs if org['name'] == organization]
     if not org_found:
         org_found = [org for org in orgs if org['longname'] == organization]
@@ -85,20 +90,20 @@ def find_org(config, organization):
     return org_id
 
 
-def find_sites(config, organization, org_id):
+def find_sites(sconnect, organization, org_id):
     """Get list of sites for specified organization."""
     print('\nGathering Sites:')
-    sites = config.get('sites')
+    sites = sconnect.get('sites')
     sites = [site for site in sites if site['org'] == org_id]
     print(status('site', sites, "in '{0}'".format(organization)))
     return sites
 
 
-def find_nodes(config, organization, org_id):
+def find_nodes(sconnect, organization, org_id):
     """Get nodes that require modification."""
     print('\nGathering Nodes:')
 
-    nodes = config.get('nodes')
+    nodes = sconnect.get('nodes')
     print(status('node', nodes, 'in Total'))
 
     nodes = [node for node in nodes if node['org'] == org_id]
