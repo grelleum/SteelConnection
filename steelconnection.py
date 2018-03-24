@@ -9,8 +9,8 @@ As there are two SteelConnect APIs: 'config' and 'reporting',
 so we provide two object templates for accessing the config and reporting APIs.
 
 Usage:
-    config = steelconnection.Config(scm_name, username, password)
-    report = steelconnection.Reporting(scm_name, username, password)
+    sconnect = steelconnection.Config(scm_name, username, password)
+    sconnect = steelconnection.Reporting(scm_name, username, password)
 
     Option keyword version can be used to specify an API version number.
     Currently there is only one API version: '1.0'.
@@ -19,8 +19,8 @@ Usage:
     you can use the object to make calls to the REST API.
 
     For example, to get all nodes in the realm, or in a specifc org:
-    nodes = config.get('nodes')
-    nodes = config.get(f'/org/{orgid}/nodes')  # where orgid is predefined.
+    nodes = sconnect.get('nodes')
+    nodes = sconnect.get(f'/org/{orgid}/nodes')  # where orgid is predefined.
 
     Any call that does not result in a success (HTTP status code 200)
     will raise an exception, so calls should be wrapped in a try/except pair.
