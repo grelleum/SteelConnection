@@ -45,7 +45,7 @@ def main(argv):
 
 def update_nodes(nodes, sconnect, organization, org_id, sites):
     """Loop through nodes and push location to SCM where applicable."""
-    for node in nodes[:3]:
+    for node in nodes:
         print('\n' + '=' * 79, '\n')
         print('Node:', node['id'], node['serial'], node['model'])
         print('org:', node['org'], organization)
