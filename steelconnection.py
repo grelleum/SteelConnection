@@ -109,10 +109,12 @@ class _SteelConnection(object):
                 self.response.raise_for_status()
             return
         if not self.response.json():
-            return self.response
-        if 'items' in self.response.json():
-            return self.response.json()['items']
-        return self.response.json()
+            self.response.data = {}
+        elif 'items' in self.response.json():
+            self.response.data = self.response.json()['items']
+        else:
+            self.response.data = self.response.json()
+        return self.response
 
     def _request_kwargs(self, resource, data):
         """Return a dictionary with the request keyword arguments."""
