@@ -67,15 +67,15 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
         })
         resource = 'node/' + node['id']
         response = sconnect.put(resource, data=payload)
-        print('Response:', sconnect.response.status_code, sconnect.response.reason)
+        print('Response:', response.status_code, response.reason)
         print()
-        print(response)
+        print(response.data)
 
 
 def find_org(sconnect, organization):
     """Find the org id for the target organization."""
     print('\nFinding organization:')
-    orgs = sconnect.get('orgs')
+    orgs = sconnect.get('orgs').data
     org_found = [org for org in orgs if org['name'] == organization]
     if not org_found:
         org_found = [org for org in orgs if org['longname'] == organization]
@@ -93,7 +93,7 @@ def find_org(sconnect, organization):
 def find_sites(sconnect, organization, org_id):
     """Get list of sites for specified organization."""
     print('\nGathering Sites:')
-    sites = sconnect.get('sites')
+    sites = sconnect.get('sites').data
     sites = [site for site in sites if site['org'] == org_id]
     print(status('site', sites, "in '{0}'".format(organization)))
     return sites
@@ -103,7 +103,7 @@ def find_nodes(sconnect, organization, org_id):
     """Get nodes that require modification."""
     print('\nGathering Nodes:')
 
-    nodes = sconnect.get('nodes')
+    nodes = sconnect.get('nodes').data
     print(status('node', nodes, 'in Total'))
 
     nodes = [node for node in nodes if node['org'] == org_id]
