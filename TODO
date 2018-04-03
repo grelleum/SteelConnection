@@ -1,0 +1,5 @@
+Test against various versions that may have issues with requests / SSL:
+    and may require urllib3 disable warnings.
+
+Use requests session, such that multiple requests can re-use tcp connection.
+
