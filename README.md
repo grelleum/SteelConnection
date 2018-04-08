@@ -10,3 +10,5 @@ Supports Python 2.7, 3.4, 3.5, 3.6
 ## Requires:
 Requests
 
+## Note:
+The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for convienience not requiring the password to be input or passed everytime an API call is made.
