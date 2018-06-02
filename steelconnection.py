@@ -58,6 +58,7 @@ class _SteelConnection(object):
         self.exit_on_error = exit_on_error
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
+        self.session = requests.Session()
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
@@ -65,19 +66,19 @@ class _SteelConnection(object):
 
     def get(self, resource, data=None):
         """Make an HTTP GET request for the API resource."""
-        return self._request(requests.get, resource)
+        return self._request(self.session.get, resource)
 
     def delete(self, resource, data=None):
         """Make an HTTP DELETE request for the API resource."""
-        return self._request(requests.delete, resource)
+        return self._request(self.session.delete, resource)
 
     def post(self, resource, data=None):
         """Make an HTTP POST request for the API resource."""
-        return self._request(requests.post, resource, data)
+        return self._request(self.session.post, resource, data)
 
     def put(self, resource, data=None):
         """Make an HTTP PUT request for the API resource."""
-        return self._request(requests.put, resource, data)
+        return self._request(self.session.put, resource, data)
 
     def url(self, resource):
         """Combine attributes and resource as a url string."""
