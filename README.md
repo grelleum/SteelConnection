@@ -31,6 +31,8 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
+#### This section is a work in progress.  Please be patient as I will expand this.
+
 ### Official Riverbed SteelConnect REST API Documentation:
 #### Configuration:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
