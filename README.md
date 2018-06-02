@@ -16,6 +16,7 @@ The password entered gets stored in the wrapper object in plain text.  So if you
 ## Official Riverbed SteelConnect REST API Documentation:
 **Configuration:**
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
+
 **Reporting:**
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
@@ -27,6 +28,7 @@ import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
 
+####Authentication:
 SteelConnect REST API uses username and password authentication.  When not specified, as shown above, the script will interactively prompt you for your username and password.  If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation.  For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
 import os
