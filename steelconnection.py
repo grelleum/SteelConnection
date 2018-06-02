@@ -199,11 +199,15 @@ class _LookUp(object):
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
         items = self.scm.get(domain).data
-        matches = [item[return_value] for item in items if value in item[key]]
+        matches = [item[return_value] for item in items if item[key] and value in item[key]]
         return max(matches) if matches else ''
 
+    def nodeid(self, serial, key='serial'):
+        """Return node id that matches appliance serial number provided."""
+        return self._lookup(domain='nodes', value=serial, key=key)
+
     def orgid(self, name, key='name'):
-        """Return org_id that matches Org short name provided."""
+        """Return org id that matches organization short name provided."""
         return self._lookup(domain='orgs', value=name, key=key)
 
 
