@@ -31,6 +31,7 @@ Import steelconnection and create a new object by providing the Fully qualified 
 import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
+
 #### Authentication:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 
@@ -55,3 +56,20 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
+#### Lookup convienience method:
+SteelConnection provides a coolection of `lookup` method to look up the id for various API objects.  Currently the `lookup.orgid` and `lookup.nodeid` methods are available.
+
+For example, most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
+```python
+>>> org_id = sconnect.lookup.orgid('Spacely')
+>>> org_id
+'org-Spacely-0a501e7f27b2c03e'
+>>> 
+```
+Similarly, the `lookup.nodeid` method exists to privide the node id when you supply the appliance serial number.
+```python
+>>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
+>>> node_id
+'node-56f1968e229ca738'
+>>> 
+```
