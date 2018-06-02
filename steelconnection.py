@@ -59,6 +59,7 @@ class _SteelConnection(object):
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
+        self.lookup = _LookUp(self)
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
