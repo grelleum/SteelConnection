@@ -31,8 +31,7 @@ Import steelconnection and create a new object by providing the Fully qualified 
 import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
-
-####Authentication:
+#### Authentication:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 
 ```python
