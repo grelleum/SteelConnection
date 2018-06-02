@@ -33,7 +33,19 @@ sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
 
 ####Authentication:
-SteelConnect REST API uses username and password authentication.  When not specified, as shown above, the script will interactively prompt you for your username and password.  If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation.  For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
+SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
+
+```python
+>>> import steelconnection
+>>> sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
+Enter username: admin
+Enter password: 
+Retype password: 
+>>> 
+```
+
+If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.
+For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
 import os
 import steelconnection
