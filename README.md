@@ -13,8 +13,7 @@ Requests
 ## Note:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
-##HOWTO
-
+## HOWTO:
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
 ```
 import steelconnection
@@ -32,8 +31,8 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
-### Official Riverbed SteelConnect REST API Documentation
-####Configuration:
+### Official Riverbed SteelConnect REST API Documentation:
+#### Configuration:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
-####Reporting:
+#### Reporting:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
