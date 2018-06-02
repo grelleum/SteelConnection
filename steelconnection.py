@@ -195,9 +195,10 @@ class _LookUp(object):
         """Obtain access to SteelConect Manager."""
         self.scm = scm
 
-    def _get(self, domain, value, key):
+    def _lookup(self, domain, value, key, return_value='id'):
+        """Generic lookup function."""
         items = self.scm.get(domain).data
-        matches = [item['id'] for item in items if value in item[key]]
+        matches = [item[return_value] for item in items if value in item[key]]
         return max(matches) if matches else ''
 
 
