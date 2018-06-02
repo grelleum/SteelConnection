@@ -188,6 +188,19 @@ class Reporting(_SteelConnection):
         )
 
 
+class _LookUp(object):
+    """Provide convienience tools to lookup objects."""
+
+    def __init__(self, scm):
+        """Obtain access to SteelConect Manager."""
+        self.scm = scm
+
+    def _get(self, domain, value, key):
+        items = self.scm.get(domain).data
+        matches = [item['id'] for item in items if value in item[key]]
+        return max(matches) if matches else ''
+
+
 def get_username(prompt=None):
     """Get username in a Python 2/3 compatible way."""
     prompt = 'Enter username: ' if prompt is None else prompt
