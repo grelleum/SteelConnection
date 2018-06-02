@@ -201,6 +201,10 @@ class _LookUp(object):
         matches = [item[return_value] for item in items if value in item[key]]
         return max(matches) if matches else ''
 
+    def orgid(self, name, key='name'):
+        """Return org_id that matches Org short name provided."""
+        return self._lookup(domain='orgs', value=name, key=key)
+
 
 def get_username(prompt=None):
     """Get username in a Python 2/3 compatible way."""
