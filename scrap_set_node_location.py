@@ -75,15 +75,13 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
 def find_org(sconnect, organization):
     """Find the org id for the target organization."""
     print('\nFinding organization:')
-    orgs = sconnect.get('orgs').data
-    org_found = [org for org in orgs if org['name'] == organization]
-    if not org_found:
-        org_found = [org for org in orgs if org['longname'] == organization]
-    if not org_found:
+    org_id = sconnect.lookup.orgid(organization)
+    if not org_id:
+        org_id = sconnect.lookup.orgid(organization, key='longname')
+    if not org_id:
         print("Could not find and org with name '{0}'".format(organization))
         return 1
-    org = org_found[0]
-    org_id = org['id']
+    org = sconnect.get('org/' + org_id).data
     print('* id:', org["id"])
     print('* name:', org["name"])
     print('* longname:', org["longname"])
