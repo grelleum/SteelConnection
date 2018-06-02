@@ -14,21 +14,21 @@ Requests
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
 ## Official Riverbed SteelConnect REST API Documentation:
-#### Configuration:
+**Configuration:**
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
-#### Reporting:
+**Reporting:**
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 ## HOWTO:
 #### This section is a work in progress.  Please be patient as I will expand this.
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
-```
+```python
 import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
 
 SteelConnect REST API uses username and password authentication.  When not specified, as shown above, the script will interactively prompt you for your username and password.  If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation.  For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
-```
+```python
 import os
 import steelconnection
 
