@@ -57,8 +57,12 @@ sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=usernam
 ```
 
 #### Lookup convienience methods:
-SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  Currently the `lookup.orgid` and `lookup.nodeid` methods are available.
-
+SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
+Currently these are the available lookup methods:
+    `lookup.orgid(org_shor_name)`
+    `lookup.nodeid(serial)` 
+    `lookup.siteid(site_name, org_id=org_id)` 
+    
 For example, most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
 ```python
 >>> org_id = sconnect.lookup.orgid('Spacely')
@@ -71,5 +75,12 @@ Similarly, the `lookup.nodeid` method exists to privide the node id when you sup
 >>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
 >>> node_id
 'node-56f1968e229ca738'
+>>> 
+```
+The site id can be found in a similar name, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
+```python
+>>> site_id = sconnect.lookup.siteid('NYC', org_id=org_id)
+>>> site_id
+'site-NYC-884b9071141e4bc0'
 >>> 
 ```

@@ -210,6 +210,13 @@ class _LookUp(object):
         """Return org id that matches organization short name provided."""
         return self._lookup(domain='orgs', value=name, key=key)
 
+    def siteid(self, name, org_id=None, key='name'):
+        """Return site id that matches site short name within the organization provided."""
+        if not org_id:
+            raise ValueError('org_id required when looking up a site.')
+        resource = '/'.join(('org', org_id, 'sites'))
+        return self._lookup(domain=resource, value=name, key=key)
+
 
 def get_username(prompt=None):
     """Get username in a Python 2/3 compatible way."""
