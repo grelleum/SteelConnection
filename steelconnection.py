@@ -54,6 +54,7 @@ class _SteelConnection(object):
         self.api = api
         self.version = version
         self.controller = controller
+        self.org = Org()
         self.response = None
         self.exit_on_error = exit_on_error
         self.username = get_username() if username is None else username
@@ -189,6 +190,25 @@ class Reporting(_SteelConnection):
         )
 
 
+class Org(object):
+
+    def __init__(self):
+        """Initialize the organization."""
+        self.details = {}
+
+    @staticmethod
+    def id(self):
+        return self.details.get('id', None)
+
+    @staticmethod
+    def name(self):
+        return self.details.get('name', None)
+
+    @staticmethod
+    def longname(self):
+        return self.details.get('longname', None)
+
+
 class _LookUp(object):
     """Provide convienience tools to lookup objects."""
 
@@ -199,23 +219,30 @@ class _LookUp(object):
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
         items = self.scm.get(domain).data
-        matches = [item[return_value] for item in items if item[key] and value in item[key]]
-        return max(matches) if matches else ''
+        valid_items = (item for item in items if item[key])
+        matches = [item for item in valid_items if value in item[key]]
+        details = max(matches) if matches else ''
+        result = details[return_value]
+        return result, details
 
     def nodeid(self, serial, key='serial'):
         """Return node id that matches appliance serial number provided."""
-        return self._lookup(domain='nodes', value=serial, key=key)
+        result, details = self._lookup(domain='nodes', value=serial, key=key)
+        return result
 
     def orgid(self, name, key='name'):
         """Return org id that matches organization short name provided."""
-        return self._lookup(domain='orgs', value=name, key=key)
+        result, details = self._lookup(domain='orgs', value=name, key=key)
+        self.scm.org.details = details
+        return result
 
     def siteid(self, name, orgid=None, key='name'):
         """Return site id that matches site short name within the organization provided."""
-        if not org_id:
-            raise ValueError('org_id required when looking up a site.')
+        if not orgid:
+            raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
-        return self._lookup(domain=resource, value=name, key=key)
+        result, details = self._lookup(domain=resource, value=name, key=key)
+        return result
 
 
 def get_username(prompt=None):
