@@ -77,7 +77,7 @@ Similarly, the `lookup.nodeid` method exists to privide the node id when you sup
 'node-56f1968e229ca738'
 >>> 
 ```
-The site id can be found in a similar name, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
+The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
 ```python
 >>> site_id = sconnect.lookup.siteid('NYC', org_id=org_id)
 >>> site_id
