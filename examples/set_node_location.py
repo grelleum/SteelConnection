@@ -9,7 +9,7 @@ Designed to work with both Python2 and Python3.
 Requires the Requests library to be installed.
 
 USAGE:
-    scrap_set_node_location.py scm.riverbed.cc organization
+    set_node_location.py scm.riverbed.cc organization
 
 """
 
@@ -37,7 +37,9 @@ def main(argv):
     )
 
 
-    org_id = find_org(sconnect, organization)
+    org_id = sconnect.lookup.orgid(organization)
+    print('Org:', organization)
+    print('Org ID:', org_id)
     sites = find_sites(sconnect, organization, org_id)
     nodes = find_nodes(sconnect, organization, org_id)
     return update_nodes(nodes, sconnect, organization, org_id, sites)
@@ -70,22 +72,6 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
         print('Response:', response.status_code, response.reason)
         print()
         print(response.data)
-
-
-def find_org(sconnect, organization):
-    """Find the org id for the target organization."""
-    print('\nFinding organization:')
-    org_id = sconnect.lookup.orgid(organization)
-    if not org_id:
-        org_id = sconnect.lookup.orgid(organization, key='longname')
-    if not org_id:
-        print("Could not find and org with name '{0}'".format(organization))
-        return 1
-    org = sconnect.get('org/' + org_id).data
-    print('* id:', org["id"])
-    print('* name:', org["name"])
-    print('* longname:', org["longname"])
-    return org_id
 
 
 def find_sites(sconnect, organization, org_id):
