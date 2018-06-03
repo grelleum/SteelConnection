@@ -10,13 +10,12 @@ Requires the Requests library to be installed.
 
 USAGE:
     set_node_location.py scm.riverbed.cc organization
-
+    set_node_location.py scm.riverbed.cc organization -u $USER -p $PASSWD
 """
 
 
 from __future__ import print_function
 import argparse
-import json
 import sys
 import steelconnection
 
@@ -36,10 +35,8 @@ def main(argv):
         exit_on_error = True,
     )
 
-
     org_id = sconnect.lookup.orgid(organization)
-    print('Org:', organization)
-    print('Org ID:', org_id)
+    print('\nOrg:', organization, '\tID:', org_id)
     sites = find_sites(sconnect, organization, org_id)
     nodes = find_nodes(sconnect, organization, org_id)
     return update_nodes(nodes, sconnect, organization, org_id, sites)
@@ -59,18 +56,17 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
             continue
         site = found_site[0]
         print("\nSetting location to '{0}'".format(site['name']))
-        payload = json.dumps({
+        payload = {
             'id': node['id'],
             'org': node['org'],
             'site': node['site'],
             'serial': node['serial'],
             'model': node['model'],
             'location': site['name'],
-        })
+        }
         resource = 'node/' + node['id']
         response = sconnect.put(resource, data=payload)
-        print('Response:', response.status_code, response.reason)
-        print()
+        print('Response:', response.status_code, response.reason, '\n')
         print(response.data)
 
 
