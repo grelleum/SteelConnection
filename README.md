@@ -56,8 +56,8 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
-#### Lookup convienience method:
-SteelConnection provides a coolection of `lookup` method to look up the id for various API objects.  Currently the `lookup.orgid` and `lookup.nodeid` methods are available.
+#### Lookup convienience methods:
+SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  Currently the `lookup.orgid` and `lookup.nodeid` methods are available.
 
 For example, most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
 ```python
