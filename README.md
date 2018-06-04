@@ -65,6 +65,15 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
+### Accessing the API:
+The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, PUT, POST, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.put`, `.post`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
+
+For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:
+`requests.get('https://example.riverbed.com/api/scm.config/1.0/orgs', auth=(username, password))`
+With steelconnection, the same request would be:
+`sconnect.get('orgs')`
+
+
 ### Lookup convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
 Currently these are the available lookup methods:
