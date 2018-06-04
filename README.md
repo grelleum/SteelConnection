@@ -13,10 +13,10 @@ Requests
 
 
 ## Official Riverbed SteelConnect REST API Documentation:
-**Configuration:**
+Please refer to the Riverbed SteelConnect REST API documentation for details specific to the REST API.
+### Configuration:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
-
-**Reporting:**
+### Reporting:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 
@@ -83,9 +83,9 @@ For example, the 'get orgs' requests should always provide a list of orgs within
 `list_of_all_orgs = sconnect.get('orgs').data`
 
 Here are the rules to determine what gets returned in the `response.data` attribute: 
-* If json data is returned and the key 'items' is in the json data, the return a python list of 'items'.
+* If json data is returned and the key 'items' is in the json data, then return a python list of 'items'.
 * If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
-* If no json data is returned, return an empty python dictionary.
+* If no json data is returned, data will be an empty python dictionary.
 
 ### Lookup convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
