@@ -198,15 +198,15 @@ class Org(object):
         """Initialize the organization."""
         self.details = {}
 
-    @staticmethod
+    @property
     def id(self):
         return self.details.get('id', None)
 
-    @staticmethod
+    @property
     def name(self):
         return self.details.get('name', None)
 
-    @staticmethod
+    @property
     def longname(self):
         return self.details.get('longname', None)
 
