@@ -21,7 +21,7 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 
 ## HOWTO:
-#### This section is a work in progress.  Please be patient as I will expand this.
+### Getting Started:
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
 ```python
 import steelconnection
@@ -33,7 +33,7 @@ There is a one to one relationship between a Realm and a SteelConnect Manager.  
 
 You normally access the SteelConnect Manager (SCM) using a web browser.  The URL you use will specify the realm and organization that you are managing.  You will want to know these in order touse the Rest API.
 
-A URL takes the form of `https://realm.riverbed.cc/admin/organization`.
+A URL takes the form of `https://**realm**.riverbed.cc/admin/**Organization**`.
 The organization in the path of the URL is case-sensistive and is also known as the organization short-name, as opposed to the long-nme, which is more descriptive and can include spaces, and other characters.
 
 ### Authentication:
@@ -69,9 +69,10 @@ sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=usernam
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, PUT, POST, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.put`, `.post`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
 For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:
-`requests.get('https://example.riverbed.com/api/scm.config/1.0/orgs', auth=(username, password))`
+`requests.get('https://example.riverbed.ccc/api/scm.config/1.0/orgs', auth=(username, password))`
 With steelconnection, the same request would be:
 `sconnect.get('orgs')`
+
 
 
 ### Lookup convienience methods:
