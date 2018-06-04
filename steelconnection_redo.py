@@ -38,7 +38,7 @@ import sys
 from requests import HTTPError
 
 
-class SteelConnection(object):
+class API(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
 
     def __init__(
