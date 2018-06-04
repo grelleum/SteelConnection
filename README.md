@@ -70,12 +70,18 @@ sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=usernam
 ```
 
 ### Accessing the API:
-The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, PUT, POST, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.put`, `.post`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
+The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
 For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:
 `requests.get('https://example.riverbed.ccc/api/scm.config/1.0/orgs', auth=(username, password))`
 With steelconnection, the same request would be:
 `sconnect.get('orgs')`
+
+* Get: Used for retrieving status or information about a resource.  Expect data to be returned.
+* Post: Create or deploy a resource that does not already exist.
+* Put: Use to edit or update some existing resource.
+* Delete: Delete an existing resource/
+
 
 ### Retrieving Data:
 The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
