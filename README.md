@@ -14,9 +14,9 @@ Requests
 
 ## Official Riverbed SteelConnect REST API Documentation:
 Please refer to the Riverbed SteelConnect REST API documentation for details specific to the REST API.
-### Configuration:
+##### Configuration:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
-### Reporting:
+##### Reporting:
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 
