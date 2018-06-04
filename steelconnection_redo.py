@@ -38,7 +38,7 @@ import sys
 from requests import HTTPError
 
 
-class API(object):
+class SConAPI(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
 
     def __init__(
@@ -58,6 +58,7 @@ class API(object):
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
+        self.response = None
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
@@ -66,6 +67,21 @@ class API(object):
         self.report = _Report(self)
         self.lookup = _LookUp(self)
         self.org = Org()
+
+    def __bool__(self):
+        """Return the success of the last request."""
+        if self.response is None:
+            return False
+        return True if self.response.status_code == 200 else False
+
+    def __repr__(self):
+        """Return a string consisting of class name, controller, and api."""
+        details = ', '.join([
+            "controller: '{0}'".format(self.controller),
+            "api version: '{0}'".format(self.version),
+            "response: '{0}'".format(self.response),
+        ])
+        return '{0}({1})'.format(self.__class__.__name__, details)
 
 
 class _Call_Handler(object):
@@ -136,21 +152,6 @@ class _Call_Handler(object):
                 data = json.dumps(data)
             kwargs['data'] = data
         return kwargs
-
-    def __bool__(self):
-        """Return the success of the last request."""
-        if self.root.response is None:
-            return False
-        return True if self.root.response.status_code == 200 else False
-
-    def __repr__(self):
-        """Return a string consisting of class name, controller, and api."""
-        details = ', '.join([
-            "controller: '{0}'".format(self.controller),
-            "api version: '{0}'".format(self.version),
-            "response: '{0}'".format(self.response),
-        ])
-        return '{0}({1})'.format(self.root.__class__.__name__, details)
 
 
 class _Config(_Call_Handler):
