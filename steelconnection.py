@@ -33,6 +33,8 @@ import json
 import requests
 import sys
 
+from requests import HTTPError
+
 
 class _SteelConnection(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
