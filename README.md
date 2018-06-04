@@ -28,6 +28,9 @@ import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
 
+### Quick Start:
+See the examples direcory for sample scripts.
+
 ### Realms and Organizations:
 There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a specific realm, which includes the domain `riverbed.cc`.  A Realm should have one or more organizations, which act an autonomous network system.  Only a newly created realm would not have any organizations.
 
@@ -73,7 +76,16 @@ For example, when using the REST API _**without**_ steelconneciton, you would ne
 With steelconnection, the same request would be:
 `sconnect.get('orgs')`
 
+### Retrieving Data:
+The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
 
+For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.
+`list_of_all_orgs = sconnect.get('orgs').data`
+
+Here are the rules to determine what gets returned in the `response.data` attribute: 
+* If json data is returned and the key 'items' is in the json data, the return a python list of 'items'.
+* If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
+* If no json data is returned, return an empty python dictionary.
 
 ### Lookup convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
