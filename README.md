@@ -90,7 +90,7 @@ With steelconnection, the same request would be:
 ### Retrieving Data:
 The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
 
-For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.
+For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.  
 `list_of_all_orgs = sconnect.config.get('orgs').data`
 
 Here are the rules to determine what gets returned in the `response.data` attribute: 
@@ -100,10 +100,10 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 
 ### Lookup convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
-Currently these are the available lookup methods:
-    `lookup.orgid(org_shor_name)`
-    `lookup.nodeid(serial)` 
-    `lookup.siteid(site_name, org_id=org_id)` 
+Currently these are the available lookup methods:  
+    `lookup.orgid(org_shor_name)`  
+    `lookup.nodeid(serial)`   
+    `lookup.siteid(site_name, org_id=org_id)`   
 
 #### Lookup Organization ID:
 Most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
