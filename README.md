@@ -40,6 +40,7 @@ The organization in the path of the URL is case-sensistive and is also known as 
 ##### Special Note on password security:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
+##### Interactive login:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 
 ```python
@@ -51,6 +52,7 @@ Retype password:
 >>> 
 ```
 
+##### Specifying username and password:
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
