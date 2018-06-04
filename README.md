@@ -60,7 +60,7 @@ Retype password:
 ```
 
 #### Specifying username and password:
-If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.
+If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
 import os
@@ -75,9 +75,9 @@ sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc', username=userna
 ### Accessing the API:
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
-For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:  
-`requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`  
-With steelconnection, the same request would be:  
+For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:\
+`requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
+With steelconnection, the same request would be:\
 `sconnect.config.get('orgs')`
 
 * Get: Used for retrieving status or information about a resource.  Expect data to be returned.
