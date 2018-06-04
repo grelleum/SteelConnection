@@ -96,11 +96,11 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If no json data is returned, data will be an empty python dictionary.
 
 ### Lookup convienience methods:
-SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.  
-Currently these are the available lookup methods:  
-    `lookup.orgid(org_shor_name)`  
-    `lookup.nodeid(serial)`   
-    `lookup.siteid(site_name, org_id=org_id)`   
+SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.\
+Currently these are the available lookup methods:\
+    `lookup.orgid(org_shor_name)`\
+    `lookup.nodeid(serial)`\
+    `lookup.siteid(site_name, org_id=org_id)`\
 
 #### Lookup Organization ID:
 Most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
