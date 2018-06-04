@@ -12,10 +12,6 @@ Supports Python 2.7, 3.4, 3.5, 3.6
 Requests
 
 
-## Note:
-The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
-
-
 ## Official Riverbed SteelConnect REST API Documentation:
 **Configuration:**
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
@@ -41,6 +37,9 @@ A URL takes the form of `https://realm.riverbed.cc/admin/organization`.
 The organization in the path of the URL is case-sensistive and is also known as the organization short-name, as opposed to the long-nme, which is more descriptive and can include spaces, and other characters.
 
 #### Authentication:
+##### Special Note on password security:
+The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
+
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 
 ```python
