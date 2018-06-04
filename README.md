@@ -32,6 +32,14 @@ import steelconnection
 sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
 ```
 
+#### Realms and Organizations:
+There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a specific realm, which includes the domain `riverbed.cc`.  A Realm should have one or more organizations, which act an autonomous network system.  Only a newly created realm would not have any organizations.
+
+You normally access the SteelConnect Manager (SCM) using a web browser.  The URL you use will specify the realm and organization that you are managing.  You will want to know these in order touse the Rest API.
+
+A URL takes the form of `https://realm.riverbed.cc/admin/organization`.
+The organization in the path of the URL is case-sensistive and is also known as the organization short-name, as opposed to the long-nme, which is more descriptive and can include spaces, and other characters.
+
 #### Authentication:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 
