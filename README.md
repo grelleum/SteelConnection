@@ -22,6 +22,7 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 ## HOWTO:
 ### Getting Started:
+Copy the steelconnecton.py file into the same folder as your script.
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
 ```python
 import steelconnection
