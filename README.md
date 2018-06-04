@@ -33,7 +33,7 @@ There is a one to one relationship between a Realm and a SteelConnect Manager.  
 
 You normally access the SteelConnect Manager (SCM) using a web browser.  The URL you use will specify the realm and organization that you are managing.  You will want to know these in order touse the Rest API.
 
-A URL takes the form of `https://**realm**.riverbed.cc/admin/**Organization**`.
+A URL takes the form of `https://realm.riverbed.cc/admin/Organization`.
 The organization in the path of the URL is case-sensistive and is also known as the organization short-name, as opposed to the long-nme, which is more descriptive and can include spaces, and other characters.
 
 ### Authentication:
