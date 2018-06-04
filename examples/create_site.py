@@ -14,17 +14,17 @@ new_site = {
 }
 
 # Initialize the steelconnection object.
-sconnect = steelconnection.Config(scm_name)
+sconnect = steelconnection.SConAPI(scm_name)
 
 # Get the org ID for your organization.
-org_id = sconnect.lookup.org(org_name)
+org_id = sconnect.lookup.orgid(org_name)
 print('Org name: {},  org_id: {}'.format(org_name, org_id))
 
 # API resource for posting.
 resource = '/org/{}/sites'.format(org_id)
 
 # Make the post request.
-response = sconnect.post(resource, data=new_site)
+response = sconnect.config.post(resource, data=new_site)
 
 # Display result.
 print('Response:', response.status_code, response.reason)

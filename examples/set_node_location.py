@@ -28,7 +28,7 @@ def main(argv):
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
 
-    sconnect = steelconnection.Config(
+    sconnect = steelconnection.SConAPI(
         scm,
         username=args.username,
         password=args.password,
@@ -65,7 +65,7 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
             'location': site['name'],
         }
         resource = 'node/' + node['id']
-        response = sconnect.put(resource, data=payload)
+        response = sconnect.config.put(resource, data=payload)
         print('Response:', response.status_code, response.reason, '\n')
         print(response.data)
 
@@ -73,7 +73,7 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
 def find_sites(sconnect, organization, org_id):
     """Get list of sites for specified organization."""
     print('\nGathering Sites:')
-    sites = sconnect.get('sites').data
+    sites = sconnect.config.get('sites').data
     sites = [site for site in sites if site['org'] == org_id]
     print(status('site', sites, "in '{0}'".format(organization)))
     return sites
@@ -83,7 +83,7 @@ def find_nodes(sconnect, organization, org_id):
     """Get nodes that require modification."""
     print('\nGathering Nodes:')
 
-    nodes = sconnect.get('nodes').data
+    nodes = sconnect.config.get('nodes').data
     print(status('node', nodes, 'in Total'))
 
     nodes = [node for node in nodes if node['org'] == org_id]

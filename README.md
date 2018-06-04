@@ -21,12 +21,18 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 
 ## HOWTO:
+
+### NOTE:
+2018-06-04: The SteelConnection API has changed slightly.  
+Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.
+Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
+
 ### Getting Started:
 Copy the steelconnecton.py file into the same folder as your script.
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
 ```python
 import steelconnection
-sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
+sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc')
 ```
 
 ### Quick Start:
@@ -49,7 +55,7 @@ SteelConnect REST API uses username and password authentication.  If a SteelConn
 
 ```python
 >>> import steelconnection
->>> sconnect = steelconnection.Config('MySteelConnect.riverbed.cc')
+>>> sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc')
 Enter username: admin
 Enter password: 
 Retype password: 
@@ -66,16 +72,16 @@ import steelconnection
 username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 
-sconnect = steelconnection.Config('MySteelConnect.riverbed.cc', username=username, password=password)
+sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc', username=username, password=password)
 ```
 
 ### Accessing the API:
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
 For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:
-`requests.get('https://example.riverbed.ccc/api/scm.config/1.0/orgs', auth=(username, password))`
+`requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`
 With steelconnection, the same request would be:
-`sconnect.get('orgs')`
+`sconnect.config.get('orgs')`
 
 * Get: Used for retrieving status or information about a resource.  Expect data to be returned.
 * Post: Create or deploy a resource that does not already exist.
@@ -87,7 +93,7 @@ With steelconnection, the same request would be:
 The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
 
 For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.
-`list_of_all_orgs = sconnect.get('orgs').data`
+`list_of_all_orgs = sconnect.config.get('orgs').data`
 
 Here are the rules to determine what gets returned in the `response.data` attribute: 
 * If json data is returned and the key 'items' is in the json data, then return a python list of 'items'.
