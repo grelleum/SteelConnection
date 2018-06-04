@@ -23,9 +23,7 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 ## HOWTO:
 
 ### NOTE:
-2018-06-04: The SteelConnection API has changed slightly.  
-Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.
-Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
+2018-06-04: The SteelConnection API has changed.  Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.  Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
 
 ### Getting Started:
 Copy the steelconnecton.py file into the same folder as your script.
