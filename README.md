@@ -30,14 +30,14 @@ See the examples direcory for sample scripts.
 
 ### Getting Started:
 Copy the steelconnecton.py file into the same folder as your script.
-Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be REALM_NAME.riverbed.cc, where REALM_NAME is specific to your realm.
+Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
 sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 ```
 
 ### Realms and Organizations:
-There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a specific realm, which includes the domain `riverbed.cc`.  A Realm should have one or more organizations, which act an autonomous network system.  Only a newly created realm would not have any organizations.
+There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a the realm.  A newly created realm would not have any organizations, otherwise a realm will have one or more organizations.  Each oganization within a realm acts an autonomous network system. In practice, most REST API operations are performed within a specific organization.
 
 You normally access the SteelConnect Manager (SCM) using a web browser.  The URL you use will specify the realm and organization that you are managing.  You will want to know these in order touse the Rest API.
 
