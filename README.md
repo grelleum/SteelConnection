@@ -99,6 +99,11 @@ SteelConnections deals with this by providing two paths to access these two APIs
 * To  access the Config API: <pre>sconnect.<b>config</b>.get(<i>resource_path</i>)</pre>
 * To  access the Reporting API: <pre>sconnect.<b>report</b>.get(<i>resource_path</i>)</pre>
 
+For example, To see how a port on an appliance is configured use the `config` path:\
+`<pre>`sconnect.config.get(f'port/{port}').data`
+To see the the actual link state, speed, and duplex for a port, you would use the `report` path:\
+`sconnect.report.get(f'port/{port}').data`
+
 For example, To see how a port on an appliance is configured use the `config` path:
 <pre>sconnect.config.get(f'port/{port}').data</pre>
 To see the the actual link state, speed, and duplex for a port, you would use the `report` path:
