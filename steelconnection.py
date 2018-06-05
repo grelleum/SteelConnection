@@ -220,15 +220,19 @@ class _LookUp(object):
         return result
 
 
-def get_username(prompt=None):
-    """Get username in a Python 2/3 compatible way."""
-    prompt = 'Enter username: ' if prompt is None else prompt
+def get_input(prompt=''):
+    """Get input in a Python 2/3 compatible way."""
     try:
-        username = raw_input(prompt)
+        data = raw_input(prompt)
     except NameError:
-        username = input(prompt)
+        data = input(prompt)
     finally:
-        return username
+        return data
+
+
+def get_username(prompt='Enter username: '):
+    """Prompt for username."""
+    return get_input(prompt=prompt)
 
 
 def get_password(prompt=None, password=None):
