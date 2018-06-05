@@ -11,15 +11,6 @@ Supports Python 2.7, 3.4, 3.5, 3.6
 ## Requires:
 Requests
 
-
-## Official Riverbed SteelConnect REST API Documentation:
-Please refer to the Riverbed SteelConnect REST API documentation for details specific to the REST API.
-##### Configuration:
-https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
-##### Reporting:
-https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
-
-
 ## HOWTO:
 
 ### NOTE:
@@ -84,28 +75,25 @@ SteelConneciton (this module) acts to simplify coding by providing an object tha
 **Without** SteelConnection, the same request would look like this:\
 `orgs = requests.get('https://REALM.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
 
+##### Available Methods:
+SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.\
+These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
 
-SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
-
-* Get: Used for retrieving status or information about a resource.  Expect data to be returned.
+* Get: Used for retrieving information or status about a resource.  Expect data to be returned.
 * Post: Create or deploy a resource that does not already exist.
 * Put: Use to edit or update some existing resource.
 * Delete: Delete an existing resource/
 
+##### Two APIs:
+Riverbed divides the REST API into two APIs:\
+* Config: used to make configurations changes and get information about SteelConnect resources.
+https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
+* Reporting: used to get current status information about a resource.
+https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
-
-### Accessing the API:
-The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
-
-For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:\
-    `requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
-**With** steelconnection, the same request would be:\
-    `sconnect.config.get('orgs')`
-
-* Get: Used for retrieving status or information about a resource.  Expect data to be returned.
-* Post: Create or deploy a resource that does not already exist.
-* Put: Use to edit or update some existing resource.
-* Delete: Delete an existing resource/
+SteelConnections deals with this by providing two paths to access these two APIs.\
+* Use `sconnect.config.get(`_resource_`)` to  access the Config API.
+* Use `sconnect.report.get(`_resource_`)` to  access the Reporting API.
 
 
 
