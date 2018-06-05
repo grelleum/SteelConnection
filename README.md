@@ -102,7 +102,7 @@ SteelConnections deals with this by providing two paths to access these two APIs
 Example:\
 > View port configuration using the `config` path.\
 View the actual link state, speed, and duplex using the `report` path.
-<pre>
+><pre>
 sconnect.<b>config</b>.get(f'port/{port}').data`  # How the port is configured.
 sconnect.<b>report</b>.get(f'port/{port}').data`  # Actual state of the port.
 </pre>
