@@ -17,9 +17,9 @@ print('\nPort ID \tifname \tLink \tSpeed \tDuplex')
 print('------- \t------ \t---- \t----- \t------')
 
 for port in ports:
-    port_id = port['id']
-    resource = 'port/{}'.format(port_id)
+    resource = 'port/{}'.format(port['id'])
     port_status = sconnect.report.get(resource).data
+
     print('{}\t{}\t{}\t{}\t{}'.format(
         port['port_id'],
         port['ifname'],
