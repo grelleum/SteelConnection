@@ -96,7 +96,7 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 SteelConnections deals with this by providing two paths to access these two APIs.
-* Use `sconnect.config.get(`_resource_`)` to  access the Config API.
+* Use `sconnect.``config``.get(``resource``)` to  access the Config API.
 * Use `sconnect.report.get(`_resource_`)` to  access the Reporting API.
 
 For example, To see how a port on an appliance is configured use the `config` path:\
