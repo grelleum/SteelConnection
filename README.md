@@ -81,8 +81,8 @@ SteelConneciton (this module) acts to simplify coding by providing an object tha
 **With** SteelConnection, a request to get a list of all organizations in the realm would look like this:\
 `orgs = sconnect.config.get('orgs').data`
 
-**without** SteelConnection, the same request would look like this:\
-`orgs = requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
+**Without** SteelConnection, the same request would look like this:\
+`orgs = requests.get('https://REALM.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
 
 
 SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
