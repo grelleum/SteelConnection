@@ -85,13 +85,13 @@ These methods will build the request to include api version, auth, etc, so you o
 * Delete: Delete an existing resource/
 
 ##### Two APIs:
-Riverbed divides the REST API into two APIs:\
+Riverbed divides the REST API into two APIs:
 * Config: used to make configurations changes and get information about SteelConnect resources.\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
 * Reporting: used to get current status information about a resource.\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
-SteelConnections deals with this by providing two paths to access these two APIs.\
+SteelConnections deals with this by providing two paths to access these two APIs.
 * Use `sconnect.config.get(`_resource_`)` to  access the Config API.
 * Use `sconnect.report.get(`_resource_`)` to  access the Reporting API.
 
