@@ -29,8 +29,8 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 See the examples direcory for sample scripts.
 
 ### Getting Started:
-* Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.\
-* Copy the steelconnecton.py file into the same folder as your script.\
+* Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
+* Copy the steelconnecton.py file into the same folder as your script.
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
