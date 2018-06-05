@@ -122,6 +122,9 @@ Currently these are the available lookup functions:\
 * `lookup.nodeid(serial)`\
 * `lookup.siteid(site_name, org_id=org_id)`\
 
+#### Object-level Convienience functions:
+These functions are accessed directly from the object you created and are specific to the SteelConnect API.
+
 ##### Lookup Organization ID:
 Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id.
 ```python
@@ -146,3 +149,16 @@ The site id can be found in a similar way, but since the same site name, like HQ
 'site-Skypad-884b9071141e4bc0'
 >>> 
 ```
+
+#### Module-level Convienience functions:
+These functions are accessed directly from the imported module and can be used independently of the SteelConnect API.
+
+##### Get Input:
+`get_input(prompt)` function works with both Python 2 and Python 3 to get user input.
+
+##### Get Username:
+`get_username(prompt)` function works with both Python 2 and Python 3 to get username.
+
+##### Get Password:
+`get_password(prompt)` function works with both Python 2 and Python 3 to get user input.  Uses getpass to provide discretion.  Requires user to input password to be typed twice for verification.
+
