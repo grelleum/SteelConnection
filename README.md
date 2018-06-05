@@ -25,16 +25,16 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 ### NOTE:
 2018-06-04: The SteelConnection API has changed.  Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.  Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
 
+### TL;DR:
+See the examples direcory for sample scripts.
+
 ### Getting Started:
 Copy the steelconnecton.py file into the same folder as your script.
 Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
 ```python
 import steelconnection
-sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc')
+sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 ```
-
-### Quick Start:
-See the examples direcory for sample scripts.
 
 ### Realms and Organizations:
 There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a specific realm, which includes the domain `riverbed.cc`.  A Realm should have one or more organizations, which act an autonomous network system.  Only a newly created realm would not have any organizations.
@@ -45,14 +45,14 @@ A URL takes the form of `https://realm.riverbed.cc/admin/Organization`.\
 The organization in the path of the URL is case-sensistive and is also known as the organization short-name, as opposed to the long-nme, which is more descriptive and can include spaces, and other characters.
 
 ### Authentication:
-#### Special Note on password security:
+#### Note on password security:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
 #### Interactive login:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 ```python
 >>> import steelconnection
->>> sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc')
+>>> sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 Enter username: admin
 Enter password: 
 Retype password: 
@@ -69,8 +69,9 @@ import steelconnection
 username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 
-sconnect = steelconnection.SConAPI('MySteelConnect.riverbed.cc', username=username, password=password)
+sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
 ```
+
 ### Accessing the API:
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
