@@ -165,6 +165,7 @@ class _Report(_Call_Handler):
 
 
 class Org(object):
+    """Store Org ID and name in SConAPI object as attributes."""
 
     def __init__(self):
         """Initialize the organization."""
