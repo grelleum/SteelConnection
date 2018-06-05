@@ -117,19 +117,20 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If no json data is returned, data will be an empty python dictionary.
 
 
-### Convienience methods:
-SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.\
-Currently these are the available lookup methods:\
-    `lookup.orgid(org_shor_name)`\
-    `lookup.nodeid(serial)`\
-    `lookup.siteid(site_name, org_id=org_id)`\
+### Convienience functions:
+The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
+SteelConnection provides a collection of `lookup` functions to look up the id for various API resources.\
+Currently these are the available lookup functions:\
+* `lookup.orgid(org_short_name)`\
+* `lookup.nodeid(serial)`\
+* `lookup.siteid(site_name, org_id=org_id)`\
 
 ##### Lookup Organization ID:
-Many REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
+Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id.
 ```python
 >>> org_id = sconnect.lookup.orgid('Spacely')
 >>> org_id
-'org-Spacely-0a501e7f27b2c03e'
+'org-Spacely-0a0b1cbadb33f34'
 >>> 
 ```
 ##### Lookup Node ID:
@@ -137,7 +138,7 @@ Similarly, the `lookup.nodeid` method exists to privide the node id when you sup
 ```python
 >>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
 >>> node_id
-'node-56f1968e229ca738'
+'node-56f1968e222ab789'
 >>> 
 ```
 ##### Lookup Site ID:
