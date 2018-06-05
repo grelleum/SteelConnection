@@ -105,7 +105,9 @@ To see the the actual link state, speed, and duplex for a port, you would use th
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sconnect.report.get(f'port/{port}').data`
 
 
-For example, Viewing port configuration using the `config` path, vs. retrieving the actual link state, speed, and duplex using the `report` path:
+Example:
+View port configuration using the `config` path.\
+View the actual link state, speed, and duplex using the `report` path.\
 <pre>
 sconnect.<b>config</b>.get(f'port/{port}').data`  # How the port is configured.
 sconnect.<b>report</b>.get(f'port/{port}').data`  # Actual state of the port.
