@@ -102,8 +102,8 @@ SteelConnections deals with this by providing two paths to access these two APIs
 For example, To see how a port on an appliance is configured use the `config` path:\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sconnect.config.get(f'port/{port}').data`\
 To see the the actual link state, speed, and duplex for a port, you would use the `report` path:\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sconnect.report.get(f'port/{port}').data`
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sconnect.report.get(f'port/{port}').data`\
+    `sconnect.config.get(f'port/{port}').data`\
 
 ### Retrieving Data:
 The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
