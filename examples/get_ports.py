@@ -2,6 +2,7 @@
 
 import steelconnection
 
+print("SteelConnect Realm should be entered in the for 'realm.riverbed.cc'")
 realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
 sconnect = steelconnection.SConAPI(realm)
 
