@@ -30,7 +30,7 @@ See the examples direcory for sample scripts.
 
 ### Getting Started:
 Copy the steelconnecton.py file into the same folder as your script.
-Import steelconnection and create a new object by providing the Fully qualified DNS name or your realm.  The would be your REALM_NAME.riverbed.cc, where REALM_NAME is the name of your realm.
+Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be REALM_NAME.riverbed.cc, where REALM_NAME is specific to your realm.
 ```python
 import steelconnection
 sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
