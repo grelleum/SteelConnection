@@ -40,7 +40,8 @@ sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a the realm.  A newly created realm would not have any organizations, otherwise a realm will have one or more organizations.  Each oganization within a realm acts an autonomous network system. In practice, most REST API operations are performed within a specific organization.
 
 You normally access the SteelConnect Manager (SCM) using a web browser.\
-The URL you use includes the realm and organization that you are managing and takes the form of `https://realm.riverbed.cc/admin/Organization`.\
+The URL you use includes the realm and organization that you are managing and takes the form:
+    `https://realm.riverbed.cc/admin/Organization`.\
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
 ### Authentication:
@@ -75,9 +76,9 @@ sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, passw
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
 
 For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:\
-`requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
-With steelconnection, the same request would be:\
-`sconnect.config.get('orgs')`
+    `requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
+**With** steelconnection, the same request would be:\
+    `sconnect.config.get('orgs')`
 
 * Get: Used for retrieving status or information about a resource.  Expect data to be returned.
 * Post: Create or deploy a resource that does not already exist.
