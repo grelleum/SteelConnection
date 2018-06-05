@@ -99,13 +99,7 @@ SteelConnections deals with this by providing two paths to access these two APIs
 * To  access the Config API: <pre>sconnect.<b>config</b>.get(<i>resource_path</i>)</pre>
 * To  access the Reporting API: <pre>sconnect.<b>report</b>.get(<i>resource_path</i>)</pre>
 
-Example:\
-View port configuration using the `config` path.\
-View the actual link state, speed, and duplex using the `report` path.
-<pre>
-sconnect.<b>config</b>.get(f'port/{port}').data`  # How the port is configured.
-sconnect.<b>report</b>.get(f'port/{port}').data`  # Actual state of the port.
-</pre>
+For example: Using the resource 'port/{port}' with `.config` would allow you to view or configure settings on a port.  Using the same resource with `.report` will allow you to view the actual link state, speed, duplex, etc. for that port.
 
 
 ### Retrieving Data:
