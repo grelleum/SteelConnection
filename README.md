@@ -111,7 +111,7 @@ The steelconnect methods leverage the popular requests package.  All returned ob
 For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.\
 `list_of_all_orgs = sconnect.config.get('orgs').data`
 
-Here are the rules to determine what gets returned in the `response.data` attribute:\
+Here are the rules to determine what gets returned in the `response.data` attribute:
 * If json data is returned and the key 'items' is in the json data, then return a python list of 'items'.
 * If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
 * If no json data is returned, data will be an empty python dictionary.
