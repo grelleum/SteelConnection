@@ -75,12 +75,16 @@ sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, passw
 
 
 ### Understanding the API:
-The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  steelconneciton (this module) provides an object that creates a session with the SCM and remembers your authentication.  It provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the recsource you are interrested in.
+The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.\
+SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds yje HTTPS requests with that information included.  A `requests.session` object is used to allow a single TCP connection to be re-used for each API request.\
 
 For example, when using the REST API _**without**_ steelconneciton, you would need to make a request like this:\
-    `requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
+`   requests.get('https://example.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password))`\
 **With** steelconnection, the same request would be:\
-    `sconnect.config.get('orgs')`
+`   sconnect.config.get('orgs')`
+
+
+SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.  These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
 
 * Get: Used for retrieving status or information about a resource.  Expect data to be returned.
 * Post: Create or deploy a resource that does not already exist.
