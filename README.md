@@ -117,22 +117,22 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If no json data is returned, data will be an empty python dictionary.
 
 
-#### Lookup convienience methods:
+### Convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.\
 Currently these are the available lookup methods:\
     `lookup.orgid(org_shor_name)`\
     `lookup.nodeid(serial)`\
     `lookup.siteid(site_name, org_id=org_id)`\
 
-#### Lookup Organization ID:
-Most REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
+##### Lookup Organization ID:
+Many REST API calls require that you know the org id of the Organization to which you are making changes.  You can provide the 'short name' of your org to the function and it will return the org id.
 ```python
 >>> org_id = sconnect.lookup.orgid('Spacely')
 >>> org_id
 'org-Spacely-0a501e7f27b2c03e'
 >>> 
 ```
-#### Lookup Node ID:
+##### Lookup Node ID:
 Similarly, the `lookup.nodeid` method exists to privide the node id when you supply the appliance serial number.
 ```python
 >>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
@@ -140,7 +140,7 @@ Similarly, the `lookup.nodeid` method exists to privide the node id when you sup
 'node-56f1968e229ca738'
 >>> 
 ```
-#### Lookup Site ID:
+##### Lookup Site ID:
 The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
 ```python
 >>> site_id = sconnect.lookup.siteid('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
