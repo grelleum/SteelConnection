@@ -104,15 +104,10 @@ For example, To see how a port on an appliance is configured use the `config` pa
 To see the the actual link state, speed, and duplex for a port, you would use the `report` path:\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`sconnect.report.get(f'port/{port}').data`
 
-For example, To see how a port on an appliance is configured use the `config` path:\
-+ `sconnect.config.get(f'port/{port}').data`\
-To see the the actual link state, speed, and duplex for a port, you would use the `report` path:\
+For example, To see how a port on an appliance is configured use the `config` path:
++ `sconnect.config.get(f'port/{port}').data`
+To see the the actual link state, speed, and duplex for a port, you would use the `report` path:
 + `sconnect.report.get(f'port/{port}').data`
-
-For example, To see how a port on an appliance is configured use the `config` path:\
-- `sconnect.config.get(f'port/{port}').data`\
-To see the the actual link state, speed, and duplex for a port, you would use the `report` path:\
-- `sconnect.report.get(f'port/{port}').data`
 
 
 ### Retrieving Data:
