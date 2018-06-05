@@ -11,13 +11,17 @@ Supports Python 2.7, 3.4, 3.5, 3.6
 ## Requires:
 Requests
 
+
 ## HOWTO:
+
 
 ### NOTE:
 2018-06-04: The SteelConnection API has changed.  Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.  Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
 
+
 ### TL;DR:
 See the examples direcory for sample scripts.
+
 
 ### Getting Started:
 * Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
@@ -36,7 +40,9 @@ The URL you use includes the realm and organization that you are managing and ta
 `    https://realm.riverbed.cc/admin/Organization`.\
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
+
 ### Authentication:
+
 #### Note on password security:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
@@ -50,7 +56,6 @@ Enter password:
 Retype password: 
 >>> 
 ```
-
 #### Specifying username and password:
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
@@ -64,7 +69,6 @@ password = os.environ.get('SCONPASSWD')
 sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
 ```
 
-
 ### Understanding the API:
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.\
 SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds yje HTTPS requests with that information included.  A `requests.session` object is used to allow a single TCP connection to be re-used for each API request.\
@@ -75,7 +79,7 @@ SteelConneciton (this module) acts to simplify coding by providing an object tha
 **Without** SteelConnection, the same request would look like this:\
 `orgs = requests.get('https://REALM.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
 
-##### Available Methods:
+#### Available Methods:
 SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.\
 These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
 
@@ -84,7 +88,7 @@ These methods will build the request to include api version, auth, etc, so you o
 * Put: Use to edit or update some existing resource.
 * Delete: Delete an existing resource/
 
-##### Two APIs:
+#### Two APIs:
 Riverbed divides the REST API into two APIs:
 * Config: used to make configurations changes and get information about SteelConnect resources.\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
@@ -95,6 +99,10 @@ SteelConnections deals with this by providing two paths to access these two APIs
 * Use `sconnect.config.get(`_resource_`)` to  access the Config API.
 * Use `sconnect.report.get(`_resource_`)` to  access the Reporting API.
 
+For example, To see how a port on an appliance is configured use the `config` path:\
+`sconnect.config.get(f'port/{port}').data`
+To see the the actual link state, speed, and duplex for a port, you would use the `report` path:
+`sconnect.report.get(f'port/{port}').data`
 
 
 ### Retrieving Data:
@@ -108,7 +116,8 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
 * If no json data is returned, data will be an empty python dictionary.
 
-### Lookup convienience methods:
+
+#### Lookup convienience methods:
 SteelConnection provides a collection of `lookup` methods to look up the id for various API objects.\
 Currently these are the available lookup methods:\
     `lookup.orgid(org_shor_name)`\
