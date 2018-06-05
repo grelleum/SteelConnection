@@ -49,7 +49,7 @@ class SConAPI(object):
         self.version = version
         self.controller = controller
         self.exit_on_error = exit_on_error
-        self.username = get_username() if username is None else username
+        self.username = get_input('Enter username: ') if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
         self.response = None
@@ -60,7 +60,7 @@ class SConAPI(object):
         self.config = _Config(self)
         self.report = _Report(self)
         self.lookup = _LookUp(self)
-        self.org = Org()
+        # self.org = Org()
 
     def __bool__(self):
         """Return the success of the last request."""
@@ -164,24 +164,24 @@ class _Report(_Call_Handler):
         self.root = root
 
 
-class Org(object):
-    """Store Org ID and name in SConAPI object as attributes."""
+# class Org(object):
+#     """Store Org ID and name in SConAPI object as attributes."""
 
-    def __init__(self):
-        """Initialize the organization."""
-        self.details = {}
+#     def __init__(self):
+#         """Initialize the organization."""
+#         self.details = {}
 
-    @property
-    def id(self):
-        return self.details.get('id', None)
+#     @property
+#     def id(self):
+#         return self.details.get('id', None)
 
-    @property
-    def name(self):
-        return self.details.get('name', None)
+#     @property
+#     def name(self):
+#         return self.details.get('name', None)
 
-    @property
-    def longname(self):
-        return self.details.get('longname', None)
+#     @property
+#     def longname(self):
+#         return self.details.get('longname', None)
 
 
 class _LookUp(object):
@@ -228,11 +228,6 @@ def get_input(prompt=''):
         data = input(prompt)
     finally:
         return data
-
-
-def get_username(prompt='Enter username: '):
-    """Prompt for username."""
-    return get_input(prompt=prompt)
 
 
 def get_password(prompt=None, password=None):
