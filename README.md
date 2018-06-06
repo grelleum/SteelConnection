@@ -133,6 +133,13 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
 * If no json data is returned, data will be an empty python dictionary.
 
+### Errors and Exceptions:
+The Zen of Python states:
+> Errors should never pass silently.
+Unless explicitly silenced.
+
+sconnect.exit_on_error
+sconnect.HTTPError
 
 ### Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
@@ -181,7 +188,3 @@ These functions are accessed directly from the imported module and can be used i
 
 ##### Get Password:
 `get_password(prompt)` function works with both Python 2 and Python 3 to get user input.  Uses getpass to provide discretion.  Requires user to input password to be typed twice for verification.
-
-### Errors and Exceptions:
-sconnect.exit_on_error
-sconnect.HTTPError
