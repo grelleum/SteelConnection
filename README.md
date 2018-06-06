@@ -117,7 +117,7 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/ne
 Within the resource path, you may see a name preceded by a colon `:`. These are considered variables and must be replaced with an actual value.  The `/networks/:netid` would require the `:netid` be replaced with the actual network ID for the network you are requesting.
 
 SteelConnection methods mimic the HTTP Methods and accept the short form resource paths.\
-To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  netid)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
+To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  net_id)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
 
 ##### Model Schema (Data Payload):
 Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept with JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
@@ -134,12 +134,20 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 * If no json data is returned, data will be an empty python dictionary.
 
 ### Errors and Exceptions:
-The Zen of Python states:
+The **_Zen of Python_** states:
 > Errors should never pass silently.\
 Unless explicitly silenced.
 
-sconnect.exit_on_error
-sconnect.HTTPError
+With this in mind, all API calls should complete without error.  Any call to the REST API that fails will result something other than a 200-level response.  By default, SteelConnection will flag these failures  and raise a steelconnection.HTTPError, which is identical to the requests.HTTPError object.  Exception handling should therefore attampt to catch the steelconnection.HTTPError exception:
+```python
+try:
+    sconnect.put(f'node/{node_id}', data={'location': 'LAB'})
+except steelconnection.HTTPError as e:
+    handle_exception(e)
+```
+Alternatively, to avoid the need for writing `try/except` blocks in your code, if you simply want to print the exception and exit everytime, you can set the `sconnect.exit_on_error = True` anytime after creating your object, or set the value at the time of object creation:\
+`sconnect = steelconnection.SConAPI('REALM.riverbed.cc', exit_on_error=True)`
+
 
 ### Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
