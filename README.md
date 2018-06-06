@@ -17,7 +17,7 @@ Requests
 
 ### NOTE:
 2018-06-06: The SteelConnection API has changed.\
-Previously the Config and Reporting APIs implemented as two objects.  Now the two APIs are consolidated under a single object.  Object methods `get`, `post`, `put`, and `delete` are always reference the Config API, where-as the Reporting API can be accessed using the `getstatus` method.
+Previously the Config and Reporting APIs were implemented as two objects.  Now the two APIs are consolidated under a single object.  Object methods `get`, `post`, `put`, and `delete` are always reference the Config API, where-as the Reporting API can be accessed using the `getstatus` method.
 
 
 ### TL;DR:
