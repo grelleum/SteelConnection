@@ -135,7 +135,7 @@ Here are the rules to determine what gets returned in the `response.data` attrib
 
 ### Errors and Exceptions:
 The Zen of Python states:
-> Errors should never pass silently.\
+> Errors should never pass silently.
 > Unless explicitly silenced.
 
 sconnect.exit_on_error
