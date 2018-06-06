@@ -86,8 +86,8 @@ These methods will build the request to include api version, auth, etc, so you o
 
 * get: Used for retrieving information about a resource.  Expect data to be returned.
 * getstatus: Used for retrieving current status about a resource.  Expect data to be returned.
-* post: Create or deploy a resource that does not already exist.
-* put: Use to edit or update some existing resource.
+* post: Create or deploy a resource that does not already exist.  Requires additional data in the payload.
+* put: Use to edit or update some existing resource.  Requires additional data in the payload.
 * delete: Delete an existing resource/
 
 #### Two APIs:
@@ -105,7 +105,8 @@ For example: Calling `.get('/port/' + port)` would retireve configuration settin
 The Riverbed documentation describes the various REST API calls that can be made.  These take the form:\
 "HTTP Method" "resource path".  
 
-Take the network section for example https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/network:
+Take the network section for example:\
+https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/network:
 * `GET` `/networks`  List networks.
 * `GET` `/org/:orgid/networks`  Get network for an org.
 * `POST` `/org/:orgid/networks`  Create network for an org.
@@ -118,6 +119,8 @@ Within the resource path, you may see a name preceded by a colon `:`. These are 
 SteelConnection methods mimic the HTTP Methods and accept the short form resource paths.\
 To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  netid)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
 
+##### Model Schema (Data Payload):
+Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept with JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
 
 ### Retrieving Data:
 The SteelConnection methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The SteelConnection object always stores the last response in the object so that it can be retrieved (`sconnect.response`).  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
