@@ -9,14 +9,14 @@ sconnect = steelconnection.SConAPI(realm)
 appliance = steelconnection.get_input('Please enter the appliance serial number: ')
 node_id = sconnect.lookup.nodeid(appliance)
 
-ports = sconnect.config.get(f'node/{node_id}/ports').data
+ports = sconnect.get(f'node/{node_id}/ports').data
 
 print('\nPort ID \tifname \tLink \tSpeed \tDuplex')
 print('------- \t------ \t---- \t----- \t------')
 
 for port in ports:
     resource = 'port/{}'.format(port['id'])
-    port_status = sconnect.report.get(resource).data
+    port_status = sconnect.getstatus(resource).data
 
     print('{}\t{}\t{}\t{}\t{}'.format(
         port['port_id'],

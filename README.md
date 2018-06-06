@@ -16,7 +16,8 @@ Requests
 
 
 ### NOTE:
-2018-06-04: The SteelConnection API has changed.  Previously there were two objects, Config and Reporting, to match the two SteelConnect REST APIs.  Now the two APIs are consolidated under a single object.  Calls to `get`, `post`, `put`, and `delete` are now prefaced with either `config.` or `report.`
+2018-06-06: The SteelConnection API has changed.\
+Previously the Config and Reporting APIs implemented as two objects.  Now the two APIs are consolidated under a single object.  Object methods `get`, `post`, `put`, and `delete` are always reference the Config API, where-as the Reporting API can be accessed using the `getstatus` method.
 
 
 ### TL;DR:
@@ -74,19 +75,20 @@ The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manag
 SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds yje HTTPS requests with that information included.  A `requests.session` object is used to allow a single TCP connection to be re-used for each API request.\
 
 **With** SteelConnection, a request to get a list of all organizations in the realm would look like this:\
-`orgs = sconnect.config.get('orgs').data`
+`orgs = sconnect.get('orgs').data`
 
 **Without** SteelConnection, the same request would look like this:\
 `orgs = requests.get('https://REALM.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
 
 #### Available Methods:
-SteelConneciton provides the `.get`, `.post`, `.put`, and `.delete` metheods to simplify access to the API.\
+SteelConneciton provides the `.get`,  `.getstatus`, `.post`, `.put`, and `.delete` methods to simplify access to the API.\
 These methods will build the request to include api version, auth, etc, so you onlu need to specify the resource you are interrested in.
 
-* Get: Used for retrieving information or status about a resource.  Expect data to be returned.
-* Post: Create or deploy a resource that does not already exist.
-* Put: Use to edit or update some existing resource.
-* Delete: Delete an existing resource/
+* get: Used for retrieving information about a resource.  Expect data to be returned.
+* getstatus: Used for retrieving current status about a resource.  Expect data to be returned.
+* post: Create or deploy a resource that does not already exist.
+* put: Use to edit or update some existing resource.
+* delete: Delete an existing resource/
 
 #### Two APIs:
 Riverbed divides the REST API into two APIs:
@@ -95,18 +97,16 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
 * Reporting: used to get current status information about a resource.\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
-SteelConnections deals with this by providing two paths to access these two APIs.
-* To  access the Config API: <pre>sconnect.<b>config</b>.get(<i>resource_path</i>)</pre>
-* To  access the Reporting API: <pre>sconnect.<b>report</b>.get(<i>resource_path</i>)</pre>
+By nature, the Reporting API only requires the HTTP GET method, where-as the more commonly used Confg API requires GET, POST, PUT and DELETE.  SteelConnections combines the two APIs by implementing `.get`,  `.post`, `.put`, and `.delete` methods to access to Config API and the `.getstatus` method to access the Reporting API.
 
-For example: Using the resource `'port/{port}'` with `.config` would allow you to view or configure settings on a port.  Using the same resource with `.report` will allow you to view the actual link state, speed, duplex, etc. for that port.
+For example: Calling `.get(f'port/{port}')` would retireve configuration settings on a port, where-as `.getstatus(f'port/{port}')` would retreive the actual link state, speed, duplex, etc. for that port.
 
 
 ### Retrieving Data:
-The steelconnect methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
+The SteelConnection methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The SteelConnection object always stores the last response in the object so that it can be retrieved (`sconnect.response`).  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
 
 For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.\
-`list_of_all_orgs = sconnect.config.get('orgs').data`
+`list_of_all_orgs = sconnect.get('orgs').data`
 
 Here are the rules to determine what gets returned in the `response.data` attribute:
 * If json data is returned and the key 'items' is in the json data, then return a python list of 'items'.
@@ -162,3 +162,6 @@ These functions are accessed directly from the imported module and can be used i
 ##### Get Password:
 `get_password(prompt)` function works with both Python 2 and Python 3 to get user input.  Uses getpass to provide discretion.  Requires user to input password to be typed twice for verification.
 
+### Errors and Exceptions:
+sconnect.exit_on_error
+sconnect.HTTPError

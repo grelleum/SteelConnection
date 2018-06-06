@@ -49,7 +49,7 @@ class SConAPI(object):
         self.version = version
         self.controller = controller
         self.exit_on_error = exit_on_error
-        self.username = get_input('Enter username: ') if username is None else username
+        self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
         self.response = None
@@ -57,8 +57,6 @@ class SConAPI(object):
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
-        self.config = _Config(self)
-        self.report = _Report(self)
         self.lookup = _LookUp(self)
         # self.org = Org()
 
@@ -77,91 +75,75 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-
-class _Call_Handler(object):
-    """Make REST API calls to Riverbed SteelConnect Manager."""
-
     def get(self, resource, data=None):
         """Make an HTTP GET request for the API resource."""
-        return self._request(self.root.session.get, resource)
+        return self._request(self.session.get, 'config', resource)
+
+    def getstatus(self, resource, data=None):
+        """Make an HTTP GET request for the API resource."""
+        return self._request(self.session.get, 'reporting', resource)
 
     def delete(self, resource, data=None):
         """Make an HTTP DELETE request for the API resource."""
-        return self._request(self.root.session.delete, resource)
+        return self._request(self.session.delete, 'config', resource)
 
     def post(self, resource, data=None):
         """Make an HTTP POST request for the API resource."""
-        return self._request(self.root.session.post, resource, data)
+        return self._request(self.session.post, 'config', resource, data)
 
     def put(self, resource, data=None):
         """Make an HTTP PUT request for the API resource."""
-        return self._request(self.root.session.put, resource, data)
+        return self._request(self.session.put, 'config', resource, data)
 
-    def url(self, resource):
+    def url(self, api, resource):
         """Combine attributes and resource as a url string."""
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
-            self.root.controller, self.api, self.root.version, resource,
+            self.controller, api, self.version, resource,
         )
 
-    def _request(self, request_method, resource, data=None):
+    def _request(self, request_method, api, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
-        kwargs = self._request_kwargs(resource, data)
+        kwargs = self._request_kwargs(api, resource, data)
         try:
-            self.root.response = request_method(**kwargs)
+            self.response = request_method(**kwargs)
         except Exception as e:
-            if self.root.exit_on_error:
+            if self.exit_on_error:
                 print('SteelConnect connection failed:', file=sys.stderr)
                 print(e, file=sys.stderr)
                 sys.exit(1)
             else:
                 raise e
-        if not self.root.response.ok:
-            if self.root.exit_on_error:
+        if not self.response.ok:
+            if self.exit_on_error:
                 text = 'SteelConnect Response: <{0}> {1}'.format(
                     response.status_code, response.reason
                 )
                 print(text, file=sys.stderr)
                 sys.exit(1)
             else:
-                self.root.response.raise_for_status()
+                self.response.raise_for_status()
             return
-        if not self.root.response.json():
-            self.root.response.data = {}
-        elif 'items' in self.root.response.json():
-            self.root.response.data = self.root.response.json()['items']
+        if not self.response.json():
+            self.response.data = {}
+        elif 'items' in self.response.json():
+            self.response.data = self.response.json()['items']
         else:
-            self.root.response.data = self.root.response.json()
-        return self.root.response
+            self.response.data = self.response.json()
+        return self.response
 
-    def _request_kwargs(self, resource, data):
+    def _request_kwargs(self, api, resource, data):
         """Return a dictionary with the request keyword arguments."""
         kwargs = {
-            'url': self.url(resource),
-            'auth': (self.root.username, self.root.password),
-            'headers': self.root.headers,
+            'url': self.url(api, resource),
+            'auth': (self.username, self.password),
+            'headers': self.headers,
         }
         if data:
             if isinstance(data, dict):
                 data = json.dumps(data)
             kwargs['data'] = data
         return kwargs
-
-
-class _Config(_Call_Handler):
-    """Make config calls via REST API calls to Riverbed SteelConnect Manager."""
-
-    def __init__(self, root):
-        self.api='config'
-        self.root = root
-
-
-class _Report(_Call_Handler):
-    """Get reporting via REST API calls to Riverbed SteelConnect Manager."""
-
-    def __init__(self, root):
-        self.api='reporting'
-        self.root = root
 
 
 # class Org(object):
@@ -193,7 +175,7 @@ class _LookUp(object):
 
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
-        items = self.sconnection.config.get(domain).data
+        items = self.sconnection.get(domain).data
         valid_items = (item for item in items if item[key])
         matches = [item for item in valid_items if value in item[key]]
         details = max(matches) if matches else ''
@@ -208,7 +190,7 @@ class _LookUp(object):
     def orgid(self, name, key='name'):
         """Return org id that matches organization short name provided."""
         result, details = self._lookup(domain='orgs', value=name, key=key)
-        self.sconnection.org.details = details
+        # self.sconnection.org.details = details
         return result
 
     def siteid(self, name, orgid=None, key='name'):
@@ -228,6 +210,10 @@ def get_input(prompt=''):
         data = input(prompt)
     finally:
         return data
+
+
+def get_username(prompt=''):
+    return get_input('Enter username: ')
 
 
 def get_password(prompt=None, password=None):

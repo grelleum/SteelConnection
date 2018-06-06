@@ -24,7 +24,7 @@ print('Org name: {},  org_id: {}'.format(org_name, org_id))
 resource = '/org/{}/sites'.format(org_id)
 
 # Make the post request.
-response = sconnect.config.post(resource, data=new_site)
+response = sconnect.post(resource, data=new_site)
 
 # Display result.
 print('Response:', response.status_code, response.reason)
