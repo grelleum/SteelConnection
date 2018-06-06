@@ -99,7 +99,24 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
 
 By nature, the Reporting API only requires the HTTP GET method, where-as the more commonly used Confg API requires GET, POST, PUT and DELETE.  SteelConnections combines the two APIs by implementing `.get`,  `.post`, `.put`, and `.delete` methods to access to Config API and the `.getstatus` method to access the Reporting API.
 
-For example: Calling `.get(f'port/{port}')` would retireve configuration settings on a port, where-as `.getstatus(f'port/{port}')` would retreive the actual link state, speed, duplex, etc. for that port.
+For example: Calling `.get('/port/' + port)` would retireve configuration settings on a port, where-as `.getstatus('/port/' + port)` would retreive the actual link state, speed, duplex, etc. for that port.
+
+##### Crafting your API calls:
+The Riverbed documentation describes the various REST API calls that can be made.  These take the form:\
+"HTTP Method" "resource path".  
+
+Take the network section for example https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/network:
+* `GET` `/networks`  List networks.
+* `GET` `/org/:orgid/networks`  Get network for an org.
+* `POST` `/org/:orgid/networks`  Create network for an org.
+* `DELETE` `/networks/:netid`  Delete network.
+* `GET` `/networks/:netid`  Get network.
+* `PUT` `/networks/:netid`  Update a network.
+
+Within the resource path, you may see a name preceded by a colon `:`. These are considered variables and must be replaced with an actual value.  The `/networks/:netid` would require the `:netid` be replaced with the actual network ID for the network you are requesting.
+
+SteelConnection methods mimic the HTTP Methods and accept the short form resource paths.\
+To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  netid)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
 
 
 ### Retrieving Data:
