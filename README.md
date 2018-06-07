@@ -86,7 +86,7 @@ These methods will build the request to include api version, auth, etc, so you o
 
 * get: Used for retrieving information about a resource.  Expect data to be returned.
 * getstatus: Used for retrieving current status about a resource.  Expect data to be returned.
-* post: Create or deploy a resource that does not already exist.  Requires additional data in the payload.
+* post: Create or deploy a new resource.  Usually requires additional data in the payload.
 * put: Use to edit or update some existing resource.  Requires additional data in the payload.
 * delete: Delete an existing resource/
 
