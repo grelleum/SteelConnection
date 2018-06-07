@@ -1,7 +1,7 @@
 # SteelConnection
+###### version 0.7.0
 REST API access to Riverbed SteelConnect Manager.
 
-###### version 0.7.0
 SteelConnection provides wrapper objects to simplify access to the Riverbed SteelConnect REST API.
 The SteelConnection objects store the SCM base URL and authentication so that you only need to pass in the resource and any required data.
 The object creates a Request session object, which is sent to the SteelConnect Manager and passes back a response object with an additional 'data' attribute containing any data from the SteelConnect Manager.
