@@ -1,7 +1,7 @@
+import re
 import setuptools
 
 name = 'steelconnection'
-version = '0.7.0'
 description = 'Simplify REST API access to Riverbed SteelConnect.'
 url = 'https://github.com/grelleum/SteelConnection'
 author = 'Greg Mueller'
@@ -16,6 +16,8 @@ classifiers=(
 
 with open('README.md', 'r') as f:
     long_description = f.read()
+
+version = re.findall('version (\d+\.\d+\.\d+)', long_description)[0]
 
 setuptools.setup(
     name=name,
