@@ -150,6 +150,7 @@ Alternatively, to avoid the need for writing `try/except` blocks in your code, i
 
 
 ### Convienience functions:
+#### Object-level Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
 SteelConnection provides a collection of `lookup` functions to look up the id for various API resources.\
 Currently these are the available lookup functions:
@@ -157,7 +158,6 @@ Currently these are the available lookup functions:
 * `lookup.nodeid(serial)`
 * `lookup.siteid(site_name, org_id=org_id)`
 
-#### Object-level Convienience functions:
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
 
 ##### Lookup Organization ID:
