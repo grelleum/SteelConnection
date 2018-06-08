@@ -5,7 +5,7 @@ name = 'steelconnection'
 description = 'Simplify REST API access to Riverbed SteelConnect.'
 url = 'https://github.com/grelleum/SteelConnection'
 author = 'Greg Mueller'
-author_email = 'greg@grelleum.com'
+author_email = 'steelconnection@grelleum.com'
 
 classifiers=(
     'Programming Language :: Python :: 2.7',
