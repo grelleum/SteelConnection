@@ -72,7 +72,7 @@ sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, passw
 ```
 
 ### Understanding the API:
-The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds the HTTPS requests based on that information.  A `requests.session` object is used to allow a single TCP connection to be re-used for all subsequent API requests.\
+The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds the HTTPS requests based on that information.  A `requests.session` object is used to allow a single TCP connection to be re-used for all subsequent API requests.
 
 **With** SteelConnection, a request to get a list of all organizations in the realm would look like this:\
 `orgs = sconnect.get('orgs').data`
@@ -152,10 +152,10 @@ Alternatively, to avoid the need for writing `try/except` blocks in your code, i
 ### Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
 SteelConnection provides a collection of `lookup` functions to look up the id for various API resources.\
-Currently these are the available lookup functions:\
-* `lookup.orgid(org_short_name)`\
-* `lookup.nodeid(serial)`\
-* `lookup.siteid(site_name, org_id=org_id)`\
+Currently these are the available lookup functions:
+* `lookup.orgid(org_short_name)`
+* `lookup.nodeid(serial)`
+* `lookup.siteid(site_name, org_id=org_id)`
 
 #### Object-level Convienience functions:
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
