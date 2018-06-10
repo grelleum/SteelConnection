@@ -120,7 +120,7 @@ class SConAPI(object):
         if not self.response.ok:
             if self.exit_on_error:
                 text = 'SteelConnect Response: <{0}> {1}'.format(
-                    response.status_code, response.reason
+                    self.response.status_code, self.response.reason
                 )
                 print(text, file=sys.stderr)
                 sys.exit(1)
