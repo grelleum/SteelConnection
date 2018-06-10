@@ -16,10 +16,17 @@ classifiers=(
     'Operating System :: OS Independent',
 ),
 
-with open('README.md', 'r') as f:
-    long_description = f.read()
+# with open('README.md', 'r') as f:
+#     long_description = f.read()
 
-version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
+long_description = """SteelConnection
+
+Convienience objects for making REST API calls
+to Riverbed SteelConnect Manager.
+"""
+
+# version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
+version = 0.7.2
 download_url = base_url + version + '.tar.gz'
 
 setuptools.setup(
