@@ -17,7 +17,7 @@ classifiers=(
 with open('README.md', 'r') as f:
     long_description = f.read()
 
-version = re.findall('version (\d+\.\d+\.\d+)', long_description)[0]
+version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
 
 setuptools.setup(
     name=name,
