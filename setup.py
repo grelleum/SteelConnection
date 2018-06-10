@@ -26,7 +26,7 @@ to Riverbed SteelConnect Manager.
 """
 
 # version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
-version = 0.7.2
+version = '0.7.2'
 download_url = base_url + version + '.tar.gz'
 
 setuptools.setup(
