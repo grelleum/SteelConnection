@@ -30,9 +30,9 @@ import json
 import requests
 import sys
 
-import lookup
-from input_tools import get_username, get_password
 from requests import HTTPError
+from steelconnection.lookup import _LookUp
+from steelconnection.input_tools import get_username, get_password
 
 
 class SConAPI(object):
@@ -60,7 +60,7 @@ class SConAPI(object):
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
-        self.lookup = lookup._LookUp(self)
+        self.lookup = _LookUp(self)
         # self.org = Org()
 
     def __bool__(self):
