@@ -14,20 +14,16 @@ Requests
 
 
 ## HOWTO:
-
-
-### NOTE:
-2018-06-06: The SteelConnection API has changed.\
-Previously the Config and Reporting APIs were implemented as two objects.  Now the two APIs are consolidated under a single object.  Object methods `get`, `post`, `put`, and `delete` are always reference the Config API, where-as the Reporting API can be accessed using the `getstatus` method.
-
+```python
+python -m pip install steelconnection
+```
 
 ### TL;DR:
 See the examples direcory for sample scripts.
 
-
 ### Getting Started:
 * Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
-* Copy the steelconnecton.py file into the same folder as your script.
+* Use pip to install steelconnection as shown above.
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
