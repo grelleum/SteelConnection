@@ -45,24 +45,3 @@ class _LookUp(object):
         resource = '/'.join(('org', orgid, 'sites'))
         result, details = self._lookup(domain=resource, value=name, key=key)
         return result
-
-
-# class Org(object):
-#     """Store Org ID and name in SConAPI object as attributes."""
-
-#     def __init__(self):
-#         """Initialize the organization."""
-#         self.details = {}
-
-#     @property
-#     def id(self):
-#         return self.details.get('id', None)
-
-#     @property
-#     def name(self):
-#         return self.details.get('name', None)
-
-#     @property
-#     def longname(self):
-#         return self.details.get('longname', None)
-
