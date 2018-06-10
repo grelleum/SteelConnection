@@ -27,12 +27,12 @@ class _LookUp(object):
 
     def nodeid(self, serial, key='serial'):
         """Return node id that matches appliance serial number provided."""
-        result, details = self._lookup(domain='nodes', value=serial, key=key)
+        result, _details = self._lookup(domain='nodes', value=serial, key=key)
         return result
 
     def orgid(self, name, key='name'):
         """Return org id that matches organization short name provided."""
-        result, details = self._lookup(domain='orgs', value=name, key=key)
+        result, _details = self._lookup(domain='orgs', value=name, key=key)
         # self.sconnection.org.details = details
         return result
 
@@ -43,5 +43,5 @@ class _LookUp(object):
         if not orgid:
             raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
-        result, details = self._lookup(domain=resource, value=name, key=key)
+        result, _details = self._lookup(domain=resource, value=name, key=key)
         return result
