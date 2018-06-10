@@ -5,11 +5,11 @@ from steelconnection.input_tools import get_input
 from steelconnection.input_tools import get_username
 from steelconnection.input_tools import get_password
 
-__version__ = '0.7.0'
+__version__ = '0.7.1'
 __all__ = (
-    SConAPI,
-    HTTPError,
-    get_input,
-    get_username,
-    get_password,
+    'SConAPI',
+    'HTTPError',
+    'get_input',
+    'get_username',
+    'get_password',
 )
