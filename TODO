@@ -1,2 +1,6 @@
 Test against various versions that may have issues with requests / SSL:
     and may require urllib3 disable warnings.
+
+Needs to be [friendlier, more explicit, more helpful] when errors occur.
+
+Re-visit error handling - forced exceptions on non-200 return codes.
