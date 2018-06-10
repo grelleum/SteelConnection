@@ -3,6 +3,7 @@ import setuptools
 
 name = 'steelconnection'
 description = 'Simplify REST API access to Riverbed SteelConnect.'
+keywords = ['SteelConnect', 'REST', 'API', 'Riverbed', 'Grelleum']
 url = 'https://github.com/grelleum/SteelConnection'
 author = 'Greg Mueller'
 author_email = 'steelconnection@grelleum.com'
@@ -30,6 +31,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=url,
+    download_url=download_url,
+    keywords = keywords,
     packages=setuptools.find_packages(),
     classifiers=classifiers
 )
