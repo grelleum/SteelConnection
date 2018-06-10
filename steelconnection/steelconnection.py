@@ -30,6 +30,8 @@ import json
 import requests
 import sys
 
+import lookup
+from input_tools import get_username, get_password
 from requests import HTTPError
 
 
@@ -58,7 +60,7 @@ class SConAPI(object):
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
-        self.lookup = _LookUp(self)
+        self.lookup = lookup._LookUp(self)
         # self.org = Org()
 
     def __bool__(self):
@@ -145,86 +147,3 @@ class SConAPI(object):
                 data = json.dumps(data)
             kwargs['data'] = data
         return kwargs
-
-
-# class Org(object):
-#     """Store Org ID and name in SConAPI object as attributes."""
-
-#     def __init__(self):
-#         """Initialize the organization."""
-#         self.details = {}
-
-#     @property
-#     def id(self):
-#         return self.details.get('id', None)
-
-#     @property
-#     def name(self):
-#         return self.details.get('name', None)
-
-#     @property
-#     def longname(self):
-#         return self.details.get('longname', None)
-
-
-class _LookUp(object):
-    """Provide convienience tools to lookup objects."""
-
-    def __init__(self, sconnection):
-        """Obtain access to SteelConect Manager."""
-        self.sconnection = sconnection
-
-    def _lookup(self, domain, value, key, return_value='id'):
-        """Generic lookup function."""
-        items = self.sconnection.get(domain).data
-        valid_items = (item for item in items if item[key])
-        matches = [item for item in valid_items if value in item[key]]
-        details = max(matches) if matches else ''
-        result = details[return_value]
-        return result, details
-
-    def nodeid(self, serial, key='serial'):
-        """Return node id that matches appliance serial number provided."""
-        result, details = self._lookup(domain='nodes', value=serial, key=key)
-        return result
-
-    def orgid(self, name, key='name'):
-        """Return org id that matches organization short name provided."""
-        result, details = self._lookup(domain='orgs', value=name, key=key)
-        # self.sconnection.org.details = details
-        return result
-
-    def siteid(self, name, orgid=None, key='name'):
-        """Return site id that matches site short name within the organization provided."""
-        if not orgid:
-            raise ValueError('orgid required when looking up a site.')
-        resource = '/'.join(('org', orgid, 'sites'))
-        result, details = self._lookup(domain=resource, value=name, key=key)
-        return result
-
-
-def get_input(prompt=''):
-    """Get input in a Python 2/3 compatible way."""
-    try:
-        data = raw_input(prompt)
-    except NameError:
-        data = input(prompt)
-    finally:
-        return data
-
-
-def get_username(prompt=''):
-    return get_input('Enter username: ')
-
-
-def get_password(prompt=None, password=None):
-    """Get password from terminal with discretion."""
-    prompt = 'Enter password: ' if prompt is None else prompt
-    while not password:
-        verify = False
-        while password != verify:
-            if verify:
-                print('Passwords do not match. Try again', file=sys.stderr)
-            password = getpass.getpass(prompt)
-            verify = getpass.getpass('Retype password: ')
-    return password
