@@ -14,10 +14,11 @@ Usage:
     Once you have instantiated an object as shown above,
     you can use the object to make calls to the REST API.
 
-    For example, to get all nodes in the realm, or in a specifc org:
+    For example, to get all nodes in the realm:
     nodes = sconnect.config.get('nodes')
-    nodes = sconnect.config.get(f'/org/{orgid}/nodes')  # where orgid is predefined.
-
+    ... or in a specifc org:
+    nodes = sconnect.config.get('/org/' + orgid + '/nodes')  
+    
     Any call that does not result in a success (HTTP status code 200)
     will raise an exception, so calls should be wrapped in a try/except pair.
 """
