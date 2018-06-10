@@ -11,14 +11,14 @@ node_id = sconnect.lookup.nodeid(appliance)
 
 ports = sconnect.get(f'node/{node_id}/ports').data
 
-print('\nPort ID \tifname \tLink \tSpeed \tDuplex')
-print('------- \t------ \t---- \t----- \t------')
+line = '{:14}{:10}{:8}{:8}{:8}'
+print(line.format('Port ID', 'ifname', 'Link', 'Speed', 'Duplex'))
+print(line.format('-------', '------', '----', '-----', '------'))
 
 for port in ports:
     resource = 'port/{}'.format(port['id'])
     port_status = sconnect.getstatus(resource).data
-
-    print('{}\t{}\t{}\t{}\t{}'.format(
+    print(line.format(
         port['port_id'],
         port['ifname'],
         'UP' if port_status['link'] else 'DOWN',
