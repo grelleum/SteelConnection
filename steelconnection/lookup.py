@@ -19,6 +19,7 @@ class _LookUp(object):
         """Generic lookup function."""
         items = self.sconnection.get(domain).data
         valid_items = (item for item in items if item[key])
+        # NEED better handling when item not found.
         matches = [item for item in valid_items if value in item[key]]
         details = max(matches) if matches else ''
         result = details[return_value]
