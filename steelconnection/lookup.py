@@ -37,7 +37,9 @@ class _LookUp(object):
         return result
 
     def siteid(self, name, orgid=None, key='name'):
-        """Return site id that matches site short name within the organization provided."""
+        """Return site id that matches site short name
+        based on the organization provided.
+        """
         if not orgid:
             raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
