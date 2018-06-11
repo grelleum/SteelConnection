@@ -1,7 +1,7 @@
 SteelConnection
 ===============
 
-version 0.7.2
+version 0.7.3
              
 
 REST API access to Riverbed SteelConnect Manager.
