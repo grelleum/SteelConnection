@@ -22,7 +22,8 @@ classifiers=(
 # to Riverbed SteelConnect Manager.
 # """
 
-with open('README.rst', 'rt') as f:
+# with open('README.rst', 'rt') as f:
+with open('README.md', 'rt') as f:
     long_description = f.read()
 version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
 
