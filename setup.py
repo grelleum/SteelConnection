@@ -16,15 +16,15 @@ classifiers=(
     'Operating System :: OS Independent'
 )
 
-long_description = """SteelConnection
+# long_description = """SteelConnection
 
-Convienience objects for making REST API calls
-to Riverbed SteelConnect Manager.
-"""
+# Convienience objects for making REST API calls
+# to Riverbed SteelConnect Manager.
+# """
 
-with open('README.md', 'r') as f:
-    readme = f.read()
-version = re.findall(r'version (\d+\.\d+\.\d+)', readme)[0]
+with open('README.rst', 'rt') as f:
+    long_description = f.read()
+version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
 
 download_url = base_url + version + '.tar.gz'
 
