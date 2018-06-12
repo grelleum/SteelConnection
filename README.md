@@ -1,5 +1,5 @@
 # SteelConnection
-###### version 0.7.6
+###### version 0.7.7
 REST API access to Riverbed SteelConnect Manager.
 
 **BETA software:** _actively working to simplify - behavior expected to change before 1.0.0 release._\
