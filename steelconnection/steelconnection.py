@@ -142,7 +142,8 @@ class SConAPI(object):
             )
         except Exception as e:
             if self.exit_on_error:
-                print('SteelConnect connection failed:', file=sys.stderr)
+                error = 'Connection to SteelConnect Manager failed:'
+                print(error, file=sys.stderr)
                 print(e, file=sys.stderr)
                 sys.exit(1)
             else:
