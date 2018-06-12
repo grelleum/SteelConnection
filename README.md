@@ -8,7 +8,7 @@ The object creates a Request session object, which is sent to the SteelConnect M
 
 Supports Python 2.7, 3.4, 3.5, 3.6
 
-#####BETA software:
+##### BETA software:
 _actively working to simplify - some behavior expected to change before 1.0.0 release._
 
 ## Requires:
