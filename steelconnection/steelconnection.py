@@ -104,37 +104,7 @@ class SConAPI(object):
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.version, resource,
         )
-
-    # def _request(self, request_method, api, resource, data=None):
-    #     """Send HTTP request to SteelConnect manager."""
-    #     kwargs = self._request_kwargs(api, resource, data)
-    #     try:
-    #         self.response = request_method(**kwargs)
-    #     except Exception as e:
-    #         if self.exit_on_error:
-    #             print('SteelConnect connection failed:', file=sys.stderr)
-    #             print(e, file=sys.stderr)
-    #             sys.exit(1)
-    #         else:
-    #             raise e
-    #     if not self.response.ok:
-    #         if self.exit_on_error:
-    #             text = 'SteelConnect Response: <{0}> {1}'.format(
-    #                 self.response.status_code, self.response.reason
-    #             )
-    #             print(text, file=sys.stderr)
-    #             sys.exit(1)
-    #         else:
-    #             self.response.raise_for_status()
-    #         return
-    #     if not self.response.json():
-    #         self.response.data = {}
-    #     elif 'items' in self.response.json():
-    #         self.response.data = self.response.json()['items']
-    #     else:
-    #         self.response.data = self.response.json()
-    #     return self.response
-
+    
     def _request(self, request_method, api, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
         self.response = self._make_request(request_method, api, resource, data)
@@ -175,16 +145,3 @@ class SConAPI(object):
             else:
                 raise e
         return response
-
-    # def _request_kwargs(self, api, resource, data):
-    #     """Return a dictionary with the request keyword arguments."""
-    #     kwargs = {
-    #         'url': self.url(api, resource),
-    #         'auth': (self.username, self.password),
-    #         'headers': self.headers,
-    #     }
-    #     if data:
-    #         if isinstance(data, dict):
-    #             data = json.dumps(data)
-    #         kwargs['data'] = data
-    #     return kwargs
