@@ -1,5 +1,5 @@
 # SteelConnection
-###### version 0.7.7
+##### version 0.7.7
 REST API access to Riverbed SteelConnect Manager.
 
 SteelConnection provides wrapper objects to simplify access to the Riverbed SteelConnect REST API.
@@ -8,7 +8,7 @@ The object creates a Request session object, which is sent to the SteelConnect M
 
 Supports Python 2.7, 3.4, 3.5, 3.6
 
-#### BETA software:
+##### BETA software:
 _actively working to simplify - some behavior expected to change before 1.0.0 release._
 
 ## Requires:
