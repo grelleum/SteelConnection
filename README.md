@@ -24,10 +24,10 @@ python3 -m pip install steelconnection
 python -m pip install steelconnection
 ```
 Upgrade to the latest version:
-```python
-python3 -m pip install -\\\\-upgrade steelconnection
+```
+python3 -m pip install --upgrade steelconnection
 # -or-
-python3 -m pip install `--`upgrade steelconnection
+python3 -m pip install --upgrade steelconnection
 ```
 
 #### TL;DR:
