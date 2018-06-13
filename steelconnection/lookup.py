@@ -22,8 +22,8 @@ class _LookUp(object):
         # NEED better handling when item not found.
         matches = [item for item in valid_items if value in item[key]]
         details = max(matches) if matches else ''
-        result = details[return_value]
-        return result, details
+        self.sconnection.result = details[return_value]
+        return self.sconnection.result, details
 
     def nodeid(self, serial, key='serial'):
         """Return node id that matches appliance serial number provided."""
