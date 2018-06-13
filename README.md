@@ -1,21 +1,20 @@
 # SteelConnection
 ##### version 0.8.0
-REST API access to Riverbed SteelConnect Manager.
+SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
-SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.\
-The SteelConnection object stores the SCM base URL and authentication so that 
-you only need to pass in the resource and any required data.
-The SteelConnection object creates a Request session object that is used to
-send many API requests using a single TCP connection.  These requests can accept either Python dictionaries or JSON formatted strings.  SteelConnection returns a native Python dictionary or list based on the expected return value.  The requests response object is always available as an attribute.
-
-Supports Python 2.7, 3.4, 3.5, 3.6
+* Create an object once and it remembers the URL and authentication.
+* All subsequent API requests are made via a single TCP connection.
+* Call the appropriate method and supply the resrouce path and any upload data.
+* Accepts and returns native Python data - no need to convert to or from JSON.
 
 ##### BETA software:
 _actively working to simplify - some behavior expected to change before 1.0.0 release._
 
+## Supports:
+Python 2.7, 3.4, 3.5, 3.6
+
 ## Requires:
 Requests
-
 
 ## HOWTO:
 ```python
