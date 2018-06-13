@@ -21,10 +21,10 @@ Requests
 python -m pip install steelconnection
 ```
 
-### TL;DR:
+#### TL;DR:
 See the examples direcory for sample scripts.
 
-### Getting Started:
+#### Getting Started:
 * Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
 * Use pip to install steelconnection as shown above.
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
@@ -33,7 +33,7 @@ import steelconnection
 sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 ```
 
-### Realms and Organizations:
+#### Realms and Organizations:
 There is a one to one relationship between a Realm and a SteelConnect Manager.  The SteelConnect Manager acts as the controller for a the realm.  A newly created realm would not have any organizations, otherwise a realm will have one or more organizations.  Each oganization within a realm acts an autonomous network system. In practice, most REST API operations are performed within a specific organization.
 
 You normally access the SteelConnect Manager (SCM) using a web browser.\
@@ -41,13 +41,12 @@ The URL you use includes the realm and organization that you are managing and ta
 `    https://realm.riverbed.cc/admin/Organization`.\
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
+#### Authentication:
 
-### Authentication:
-
-#### Note on password security:
+###### Note on password security:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
-#### Interactive login:
+###### Interactive login:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 ```python
 >>> import steelconnection
@@ -57,7 +56,7 @@ Enter password:
 Retype password: 
 >>> 
 ```
-#### Specifying username and password:
+###### Specifying username and password:
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
