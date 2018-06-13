@@ -30,7 +30,7 @@ python3 -m pip install --upgrade steelconnection
 python -m pip install --upgrade steelconnection
 ```
 
-#### TL;DR:
+#### Quickstart:
 See the examples direcory for sample scripts.
 
 #### Getting Started:
