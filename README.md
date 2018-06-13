@@ -1,5 +1,5 @@
 # SteelConnection
-##### version 0.7.7
+##### version 0.8.0
 REST API access to Riverbed SteelConnect Manager.
 
 SteelConnection provides wrapper objects to simplify access to the Riverbed SteelConnect REST API.

@@ -9,7 +9,7 @@ from steelconnection.input_tools import get_input
 from steelconnection.input_tools import get_username
 from steelconnection.input_tools import get_password
 
-__version__ = '0.7.7'
+__version__ = '0.8.0'
 __all__ = (
     'SConAPI',
     'HTTPError',
