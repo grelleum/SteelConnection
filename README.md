@@ -43,10 +43,10 @@ The Organization is case-sensistive and is also known as the organization short 
 
 #### Authentication:
 
-###### Note on password security:
+##### Note on password security:
 The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
 
-###### Interactive login:
+##### Interactive login:
 SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
 ```python
 >>> import steelconnection
@@ -56,7 +56,7 @@ Enter password:
 Retype password: 
 >>> 
 ```
-###### Specifying username and password:
+##### Specifying username and password:
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
@@ -106,7 +106,7 @@ By nature, the Reporting API only requires the HTTP GET method, where-as the mor
 
 For example: Calling `.get('/port/' + port)` would retireve configuration settings on a port, where-as `.getstatus('/port/' + port)` would retreive the actual link state, speed, duplex, etc. for that port.
 
-###### Crafting your API calls:
+##### Crafting your API calls:
 The Riverbed documentation describes the various REST API calls that can be made.\
 These take the form:  "_HTTP Method_" "_resource path_".  
 
@@ -127,7 +127,7 @@ To update a network, the documentation lists `PUT` `/networks/:netid`.  With the
 ##### Model Schema (Data Payload):
 Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept either JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
 
-### Retrieving Data:
+#### Retrieving Data:
 The SteelConnection methods leverage the popular requests package.  Methods calls always return a native Python dictionary, or a list of dictionaries, depending on the API call.  The `requests.response` object will be stored as an attribute of the object (`sconnect.response`) so the latest response is always easily accessible.  By providing the full `requests.response` object you are free to check status and see all headers.
 
 For example, the 'get orgs' request should always provide a list of orgs within the realm, so we can directly assign the result as a native Python list.\
@@ -138,7 +138,7 @@ Here are the rules to determine what gets returned by an API request:
 * If response.json() is True and the 'items' key _does not_ exist, then return a python dictionary.
 * If response.json() is False, return an empty python dictionary.
 
-### Errors and Exceptions:
+#### Errors and Exceptions:
 The **_Zen of Python_** states:
 > Errors should never pass silently.\
 Unless explicitly silenced.
@@ -154,8 +154,8 @@ Alternatively, to avoid the need for writing `try/except` blocks in your code, i
 `sconnect = steelconnection.SConAPI('REALM.riverbed.cc', exit_on_error=True)`
 
 
-### Convienience functions:
-#### Object-level Convienience functions:
+#### Convienience functions:
+##### Object-level Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
 SteelConnection provides a collection of `lookup` functions to look up the id for various API resources.\
 Currently these are the available lookup functions:
@@ -165,7 +165,7 @@ Currently these are the available lookup functions:
 
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
 
-##### Lookup Organization ID:
+###### Lookup Organization ID:
 Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id.
 ```python
 >>> org_id = sconnect.lookup.orgid('Spacely')
@@ -173,7 +173,7 @@ Many REST API calls require that you know the org id of your organization.  You 
 'org-Spacely-0a0b1cbadb33f34'
 >>> 
 ```
-##### Lookup Node ID:
+###### Lookup Node ID:
 Similarly, the `lookup.nodeid` method exists to privide the node id when you supply the appliance serial number.
 ```python
 >>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
@@ -181,7 +181,7 @@ Similarly, the `lookup.nodeid` method exists to privide the node id when you sup
 'node-56f1968e222ab789'
 >>> 
 ```
-##### Lookup Site ID:
+###### Lookup Site ID:
 The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
 ```python
 >>> site_id = sconnect.lookup.siteid('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
@@ -190,14 +190,14 @@ The site id can be found in a similar way, but since the same site name, like HQ
 >>> 
 ```
 
-#### Module-level Convienience functions:
+##### Module-level Convienience functions:
 These functions are accessed directly from the imported module and can be used independently of the SteelConnect API.
 
-##### Get Input:
+###### Get Input:
 `get_input(prompt)` function works with both Python 2 and Python 3 to get user input.
 
-##### Get Username:
+###### Get Username:
 `get_username(prompt)` function works with both Python 2 and Python 3 to get username.
 
-##### Get Password:
+###### Get Password:
 `get_password(prompt)` function works with both Python 2 and Python 3 to get user input.  Uses getpass to provide discretion.  Requires user to input password to be typed twice for verification.
