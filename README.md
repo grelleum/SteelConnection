@@ -6,7 +6,7 @@ SteelConnection provides a wrapper object to simplify access to the Riverbed Ste
 The SteelConnection object stores the SCM base URL and authentication so that 
 you only need to pass in the resource and any required data.
 The SteelConnection object creates a Request session object that is used to
-send many API requests using a single TCP connection.  These requests can accept either Python dictionaries or JSON formatted strings.  SteelConnection returns a native Python dictionary or list based on the expected return value.  The requests response object is always available as an attribute.\
+send many API requests using a single TCP connection.  These requests can accept either Python dictionaries or JSON formatted strings.  SteelConnection returns a native Python dictionary or list based on the expected return value.  The requests response object is always available as an attribute.
 
 Supports Python 2.7, 3.4, 3.5, 3.6
 
@@ -79,7 +79,7 @@ The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manag
 orgs = sconnect.get('orgs')
 ```
 **Without** SteelConnection, the same request would look like this:
-````python
+```python
 response = requests.get(
     'https://REALM.riverbed.cc/api/scm.config/1.0/orgs', 
     auth=(username, password)
