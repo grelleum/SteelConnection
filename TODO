@@ -6,3 +6,8 @@ Write tests using pytest.
 Needs to be [friendlier, more explicit, more helpful] when errors occur.
 
 Re-visit error handling - forced exceptions on non-200 return codes.
+
+Don't restrict scm name to somthing.cc ...
+validate by resolving name/ip, 
+or by creating a connection on instantiation.
+- in the latter case, perhaps explicit errors letting user knwo what went wrong.
