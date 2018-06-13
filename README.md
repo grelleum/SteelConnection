@@ -27,7 +27,7 @@ Upgrade to the latest version:
 ```bash
 python3 -m pip install --upgrade steelconnection
 # -or-
-python3 -m pip install --upgrade steelconnection
+python -m pip install --upgrade steelconnection
 ```
 
 #### TL;DR:
