@@ -127,7 +127,7 @@ class SConAPI(object):
             self.response.data = self.response.json()['items']
         else:
             self.response.data = self.response.json()
-        return self.response
+        return self.response.data
 
     def _make_request(self, request_method, api, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
