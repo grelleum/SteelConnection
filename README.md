@@ -1,5 +1,5 @@
 # SteelConnection
-##### version 0.8.1
+##### version 0.8.2
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
@@ -31,7 +31,7 @@ python -m pip install --upgrade steelconnection
 ```
 
 #### Quickstart:
-See the examples direcory for sample scripts.
+See the examples folder for sample scripts.
 
 #### Getting Started:
 * Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
