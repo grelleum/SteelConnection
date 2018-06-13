@@ -18,7 +18,7 @@ Requests
 
 ## HOWTO:
 Install:
-```python
+```
 python3 -m pip install steelconnection
 # -or-
 python -m pip install steelconnection
