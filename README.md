@@ -18,13 +18,13 @@ Requests
 
 ## HOWTO:
 Install:
-```
+```bash
 python3 -m pip install steelconnection
 # -or-
 python -m pip install steelconnection
 ```
 Upgrade to the latest version:
-```
+```bash
 python3 -m pip install --upgrade steelconnection
 # -or-
 python3 -m pip install --upgrade steelconnection
