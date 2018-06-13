@@ -17,7 +17,7 @@ class _LookUp(object):
 
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
-        items = self.sconnection.get(domain).data
+        items = self.sconnection.get(domain)
         valid_items = (item for item in items if item[key])
         # NEED better handling when item not found.
         matches = [item for item in valid_items if value in item[key]]

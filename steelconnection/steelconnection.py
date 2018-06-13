@@ -58,6 +58,7 @@ class SConAPI(object):
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
+        self.result = None
         self.response = None
         self.headers = {
             'Accept': 'application/json',
@@ -122,12 +123,12 @@ class SConAPI(object):
                 self.response.raise_for_status()
             return
         if not self.response.json():
-            self.response.data = {}
+            self.result = {}
         elif 'items' in self.response.json():
-            self.response.data = self.response.json()['items']
+            self.result = self.response.json()['items']
         else:
-            self.response.data = self.response.json()
-        return self.response.data
+            self.result = self.response.json()
+        return self.result
 
     def _make_request(self, request_method, api, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
