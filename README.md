@@ -2,9 +2,11 @@
 ##### version 0.8.0
 REST API access to Riverbed SteelConnect Manager.
 
-SteelConnection provides wrapper objects to simplify access to the Riverbed SteelConnect REST API.
-The SteelConnection objects store the SCM base URL and authentication so that you only need to pass in the resource and any required data.
-The object creates a Request session object, which is sent to the SteelConnect Manager and passes back a response object with an additional 'data' attribute containing any data from the SteelConnect Manager.
+SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.\
+The SteelConnection object stores the SCM base URL and authentication so that 
+you only need to pass in the resource and any required data.
+The SteelConnection object creates a Request session object that is used to
+send many API requests using a single TCP connection.  These requests can accept either Python dictionaries or JSON formatted strings.  SteelConnection returns a native Python dictionary or list based on the expected return value.  The requests response object is always available as an attribute.\
 
 Supports Python 2.7, 3.4, 3.5, 3.6
 
@@ -72,11 +74,18 @@ sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, passw
 ### Understanding the API:
 The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE commands.  SteelConneciton (this module) acts to simplify coding by providing an object that remembers your realm, version, and authentication and builds the HTTPS requests based on that information.  A `requests.session` object is used to allow a single TCP connection to be re-used for all subsequent API requests.
 
-**With** SteelConnection, a request to get a list of all organizations in the realm would look like this:\
-`orgs = sconnect.get('orgs').data`
-
-**Without** SteelConnection, the same request would look like this:\
-`orgs = requests.get('https://REALM.riverbed.cc/api/scm.config/1.0/orgs', auth=(username, password)).json()['items']`
+**With** SteelConnection, a request to get a list of all organizations in the realm would look like this:
+```python
+orgs = sconnect.get('orgs')
+```
+**Without** SteelConnection, the same request would look like this:
+````python
+response = requests.get(
+    'https://REALM.riverbed.cc/api/scm.config/1.0/orgs', 
+    auth=(username, password)
+)
+orgs = response.json()['items']
+```
 
 #### Available Methods:
 SteelConneciton provides the `.get`,  `.getstatus`, `.post`, `.put`, and `.delete` methods to simplify access to the API.\
@@ -86,7 +95,7 @@ These methods will build the request to include api version, auth, etc, so you o
 * getstatus: Used for retrieving current status about a resource.  Expect data to be returned.
 * post: Create or deploy a new resource.  Usually requires additional data in the payload.
 * put: Use to edit or update some existing resource.  Requires additional data in the payload.
-* delete: Delete an existing resource/
+* delete: Delete an existing resource.
 
 #### Two APIs:
 Riverbed divides the REST API into two APIs:
@@ -118,18 +127,18 @@ SteelConnection methods mimic the HTTP Methods and accept the short form resourc
 To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  net_id)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
 
 ##### Model Schema (Data Payload):
-Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept with JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
+Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept either JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
 
 ### Retrieving Data:
-The SteelConnection methods leverage the popular requests package.  All returned objects are a `requests.response` object, with an extra `.data` attribute added.  By providing the full `requests.response` object you are free to check status and see all headers.  The SteelConnection object always stores the last response in the object so that it can be retrieved (`sconnect.response`).  The additional `.data` attibute will contain a 'best-guess' python native format object that is most likely what you are trying to retrieve by making the call.
+The SteelConnection methods leverage the popular requests package.  Methods calls always return a native Python dictionary, or a list of dictionaries, depending on the API call.  The `requests.response` object will be stored as an attribute of the object (`sconnect.response`) so the latest response is always easily accessible.  By providing the full `requests.response` object you are free to check status and see all headers.
 
-For example, the 'get orgs' requests should always provide a list of orgs within the realm.  By adding the `.data` to the request we can directly assign the return list as a native Python list.\
-`list_of_all_orgs = sconnect.get('orgs').data`
+For example, the 'get orgs' request should always provide a list of orgs within the realm, so we can directly assign the result as a native Python list.\
+`list_of_all_orgs = sconnect.get('orgs')`
 
-Here are the rules to determine what gets returned in the `response.data` attribute:
-* If json data is returned and the key 'items' is in the json data, then return a python list of 'items'.
-* If json data is returned and the key 'items' is not in the json data, then return the json data as a python dictionary.
-* If no json data is returned, data will be an empty python dictionary.
+Here are the rules to determine what gets returned by an API request:
+* If response.json() is True and the 'items' key exists, then return a python list of response.json()['items'].
+* If response.json() is True and the 'items' key _does not_ exist, then return a python dictionary.
+* If response.json() is False, return an empty python dictionary.
 
 ### Errors and Exceptions:
 The **_Zen of Python_** states:
