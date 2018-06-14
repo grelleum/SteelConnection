@@ -38,6 +38,10 @@ from steelconnection.lookup import _LookUp
 from steelconnection.input_tools import get_username, get_password
 
 
+class SConError(HTTPError):
+    pass
+
+
 class SConAPI(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
 
@@ -48,7 +52,7 @@ class SConAPI(object):
         password=None,
         version='1.0',
         exit_on_error = False,
-        raise_for_status = True,
+        raise_on_bad_request = True,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
@@ -56,7 +60,7 @@ class SConAPI(object):
         self.version = version
         self.controller = controller
         self.exit_on_error = exit_on_error
-        self.raise_for_status = raise_for_status
+        self.raise_on_bad_request = raise_on_bad_request
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
@@ -115,15 +119,18 @@ class SConAPI(object):
         """Send request to controller and handle response."""
         self.response = self._make_request(request_method, api, resource, data)
         if not self.response.ok:
-            error = 'SteelConnect Response: <{0}> {1}'.format(
-                self.response.status_code, self.response.reason
+            detail = self.response.json().get('error', {}).get('message', '')
+            error = 'Error: <{0}> {1}{2}'.format(
+                self.response.status_code,
+                self.response.reason,
+                ': ' + detail if detail else '',
             )
             if self.exit_on_error:
                 print(error, file=sys.stderr)
                 sys.exit(1)
-            elif self.raise_for_status:
-                self.response.raise_for_status()
-            return
+            elif self.raise_on_bad_request:
+                raise SConError(error)
+            return {'error': error}
         if not self.response.json():
             self.result = {}
         elif 'items' in self.response.json():
