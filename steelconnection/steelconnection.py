@@ -39,10 +39,7 @@ from steelconnection.input_tools import get_username, get_password
 
 
 class SConAPI(object):
-    """Make REST API calls to Riverbed SteelConnect Manager.
-    
-    
-    """
+    """Make REST API calls to Riverbed SteelConnect Manager."""
 
     def __init__(
         self,
