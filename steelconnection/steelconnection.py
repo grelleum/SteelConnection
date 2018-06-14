@@ -48,7 +48,7 @@ class SConAPI(object):
         password=None,
         version='1.0',
         exit_on_error = False,
-        raise_when_not_ok = True,
+        raise_for_status = True,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
@@ -120,7 +120,7 @@ class SConAPI(object):
                 )
                 print(text, file=sys.stderr)
                 sys.exit(1)
-            elif self.raise_when_not_ok:
+            elif self.raise_for_status:
                 self.response.raise_for_status()
             return
         if not self.response.json():
