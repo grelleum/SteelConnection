@@ -11,3 +11,5 @@ Don't restrict scm name to somthing.cc ...
 validate by resolving name/ip, 
 or by creating a connection on instantiation.
 - in the latter case, perhaps explicit errors letting user knwo what went wrong.
+
+docstrings - need to be expanded for better documentation.
