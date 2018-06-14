@@ -8,7 +8,7 @@ SteelConnection provides a wrapper object to simplify access to the Riverbed Ste
 * Accepts and returns native Python data - no need to convert to or from JSON.
 
 ##### BETA software:
-_actively working to simplify - some behavior expected to change before 1.0.0 release._
+_actively working to simplify - some behavior may change before 1.0.0 release._
 
 ## Supports:
 Python 2.7, 3.4, 3.5, 3.6
