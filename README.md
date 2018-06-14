@@ -47,7 +47,7 @@ There is a one to one relationship between a Realm and a SteelConnect Manager.  
 
 You normally access the SteelConnect Manager (SCM) using a web browser.\
 The URL you use includes the realm and organization that you are managing and takes the form:
-`    https://realm.riverbed.cc/admin/Organization`.\
+`https://realm.riverbed.cc/admin/Organization`.\
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
 #### Authentication:
