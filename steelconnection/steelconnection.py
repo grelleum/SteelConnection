@@ -39,7 +39,10 @@ from steelconnection.input_tools import get_username, get_password
 
 
 class SConAPI(object):
-    """Make REST API calls to Riverbed SteelConnect Manager."""
+    """Make REST API calls to Riverbed SteelConnect Manager.
+    
+    
+    """
 
     def __init__(
         self,
@@ -85,23 +88,23 @@ class SConAPI(object):
         return '{0}({1})'.format(self.__class__.__name__, details)
 
     def get(self, resource, data=None):
-        """Make an HTTP GET request for the API resource."""
+        """Make an HTTP GET request for the Config API resource."""
         return self._request(self.session.get, 'config', resource)
 
     def getstatus(self, resource, data=None):
-        """Make an HTTP GET request for the API resource."""
+        """Make an HTTP GET request for the Reporting API resource."""
         return self._request(self.session.get, 'reporting', resource)
 
     def delete(self, resource, data=None):
-        """Make an HTTP DELETE request for the API resource."""
+        """Make an HTTP DELETE request for the Config API resource."""
         return self._request(self.session.delete, 'config', resource)
 
     def post(self, resource, data=None):
-        """Make an HTTP POST request for the API resource."""
+        """Make an HTTP POST request for the Config API resource."""
         return self._request(self.session.post, 'config', resource, data)
 
     def put(self, resource, data=None):
-        """Make an HTTP PUT request for the API resource."""
+        """Make an HTTP PUT request for the Config API resource."""
         return self._request(self.session.put, 'config', resource, data)
 
     def url(self, api, resource):
@@ -112,14 +115,14 @@ class SConAPI(object):
         )
     
     def _request(self, request_method, api, resource, data=None):
-        """Send HTTP request to SteelConnect manager."""
+        """Send request to controller and handle response."""
         self.response = self._make_request(request_method, api, resource, data)
         if not self.response.ok:
+            error = 'SteelConnect Response: <{0}> {1}'.format(
+                self.response.status_code, self.response.reason
+            )
             if self.exit_on_error:
-                text = 'SteelConnect Response: <{0}> {1}'.format(
-                    self.response.status_code, self.response.reason
-                )
-                print(text, file=sys.stderr)
+                print(error, file=sys.stderr)
                 sys.exit(1)
             elif self.raise_for_status:
                 self.response.raise_for_status()
