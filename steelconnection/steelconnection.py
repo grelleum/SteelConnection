@@ -56,6 +56,7 @@ class SConAPI(object):
         self.version = version
         self.controller = controller
         self.exit_on_error = exit_on_error
+        self.raise_for_status = raise_for_status
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
