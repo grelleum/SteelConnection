@@ -119,11 +119,16 @@ class SConAPI(object):
         """Send request to controller and handle response."""
         self.response = self._make_request(request_method, api, resource, data)
         if not self.response.ok:
-            detail = self.response.json().get('error', {}).get('message', '')
+            try:
+                details = self.response.json()
+            except JSONDecodeError:
+                details = {}
+            finally:
+                details = details.get('error', {}).get('message', '')
             error = 'Error: <{0}> {1}{2}'.format(
                 self.response.status_code,
                 self.response.reason,
-                ': ' + detail if detail else '',
+                ': ' + details if details else '',
             )
             if self.exit_on_error:
                 print(error, file=sys.stderr)
