@@ -1,18 +1,20 @@
 """List port information for a SteelConnect appliance."""
 
+from __future__ import print_function
+
 import steelconnection
 
-print("SteelConnect Realm should be entered in the for 'realm.riverbed.cc'")
+print("Note: SteelConnect Realm is usually in the form 'realm.riverbed.cc'")
 realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
 sconnect = steelconnection.SConAPI(realm)
 
-appliance = steelconnection.get_input('Please enter the appliance serial number: ')
+appliance = steelconnection.get_input('\nPlease enter the appliance serial number: ')
 node_id, node = sconnect.lookup.node(appliance)
 
 ports = sconnect.get('node/' + node_id + '/ports')
 
 line = '{:14}{:10}{:8}{:8}{:8}'
-print(line.format('Port ID', 'ifname', 'Link', 'Speed', 'Duplex'))
+print(line.format('\nPort ID', 'ifname', 'Link', 'Speed', 'Duplex'))
 print(line.format('-------', '------', '----', '-----', '------'))
 
 for port in ports:
@@ -25,3 +27,5 @@ for port in ports:
         port_status['speed'],
         port_status['duplex'],
     ))
+
+print()
