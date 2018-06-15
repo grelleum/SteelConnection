@@ -20,7 +20,7 @@ class _LookUp(object):
         items = self.sconnection.get(domain)
         for item in items:
             item_value = item.get(key, '')
-            if value in item_value:
+            if item_value and value in item_value:
                 self.sconnection.result = item.get(return_value, '')
                 return self.sconnection.result, item
 
