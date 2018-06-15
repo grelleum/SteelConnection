@@ -33,15 +33,10 @@ import json
 import requests
 import sys
 
-from requests import HTTPError
 from steelconnection.lookup import _LookUp
 from steelconnection.input_tools import get_username, get_password
 
 import steelconnection.version
-
-
-class SConError(HTTPError):
-    pass
 
 
 class SConAPI(object):
@@ -54,7 +49,7 @@ class SConAPI(object):
         password=None,
         api_version='1.0',
         exit_on_error = False,
-        raise_on_bad_request = True,
+        raise_on_failure = True,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
@@ -62,7 +57,7 @@ class SConAPI(object):
         self.api_version = api_version
         self.controller = controller
         self.exit_on_error = exit_on_error
-        self.raise_on_bad_request = raise_on_bad_request
+        self.raise_on_failure = raise_on_failure
         self.username = get_username() if username is None else username
         self.password = get_password() if password is None else password
         self.session = requests.Session()
@@ -125,8 +120,8 @@ class SConAPI(object):
             if self.exit_on_error:
                 print(error, file=sys.stderr)
                 sys.exit(1)
-            elif self.raise_on_bad_request:
-                raise SConError(error)
+            elif self.raise_on_failure:
+                raise RuntimeError(error)
             return {'error': error}
         if not self.response.json():
             self.result = {}
