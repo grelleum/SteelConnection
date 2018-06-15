@@ -50,14 +50,14 @@ class SConAPI(object):
         controller,
         username=None,
         password=None,
-        version='1.0',
+        api_version='1.0',
         exit_on_error = False,
         raise_on_bad_request = True,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
             raise ValueError("SteelConnect Manager's name must end with '.cc'")
-        self.version = version
+        self.api_version = api_version
         self.controller = controller
         self.exit_on_error = exit_on_error
         self.raise_on_bad_request = raise_on_bad_request
@@ -83,7 +83,7 @@ class SConAPI(object):
         """Return a string consisting of class name, controller, and api."""
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
-            "api version: '{0}'".format(self.version),
+            "api version: '{0}'".format(self.api_version),
             "response: '{0}'".format(self.response),
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
@@ -112,7 +112,7 @@ class SConAPI(object):
         """Combine attributes and resource as a url string."""
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
-            self.controller, api, self.version, resource,
+            self.controller, api, self.api_version, resource,
         )
     
     def _request(self, request_method, api, resource, data=None):
