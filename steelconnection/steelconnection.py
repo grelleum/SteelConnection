@@ -8,7 +8,7 @@ to Riverbed SteelConnect Manager.
 Usage:
     sconnect = steelconnection.SConAPI(scm_name, username, password)
 
-    Option keyword version can be used to specify an API version number.
+    Optional keyword api_version can be used to specify an API version number.
     Currently there is only one API version: '1.0'.
 
     Once you have instantiated an object as shown above,
