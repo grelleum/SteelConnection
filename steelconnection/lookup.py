@@ -14,6 +14,7 @@ class _LookUp(object):
     def __init__(self, sconnection):
         """Obtain access to SteelConect Manager."""
         self.sconnection = sconnection
+        self._deprecated = 'lookup.{0}id deprecated: use lookup.{0} instead'
 
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
@@ -54,6 +55,7 @@ class _LookUp(object):
         """deprecated:
         Return node id that matches appliance serial number provided.
         """
+        print(self._deprecated.format('node'), file=sys.stderr)
         result, _details = self._lookup(domain='nodes', value=serial, key=key)
         return result
 
@@ -61,6 +63,7 @@ class _LookUp(object):
         """deprecated:
         Return org id that matches organization short name provided.
         """
+        print(self._deprecated.format('org'), file=sys.stderr)
         result, _details = self._lookup(domain='orgs', value=name, key=key)
         # self.sconnection.org.details = details
         return result
@@ -70,6 +73,7 @@ class _LookUp(object):
         Return site id that matches site short name
         based on the organization provided.
         """
+        print(self._deprecated.format('site'), file=sys.stderr)
         if not orgid:
             raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
