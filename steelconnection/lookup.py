@@ -22,7 +22,7 @@ class _LookUp(object):
             item_value = item.get(key, '')
             if value in item_value:
                 self.sconnection.result = item.get(return_value, '')
-                return self.sconnection.result, details
+                return self.sconnection.result, item
 
     def nodeid(self, serial, key='serial'):
         """Return node id that matches appliance serial number provided."""
