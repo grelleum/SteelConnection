@@ -37,6 +37,8 @@ from requests import HTTPError
 from steelconnection.lookup import _LookUp
 from steelconnection.input_tools import get_username, get_password
 
+import steelconnection.version
+
 
 class SConError(HTTPError):
     pass
@@ -71,7 +73,7 @@ class SConAPI(object):
             'Content-type': 'application/json',
         }
         self.lookup = _LookUp(self)
-        # self.org = Org()
+        self.__version__ = steelconnection.version.__version__
 
     def __bool__(self):
         """Return the success of the last request."""
