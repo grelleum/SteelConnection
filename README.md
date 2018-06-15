@@ -162,34 +162,34 @@ Alternatively, to avoid the need for writing `try/except` blocks in your code, i
 #### Convienience functions:
 ##### Object-level Convienience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in.\
-SteelConnection provides a collection of `lookup` functions to look up the id for various API resources.\
+SteelConnection provides a collection of `lookup` functions to look up the resources based on known values.  These functions return a tuple of the id and the actual resouce.\
 Currently these are the available lookup functions:
-* `lookup.orgid(org_short_name)`
-* `lookup.nodeid(serial)`
-* `lookup.siteid(site_name, org_id=org_id)`
+* `lookup.org(org_short_name)`
+* `lookup.node(serial)`
+* `lookup.site(site_name, org_id=org_id)`
 
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
 
-###### Lookup Organization ID:
-Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id.
+###### Lookup Organization:
+Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id and the org object.
 ```python
->>> org_id = sconnect.lookup.orgid('Spacely')
+>>> org_id, org = sconnect.lookup.org('Spacely')
 >>> org_id
 'org-Spacely-0a0b1cbadb33f34'
 >>> 
 ```
-###### Lookup Node ID:
-Similarly, the `lookup.nodeid` method exists to privide the node id when you supply the appliance serial number.
+###### Lookup Node:
+Similarly, the `lookup.node` method exists to privide the node id and node when you supply the commonly known appliance serial number.
 ```python
->>> node_id = sconnect.lookup.nodeid('XN00012345ABCDEF')
+>>> node_id, node = sconnect.lookup.node('XN00012345ABCDEF')
 >>> node_id
 'node-56f1968e222ab789'
 >>> 
 ```
-###### Lookup Site ID:
-The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id must also be supplied.
+###### Lookup Site:
+The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id is required.
 ```python
->>> site_id = sconnect.lookup.siteid('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
+>>> site_id, site = sconnect.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
 >>> site_id
 'site-Skypad-884b9071141e4bc0'
 >>> 
