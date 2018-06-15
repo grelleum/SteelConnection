@@ -18,11 +18,11 @@ class _LookUp(object):
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
         items = self.sconnection.get(domain)
-        valid_items = (item for item in items if key in item)
-        matches = [item for item in valid_items if value in item[key]]
-        details = max(matches) if matches else ''
-        self.sconnection.result = details[return_value]
-        return self.sconnection.result, details
+        for item in items:
+            item_value = item.get(key, '')
+            if value in item_value:
+                self.sconnection.result = item.get(return_value, '')
+                return self.sconnection.result, details
 
     def nodeid(self, serial, key='serial'):
         """Return node id that matches appliance serial number provided."""
