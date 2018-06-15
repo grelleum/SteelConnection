@@ -17,17 +17,13 @@ Python 2.7, 3.4, 3.5, 3.6
 Requests
 
 ## HOWTO:
-Install:
+To install the latest version:
 ```bash
-python3 -m pip install steelconnection
-# -or-
-python -m pip install steelconnection
-```
-Upgrade to the latest version:
-```bash
+# Python 3
 python3 -m pip install --upgrade steelconnection
-# -or-
-python -m pip install --upgrade steelconnection
+
+# Python 2
+python2 -m pip install --upgrade steelconnection
 ```
 
 #### Quickstart:
