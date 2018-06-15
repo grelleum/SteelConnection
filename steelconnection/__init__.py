@@ -7,8 +7,11 @@ from steelconnection.steelconnection import SConError
 from steelconnection.input_tools import get_input
 from steelconnection.input_tools import get_username
 from steelconnection.input_tools import get_password
+import steelconnection.version
 
-__version__ = '0.8.4'
+
+# __version__ = '0.8.4'
+__version__ = steelconnection.version.__version__
 __all__ = (
     'SConAPI',
     'SConError',
