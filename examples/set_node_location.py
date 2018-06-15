@@ -35,7 +35,7 @@ def main(argv):
         exit_on_error = True,
     )
 
-    org_id = sconnect.lookup.orgid(organization)
+    org_id, org = sconnect.lookup.org(organization)
     print('\nOrg:', organization, '\tID:', org_id)
     sites = find_sites(sconnect, organization, org_id)
     nodes = find_nodes(sconnect, organization, org_id)

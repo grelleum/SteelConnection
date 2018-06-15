@@ -7,7 +7,7 @@ realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
 sconnect = steelconnection.SConAPI(realm)
 
 appliance = steelconnection.get_input('Please enter the appliance serial number: ')
-node_id = sconnect.lookup.nodeid(appliance)
+node_id, node = sconnect.lookup.node(appliance)
 
 ports = sconnect.get('node/' + node_id + '/ports')
 

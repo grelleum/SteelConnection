@@ -17,7 +17,7 @@ new_site = {
 sconnect = steelconnection.SConAPI(scm_name)
 
 # Get the org ID for your organization.
-org_id = sconnect.lookup.orgid(org_name)
+org_id, org = sconnect.lookup.org(org_name)
 print('Org name: {},  org_id: {}'.format(org_name, org_id))
 
 # API resource for posting.
