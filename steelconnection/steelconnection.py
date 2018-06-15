@@ -159,16 +159,17 @@ class SConAPI(object):
 
 
 def _error_string(response):
-    try:
-        details = response.json()
-    except json.JSONDecodeError:
-        details = {}
-    finally:
-        details = details.get('error', {}).get('message', '')
-    error = '{} - {}\nURL: {}{}'.format(
+    details = ''
+    if response.text:
+        try:
+            details = response.json()
+            details = details.get('error', {}).get('message', '')
+        except ValueError:
+            pass
+    error = '\t{} - {}\nURL:   \t{}{}'.format(
         response.status_code,
         response.reason,
         response.url,
-        '\nServer response: ' + details if details else '',
+        '\nDetails:\t' + details if details else '',
     )
     return error
