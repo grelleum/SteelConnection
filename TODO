@@ -17,3 +17,5 @@ docstrings - need to be expanded for better documentation.
 logging!
 
 better way to store authentication.
+
+need to handle binary return - like download vGW image.zip
