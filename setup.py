@@ -1,6 +1,9 @@
 import re
 import setuptools
 
+import steelconnection.version
+version = steelconnection.version.__version__
+
 name = 'steelconnection'
 description = 'Simplify REST API access to Riverbed SteelConnect.'
 keywords = ['SteelConnect', 'REST', 'API', 'Riverbed', 'Grelleum']
@@ -16,16 +19,8 @@ classifiers=(
     'Operating System :: OS Independent'
 )
 
-# long_description = """SteelConnection
-
-# Convienience objects for making REST API calls
-# to Riverbed SteelConnect Manager.
-# """
-
-# with open('README.rst', 'rt') as f:
 with open('README.md', 'rt') as f:
     long_description = f.read()
-version = re.findall(r'version (\d+\.\d+\.\d+)', long_description)[0]
 
 download_url = base_url + version + '.tar.gz'
 
