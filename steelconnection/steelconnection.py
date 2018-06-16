@@ -161,10 +161,11 @@ def _error_string(response):
             details = details.get('error', {}).get('message', '')
         except ValueError:
             pass
-    error = '\t{} - {}\nURL:   \t{}{}'.format(
+    error = '\t{0} - {1}{2}\nURL:   \t{3}\nData Sent:\t{4}'.format(
         response.status_code,
         response.reason,
-        response.url,
         '\nDetails:\t' + details if details else '',
+        response.url,
+        repr(response.request.body),
     )
     return error
