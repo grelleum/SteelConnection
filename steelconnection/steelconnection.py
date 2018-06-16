@@ -85,12 +85,16 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-    def get(self, resource, data=None):
+    def get(self, resource, data=None, params=None):
         """Make an HTTP GET request for the Config API resource."""
+        if params and not data:
+            data = params
         return self._request(self.session.get, 'config', resource, data)
 
-    def getstatus(self, resource, data=None):
+    def getstatus(self, resource, data=None, params=None):
         """Make an HTTP GET request for the Reporting API resource."""
+        if params and not data:
+            data = params
         return self._request(self.session.get, 'reporting', resource, data)
 
     def delete(self, resource, data=None):
@@ -133,6 +137,10 @@ class SConAPI(object):
 
     def _make_request(self, request_method, api, resource, data=None):
         """Send HTTP request to SteelConnect manager."""
+        if request_method is self.get or request_method is self.getstatus:
+            params, data = data, None
+        else:
+            params = None
         if data and isinstance(data, dict):
             data = json.dumps(data)
         try:
@@ -140,6 +148,7 @@ class SConAPI(object):
                 url=self.url(api, resource),
                 auth=(self.username, self.password),
                 headers=self.headers,
+                params=params,
                 data=data,
             )
         except Exception as e:
@@ -161,7 +170,7 @@ def _error_string(response):
             details = details.get('error', {}).get('message', '')
         except ValueError:
             pass
-    error = '\t{0} - {1}{2}\nURL:   \t{3}\nData Sent:\t{4}'.format(
+    error = '\t{0} - {1}{2}\nURL:      \t{3}\nData Sent:\t{4}'.format(
         response.status_code,
         response.reason,
         '\nDetails:\t' + details if details else '',
