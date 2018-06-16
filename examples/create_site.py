@@ -11,6 +11,7 @@ new_site = {
     'city': 'New York',
     'country': 'US',
     'longname': 'New York test lab.',
+    'timezone': 'America/New_York',
 }
 
 # Initialize the steelconnection object.
