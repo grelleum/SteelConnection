@@ -21,7 +21,6 @@ class _LookUp(object):
     def __init__(self, sconnection):
         """Obtain access to SteelConect Manager."""
         self.sconnection = sconnection
-        # self._deprecated = 'lookup.{0}id deprecated: use lookup.{0} instead'
 
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
