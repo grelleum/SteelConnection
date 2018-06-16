@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from requests import HTTPError
 from steelconnection.steelconnection import SConAPI
 from steelconnection.input_tools import get_input
 from steelconnection.input_tools import get_username
