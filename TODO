@@ -13,3 +13,5 @@ or by creating a connection on instantiation.
 - in the latter case, perhaps explicit errors letting user knwo what went wrong.
 
 docstrings - need to be expanded for better documentation.
+
+logging!
