@@ -15,3 +15,5 @@ or by creating a connection on instantiation.
 docstrings - need to be expanded for better documentation.
 
 logging!
+
+better way to store authentication.
