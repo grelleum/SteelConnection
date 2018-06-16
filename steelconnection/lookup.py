@@ -23,11 +23,15 @@ class _LookUp(object):
         self.sconnection = sconnection
 
     def _lookup(self, domain, value, key, return_value='id'):
-        """Generic lookup function."""
+        """
+        Generic lookup function.
+        Given a resource type (domain), a value to match, and a key to lookup,
+        returns a tuple consisting of an object ID and the actual object.
+        """
         items = self.sconnection.get(domain)
         for item in items:
-            item_value = item.get(key, '')
-            if item_value and value in item_value:
+            key_value = item.get(key, '')
+            if key_value and value in key_value:
                 self.sconnection.result = item.get(return_value, '')
                 return self.sconnection.result, item
 
