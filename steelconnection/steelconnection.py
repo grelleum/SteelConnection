@@ -87,15 +87,15 @@ class SConAPI(object):
 
     def get(self, resource, data=None):
         """Make an HTTP GET request for the Config API resource."""
-        return self._request(self.session.get, 'config', resource)
+        return self._request(self.session.get, 'config', resource, data)
 
     def getstatus(self, resource, data=None):
         """Make an HTTP GET request for the Reporting API resource."""
-        return self._request(self.session.get, 'reporting', resource)
+        return self._request(self.session.get, 'reporting', resource, data)
 
     def delete(self, resource, data=None):
         """Make an HTTP DELETE request for the Config API resource."""
-        return self._request(self.session.delete, 'config', resource)
+        return self._request(self.session.delete, 'config', resource, data)
 
     def post(self, resource, data=None):
         """Make an HTTP POST request for the Config API resource."""
