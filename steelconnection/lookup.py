@@ -12,6 +12,7 @@ from __future__ import division
 from __future__ import print_function
 
 import sys
+import warnings
 
 
 class _LookUp(object):
@@ -20,7 +21,7 @@ class _LookUp(object):
     def __init__(self, sconnection):
         """Obtain access to SteelConect Manager."""
         self.sconnection = sconnection
-        self._deprecated = 'lookup.{0}id deprecated: use lookup.{0} instead'
+        # self._deprecated = 'lookup.{0}id deprecated: use lookup.{0} instead'
 
     def _lookup(self, domain, value, key, return_value='id'):
         """Generic lookup function."""
@@ -61,7 +62,10 @@ class _LookUp(object):
         """deprecated:
         Return node id that matches appliance serial number provided.
         """
-        print(self._deprecated.format('node'), file=sys.stderr)
+        warnings.warn(
+            'lookup.nodeid deprecated: use lookup.node instead',
+            DeprecationWarning
+        )
         result, _details = self._lookup(domain='nodes', value=serial, key=key)
         return result
 
@@ -69,9 +73,11 @@ class _LookUp(object):
         """deprecated:
         Return org id that matches organization short name provided.
         """
-        print(self._deprecated.format('org'), file=sys.stderr)
+        warnings.warn(
+            'lookup.orgid deprecated: use lookup.org instead',
+            DeprecationWarning
+        )
         result, _details = self._lookup(domain='orgs', value=name, key=key)
-        # self.sconnection.org.details = details
         return result
 
     def siteid(self, name, orgid=None, key='name'):
@@ -79,7 +85,10 @@ class _LookUp(object):
         Return site id that matches site short name
         based on the organization provided.
         """
-        print(self._deprecated.format('site'), file=sys.stderr)
+        warnings.warn(
+            'lookup.siteid deprecated: use lookup.site instead',
+            DeprecationWarning
+        )
         if not orgid:
             raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
