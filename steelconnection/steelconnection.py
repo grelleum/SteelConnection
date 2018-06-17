@@ -85,7 +85,7 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-    def get(self, resource, params=None):
+    def get(self, resource, params=None, data=None):
         """Make an HTTP GET request for the Config API resource."""
         if data and not params:
             params, data = data, None
