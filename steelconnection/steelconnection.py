@@ -115,6 +115,10 @@ class SConAPI(object):
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.api_version, resource,
         )
+
+    def savefile(self, filename):
+        """Save binary return data to a file."""
+        pass
     
     def _request(self, request_method, api, resource, data=None):
         """Send request to controller and handle response."""
@@ -127,6 +131,11 @@ class SConAPI(object):
             elif self.raise_on_failure:
                 raise RuntimeError(error)
             return {'error': error}
+        if self.response.headers['Content-Type'] == 'application/octet-stream':
+            return (
+                "Binary data returned.  Use '.savefile(filename)' method "
+                "or access using '.response.content'."
+            )
         if not self.response.json():
             self.result = {}
         elif 'items' in self.response.json():
