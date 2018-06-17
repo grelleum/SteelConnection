@@ -21,3 +21,13 @@ better way to store authentication.
 need to handle binary return - like download vGW image.zip
 - GET /node/:nodeid/get_image
 http://docs.python-requests.org/en/master/user/quickstart/#binary-response-content
+with open(filename, 'wb') as f:
+    f.write(r.content)
+
+http://docs.python-requests.org/en/master/user/quickstart/#raw-response-content
+
+with open(filename, 'wb') as fd:
+    for chunk in r.iter_content(chunk_size=128):
+        fd.write(chunk)
+
+
