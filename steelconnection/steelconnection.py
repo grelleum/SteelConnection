@@ -85,29 +85,50 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-    def get(self, resource, data=None, params=None):
+    def get(self, resource, params=None):
         """Make an HTTP GET request for the Config API resource."""
-        if params and not data:
-            data = params
-        return self._request(self.session.get, 'config', resource, data)
+        return self._request(
+            request_method=self.session.get,
+            api='config',
+            resource=resource,
+            params=params,
+        )
 
     def getstatus(self, resource, data=None, params=None):
         """Make an HTTP GET request for the Reporting API resource."""
-        if params and not data:
-            data = params
-        return self._request(self.session.get, 'reporting', resource, data)
+        return self._request(
+            request_method=self.session.get,
+            api='reporting',
+            resource=resource,
+            params=params,
+        )
 
     def delete(self, resource, data=None):
         """Make an HTTP DELETE request for the Config API resource."""
-        return self._request(self.session.delete, 'config', resource, data)
+        return self._request(
+            request_method=self.session.delete,
+            api='config',
+            resource=resource,
+            data=data, 
+        )
 
     def post(self, resource, data=None):
         """Make an HTTP POST request for the Config API resource."""
-        return self._request(self.session.post, 'config', resource, data)
+        return self._request(
+            request_method=self.session.post,
+            api='config',
+            resource=resource,
+            data=data, 
+        )
 
     def put(self, resource, data=None):
         """Make an HTTP PUT request for the Config API resource."""
-        return self._request(self.session.put, 'config', resource, data)
+        return self._request(
+            request_method=self.session.put,
+            api='config',
+            resource=resource,
+            data=data, 
+        )
 
     def url(self, api, resource):
         """Combine attributes and resource as a url string."""
@@ -118,11 +139,18 @@ class SConAPI(object):
 
     def savefile(self, filename):
         """Save binary return data to a file."""
-        pass
+        with open(filename, 'wb') as f:
+            f.write(self.response.content)
     
-    def _request(self, request_method, api, resource, data=None):
+    def _request(self, request_method, api, resource, data=None, params=None):
         """Send request to controller and handle response."""
-        self.response = self._make_request(request_method, api, resource, data)
+        self.response = self._make_request(
+            request_method=request_method,
+            api='config',
+            resource=resource,
+            data=data, 
+            params=params,
+        )
         if not self.response.ok:
             error = _error_string(self.response)
             if self.exit_on_error:
@@ -144,12 +172,8 @@ class SConAPI(object):
             self.result = self.response.json()
         return self.result
 
-    def _make_request(self, request_method, api, resource, data=None):
+    def _make_request(self, request_method, api, resource, data=None, params=None):
         """Send HTTP request to SteelConnect manager."""
-        if request_method is self.get or request_method is self.getstatus:
-            params, data = data, None
-        else:
-            params = None
         if data and isinstance(data, dict):
             data = json.dumps(data)
         try:
