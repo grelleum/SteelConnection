@@ -156,6 +156,9 @@ class SConAPI(object):
             params=params,
         )
         if not self.response.ok:
+            # work-around for bug in get:'/node/{node_id}/image_status' response
+            if self.response.text and 'Queued' in self.response.text:
+                return self.response.json()
             error = _error_string(self.response)
             if self.exit_on_error:
                 print(error, file=sys.stderr)
