@@ -85,7 +85,7 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-    def get(self, resource, params=None, data=None):
+    def get(self, resource, data=None, params=None):
         """Make an HTTP GET request for the Config API resource."""
         if data and not params:
             params, data = data, None
@@ -96,7 +96,7 @@ class SConAPI(object):
             params=params,
         )
 
-    def getstatus(self, resource, params=None, data=None):
+    def getstatus(self, resource, data=None, params=None):
         """Make an HTTP GET request for the Reporting API resource."""
         if data and not params:
             params, data = data, None
@@ -125,7 +125,7 @@ class SConAPI(object):
             data=data, 
         )
 
-    def put(self, resource, params=None, data=None):
+    def put(self, resource, data=None, params=None):
         """Make an HTTP PUT request for the Config API resource."""
         return self._request(
             request_method=self.session.put,
