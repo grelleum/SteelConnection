@@ -19,3 +19,5 @@ logging!
 better way to store authentication.
 
 need to handle binary return - like download vGW image.zip
+- GET /node/:nodeid/get_image
+http://docs.python-requests.org/en/master/user/quickstart/#binary-response-content
