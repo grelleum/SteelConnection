@@ -125,7 +125,7 @@ class SConAPI(object):
             data=data, 
         )
 
-    def put(self, resource, data=None):
+    def put(self, resource, params=None, data=None):
         """Make an HTTP PUT request for the Config API resource."""
         return self._request(
             request_method=self.session.put,
@@ -150,7 +150,7 @@ class SConAPI(object):
         """Send request to controller and handle response."""
         self.response = self._make_request(
             request_method=request_method,
-            api='config',
+            api=api,
             resource=resource,
             data=data, 
             params=params,
