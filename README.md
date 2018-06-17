@@ -144,6 +144,9 @@ Here are the rules to determine what gets returned by an API request:
 * If response.json() is True and the 'items' key _does not_ exist, then return a python dictionary.
 * If response.json() is False, return an empty python dictionary.
 
+##### Binary Data:
+In the event an API call returns binary data, as is the case with "GET /node/:nodeid/get_image", the return value of the call will include a message on how to access the binary data.  You can access it directly through the object's '.response.content' attribute, or by calling the '.savefile(filename)' method, which will save the binary data to a file.
+
 #### Errors and Exceptions:
 The **_Zen of Python_** states:
 > Errors should never pass silently.\
