@@ -167,10 +167,13 @@ class SConAPI(object):
                 raise RuntimeError(error)
             return {'error': error}
         if self.response.headers['Content-Type'] == 'application/octet-stream':
-            return (
-                "Binary data returned.  Use '.savefile(filename)' method "
-                "or access using '.response.content'."
-            )
+            return {
+                'status': (
+                    "Binary data returned.  "
+                    "Use '.savefile(filename)' method "
+                    "or access using '.response.content'."
+                )
+            }
         if not self.response.json():
             self.result = {}
         elif 'items' in self.response.json():
