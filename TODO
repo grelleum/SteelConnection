@@ -16,7 +16,10 @@ docstrings - need to be expanded for better documentation.
 
 logging!
 
-better way to store authentication:  Keyring Support
+better way to store authentication:  Keyring Support??
+how could I take advantage of .netns support in requests?
+should instantiation generate a call to scm 'status' to test auth?
+-- does 'status' work if user is only org admin?
 
 need to handle binary return - like download vGW image.zip
 - GET /node/:nodeid/get_image
