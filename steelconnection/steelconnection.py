@@ -48,8 +48,8 @@ class SConAPI(object):
         username=None,
         password=None,
         api_version='1.0',
-        exit_on_error = False,
-        raise_on_failure = True,
+        exit_on_error=False,
+        raise_on_failure=True,
     ):
         """Initialize attributes."""
         if not controller.endswith('.cc'):
