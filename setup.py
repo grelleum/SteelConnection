@@ -2,7 +2,7 @@ import re
 import setuptools
 
 import steelconnection.version
-version = steelconnection.version.__version__
+version = steelconnection.__version__
 
 name = 'steelconnection'
 description = 'Simplify REST API access to Riverbed SteelConnect.'
