@@ -34,10 +34,10 @@ import requests
 import sys
 import traceback
 
-from steelconnection.lookup import _LookUp
-from steelconnection.input_tools import get_username, get_password
+from .__version__ import __version__
+from .lookup import _LookUp
+from .input_tools import get_username, get_password
 
-import steelconnection.version
 
 
 class SConAPI(object):
@@ -69,7 +69,7 @@ class SConAPI(object):
             'Content-type': 'application/json',
         }
         self.lookup = _LookUp(self)
-        self.__version__ = steelconnection.version.__version__
+        self.__version__ = __version__
 
     def __bool__(self):
         """Return the success of the last request."""
