@@ -73,9 +73,7 @@ class SConAPI(object):
 
     def __bool__(self):
         """Return the success of the last request."""
-        if self.response is None:
-            return False
-        return True if self.response.status_code == 200 else False
+        return False if self.response is None else self.response.ok 
 
     def __repr__(self):
         """Return a string consisting of class name, controller, and api."""
