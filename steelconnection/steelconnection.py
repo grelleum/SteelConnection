@@ -32,6 +32,7 @@ import getpass
 import json
 import requests
 import sys
+import traceback
 
 from steelconnection.lookup import _LookUp
 from steelconnection.input_tools import get_username, get_password
@@ -164,6 +165,7 @@ class SConAPI(object):
                 print(error, file=sys.stderr)
                 sys.exit(1)
             elif self.raise_on_failure:
+                self._tb = traceback.extract_stack()
                 raise RuntimeError(error)
             return {'error': error}
         if self.response.headers['Content-Type'] == 'application/octet-stream':
