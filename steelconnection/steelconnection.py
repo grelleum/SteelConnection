@@ -40,7 +40,7 @@ from .input_tools import get_username, get_password
 
 
 
-class SConAPI(object):
+class API(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
 
     def __init__(
@@ -231,6 +231,38 @@ class SConAPI(object):
             else:
                 raise e
         return response
+
+
+class SConAPI(API):
+    """Make REST API calls to Riverbed SteelConnect Manager."""
+
+    def __init__(
+        self,
+        controller,
+        username=None,
+        password=None,
+        api_version='1.0',
+        exit_on_error=False,
+        raise_on_failure=True,
+    ):
+        """Initialize attributes."""
+        if not controller.endswith('.cc'):
+            raise ValueError("SteelConnect Manager's name must end with '.cc'")
+        self.api_version = api_version
+        self.controller = controller
+        self.exit_on_error = exit_on_error
+        self.raise_on_failure = raise_on_failure
+        self.username = get_username() if username is None else username
+        self.password = get_password() if password is None else password
+        self.session = requests.Session()
+        self.result = None
+        self.response = None
+        self.headers = {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+        }
+        self.lookup = _LookUp(self)
+        self.__version__ = __version__
 
 
 def _error_string(response):
