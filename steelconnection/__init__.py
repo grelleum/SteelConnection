@@ -2,7 +2,7 @@
 
 """
 SteelConnection:
-Simplify access to the Riverbed REST API.
+Simplify access to the Riverbed SteelConnect REST API.
 
 usage:
 
