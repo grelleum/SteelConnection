@@ -234,7 +234,7 @@ class SConAPI(object):
 
 
 def _error_string(response):
-    """Returns a string that summarizes conditions of the error."""
+    """Summarize error conditions and return as a string."""
     details = ''
     if response.text:
         try:
