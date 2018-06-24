@@ -4,7 +4,7 @@ SteelConnection provides a wrapper object to simplify access to the Riverbed Ste
 
 * Create an object once and it remembers the URL and authentication.
 * All subsequent API requests are made via a single TCP connection.
-* Call the appropriate method and supply the resrouce path and any upload data.
+* Call the appropriate method and supply the resource path and any upload data.
 * Accepts and returns native Python data - no need to convert to or from JSON.
 
 ##### BETA software:
@@ -48,20 +48,25 @@ The URL you use includes the realm and organization that you are managing and ta
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
 #### Authentication:
-
-##### Note on password security:
-The password entered gets stored in the wrapper object in plain text.  So if you were to query the object attributes you could easily see the password.  This is done for the convienience of not requiring the password to be input or passed everytime an API call is made.
+SteelConnect REST API uses Basic Auth, meaning a username and password are required for authentication for every request made.  The steelconnection object can store the username and pssword for you, or you can use a .netrc file as detailed below.
 
 ##### Interactive login:
-SteelConnect REST API uses username and password authentication.  If a SteelConnection object gets created without a specified username and password, the object will interactively prompt you for your username and password.  
+If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
 >>> sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
 Enter username: admin
 Enter password: 
-Retype password: 
 >>> 
 ```
+
+##### Using a .netrc file:
+A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  This file would be stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
+```bash
+echo "machine REALM.riverbed.cc login USERNAME password PASSWORD" >> ~/.netrc
+chmod 600 ~/.netrc
+```
+
 ##### Specifying username and password:
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
@@ -97,7 +102,7 @@ These methods will build the request to include api version, auth, etc, so you o
 
 * get: Used for retrieving information about a resource.  Expect data to be returned.
 * getstatus: Used for retrieving current status about a resource.  Expect data to be returned.
-* post: Create or deploy a new resource.  Usually requires additional data in the payload.
+* post: Create or deploy a new resource.  Requires additional data in the payload and usually returns the newly created object.
 * put: Use to edit or update some existing resource.  Requires additional data in the payload.
 * delete: Delete an existing resource.
 
