@@ -48,9 +48,9 @@ The URL you use includes the realm and organization that you are managing and ta
 The Organization is case-sensistive and is also known as the organization short name, as opposed to the longname, which is more descriptive and can include spaces, and other characters.
 
 #### Authentication:
-SteelConnect REST API uses Basic Auth, meaning a username and password are required for authentication for every request made.  The steelconnection object can store the username and pssword for you, or you can use a .netrc file as detailed below.
+SteelConnect REST API uses Basic Auth, meaning a username and password are required for authentication for every request made.  The steelconnection object can store the username and pssword for you, or you can use a .netrc file as detailed below.  Choose one of the following methods:
 
-##### Interactive login:
+##### Interactive login (Optional):
 If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
@@ -60,14 +60,14 @@ Enter password:
 >>> 
 ```
 
-##### Using a .netrc file:
+##### Using a .netrc file (Optional):
 A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  This file would be stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
 ```bash
 echo "machine REALM.riverbed.cc login USERNAME password PASSWORD" >> ~/.netrc
 chmod 600 ~/.netrc
 ```
 
-##### Specifying username and password:
+##### Specifying username and password (Optional):
 If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
