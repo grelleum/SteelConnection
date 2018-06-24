@@ -7,26 +7,11 @@ Needs to be [friendlier, more explicit, more helpful] when errors occur.
 
 Re-visit error handling - forced exceptions on non-200 return codes.
 
-Don't restrict scm name to somthing.cc ...
-validate by resolving name/ip, 
-or by creating a connection on instantiation.
-- in the latter case, perhaps explicit errors letting user knwo what went wrong.
-
 docstrings - need to be expanded for better documentation.
 
-logging!
-
 better way to store authentication:  Keyring Support??
-how could I take advantage of .netns support in requests?
-should instantiation generate a call to scm 'status' to test auth?
--- does 'status' work if user is only org admin?
 
-need to handle binary return - like download vGW image.zip
-- GET /node/:nodeid/get_image
-http://docs.python-requests.org/en/master/user/quickstart/#binary-response-content
-with open(filename, 'wb') as f:
-    f.write(r.content)
-
+streaming transfers ...
 http://docs.python-requests.org/en/master/user/quickstart/#raw-response-content
 
 with open(filename, 'wb') as fd:
