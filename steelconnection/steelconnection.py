@@ -67,9 +67,9 @@ class API(object):
         }
         self.lookup = _LookUp(self)
         self.__version__ = __version__
-        self._authenticate()
+        self._authenticate(username, password)
 
-    def _authenticate(self):
+    def _authenticate(self, username, password):
         if self.username is None and self.password is None:
             # Allow requests to attempt netrc authentication.
             self.response = self.session.get(
