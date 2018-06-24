@@ -18,7 +18,16 @@ classifiers=(
 )
 
 with open('README.md', 'rt') as f:
-    long_description = f.read()
+    readme = f.read()
+
+long_description = re.sub(
+    r'##### version \d+\.\d+\.\d+',
+    '##### version ' + __version__,
+    readme,
+)
+
+with open('README.md', 'wt') as f:
+    f.write(long_description)
 
 download_url = base_url + __version__ + '.tar.gz'
 
