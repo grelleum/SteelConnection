@@ -36,6 +36,7 @@ import traceback
 import warnings
 
 from .__version__ import __version__
+from .exceptions import AuthenticationError, APIUnavailableError, NotFoundError
 from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
@@ -68,29 +69,37 @@ class SConAPI(object):
         }
         self.lookup = _LookUp(self)
         self.__version__ = __version__
-        self.scm_version = self._get_scm_version(username, password)
-        # status = self._authenticate(username, password)
-        # scm_version = status.get('scm_version'), status.get('scm_build')
-        # self.scm_version = '.'.join(s for s in scm_version if s)
+        self._authenticate(username, password)
+        self.scm_version = self._get_scm_version()
 
-    # def _authenticate(self, username, password):
-    #     if self.username is None and self.password is None:
-    #         # Allow requests to attempt .netrc authentication.
-    #         return self.get('status')
-    #     self.username = get_username() if username is None else username
-    #     self.password = get_password_once() if password is None else password 
-    #     return self.get('status')
+    def _authenticate(self, username=None, password=None):
+        """Attempt authentication."""
+        attempt_netrc_auth = username is None and password is None
+        # should test for a 502 bad gateway - could be rest api not enabled.
+        # ... APIUnavailableError
+        if attempt_netrc_auth:
+            try:
+                _ = self.get('orgs')
+            except AuthenticationError:
+                pass
+            else:
+                return
+        self.username, self.password = self._get_auth(username, password)
+        print('>>>>>>>>', self.username, self.password)
+        orgs = self.get('orgs')
+        print(orgs)
 
     def _get_scm_version(self, username=None, password=None):
         """Get version and build number of SteelConnect Manager."""
-        no_auth_provided = username is None and password is None
-        if no_auth_provided:
-            self.username, self.password = _get_auth(username, password)
-        status = self.get('status')
-        scm_version = status.get('scm_version'), status.get('scm_build')
-        return '.'.join(s for s in scm_version if s)
+        try:
+            status = self.get('status')
+        except NotFoundError:
+            return ''
+        else:
+            scm_version = status.get('scm_version'), status.get('scm_build')
+            return '.'.join(s for s in scm_version if s)
 
-    def _get_auth(username=None, password=None):
+    def _get_auth(self, username=None, password=None):
         """Prompt for username and password if not provided."""
         username = get_username() if username is None else username
         password = get_password_once() if password is None else password 
@@ -226,7 +235,12 @@ class SConAPI(object):
                 sys.exit(1)
             elif self.raise_on_failure:
                 self._tb = traceback.extract_stack()
-                raise RuntimeError(error)
+                if self.response.status_code == 401:
+                    raise AuthenticationError(error)
+                if self.response.status_code == 404:
+                    raise NotFoundError(error)
+                else:
+                    raise RuntimeError(error)
             return {'error': error}
         if self.response.headers['Content-Type'] == 'application/octet-stream':
             message = ' '.join(
@@ -283,3 +297,7 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
+
+list_of_errors_seen = """
+RuntimeError: 	502 - Bad Gateway -- rest api not enabled.
+"""
