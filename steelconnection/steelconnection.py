@@ -36,8 +36,7 @@ import traceback
 
 from .__version__ import __version__
 from .lookup import _LookUp
-from .input_tools import get_username, get_password
-
+from .input_tools import get_username, get_password, get_password_once
 
 
 class API(object):
@@ -53,12 +52,12 @@ class API(object):
         raise_on_failure=True,
     ):
         """Initialize attributes."""
-        self.api_version = api_version
         self.controller = controller
+        self.username = username
+        self.password = password
+        self.api_version = api_version
         self.exit_on_error = exit_on_error
         self.raise_on_failure = raise_on_failure
-        self.username = get_username() if username is None else username
-        self.password = get_password() if password is None else password
         self.session = requests.Session()
         self.result = None
         self.response = None
@@ -68,6 +67,20 @@ class API(object):
         }
         self.lookup = _LookUp(self)
         self.__version__ = __version__
+        self._authenticate()
+
+    def _authenticate(self):
+        if self.username is None and self.password is None:
+            # Allow requests to attempt netrc authentication.
+            self.response = self.session.get(
+                url=self.url('config', 'realm'),
+                headers=self.headers,
+            )
+            if self.response.ok:
+                return
+        self.username = get_username() if username is None else username
+        self.password = get_password_once() if password is None else password        
+        self.get('realm')
 
     def __bool__(self):
         """Return the success of the last request."""
