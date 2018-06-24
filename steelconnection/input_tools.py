@@ -36,3 +36,9 @@ def get_password(prompt=None, password=None):
             password = getpass.getpass(prompt)
             verify = getpass.getpass('Retype password: ')
     return password
+
+
+def get_password_once(prompt=None):
+    """Get password from terminal with discretion."""
+    prompt = 'Enter password: ' if prompt is None else prompt
+    return getpass.getpass(prompt)
