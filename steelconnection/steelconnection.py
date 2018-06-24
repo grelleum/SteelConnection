@@ -53,8 +53,6 @@ class API(object):
         raise_on_failure=True,
     ):
         """Initialize attributes."""
-        if not controller.endswith('.cc'):
-            raise ValueError("SteelConnect Manager's name must end with '.cc'")
         self.api_version = api_version
         self.controller = controller
         self.exit_on_error = exit_on_error
