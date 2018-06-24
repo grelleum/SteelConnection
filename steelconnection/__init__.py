@@ -22,7 +22,8 @@ from __future__ import division
 from __future__ import print_function
 
 from .steelconnection import API, SConAPI
-from .input_tools import get_input, get_username, get_password
+from .input_tools import get_input, get_username
+from .input_tools import get_password, get_password_once
 
 import logging
 logging.getLogger(__name__).addHandler(logging.NullHandler())
