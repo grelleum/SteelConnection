@@ -33,13 +33,14 @@ import json
 import requests
 import sys
 import traceback
+import warnings
 
 from .__version__ import __version__
 from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
 
-class API(object):
+class SConAPI(object):
     """Make REST API calls to Riverbed SteelConnect Manager."""
 
     def __init__(
@@ -67,20 +68,17 @@ class API(object):
         }
         self.lookup = _LookUp(self)
         self.__version__ = __version__
-        self._authenticate(username, password)
+        status = self._authenticate(username, password)
+        scm_version = status.get('scm_version'), status.get('scm_build')
+        self.scm_version = '.'.join(s for s in scm_version if s)
 
     def _authenticate(self, username, password):
         if self.username is None and self.password is None:
-            # Allow requests to attempt netrc authentication.
-            self.response = self.session.get(
-                url=self.url('config', 'realm'),
-                headers=self.headers,
-            )
-            if self.response.ok:
-                return
+            # Allow requests to attempt .netrc authentication.
+            return self.get('status')
         self.username = get_username() if username is None else username
-        self.password = get_password_once() if password is None else password        
-        self.get('realm')
+        self.password = get_password_once() if password is None else password 
+        return self.get('status')       
 
     def __bool__(self):
         """Return the success of the last request."""
@@ -90,6 +88,7 @@ class API(object):
         """Return a string consisting of class name, controller, and api."""
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
+            "scm version: '{0}'".format(self.scm_version),
             "api version: '{0}'".format(self.api_version),
             "response: '{0}'".format(self.response),
         ])
@@ -228,7 +227,7 @@ class API(object):
         try:
             response = request_method(
                 url=self.url(api, resource),
-                auth=(self.username, self.password),
+                auth=(self.username, self.password) if self.username else None,
                 headers=self.headers,
                 params=params,
                 data=data,
@@ -242,38 +241,6 @@ class API(object):
             else:
                 raise e
         return response
-
-
-class SConAPI(API):
-    """Make REST API calls to Riverbed SteelConnect Manager."""
-
-    def __init__(
-        self,
-        controller,
-        username=None,
-        password=None,
-        api_version='1.0',
-        exit_on_error=False,
-        raise_on_failure=True,
-    ):
-        """Initialize attributes."""
-        if not controller.endswith('.cc'):
-            raise ValueError("SteelConnect Manager's name must end with '.cc'")
-        self.api_version = api_version
-        self.controller = controller
-        self.exit_on_error = exit_on_error
-        self.raise_on_failure = raise_on_failure
-        self.username = get_username() if username is None else username
-        self.password = get_password() if password is None else password
-        self.session = requests.Session()
-        self.result = None
-        self.response = None
-        self.headers = {
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-        }
-        self.lookup = _LookUp(self)
-        self.__version__ = __version__
 
 
 def _error_string(response):
