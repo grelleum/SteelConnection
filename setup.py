@@ -36,18 +36,3 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=classifiers
 )
-
-# setuptools.setup(
-#     name=name,
-#     version=version,
-#     author=author,
-#     author_email=author_email,
-#     description=description,
-#     long_description=long_description,
-#     long_description_content_type='text/markdown',
-#     url=url,
-#     download_url=download_url,
-#     keywords = keywords,
-#     packages=setuptools.find_packages(),
-#     classifiers=classifiers
-# )
