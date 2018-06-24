@@ -21,7 +21,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from .steelconnection import API, SConAPI
+from .steelconnection import SConAPI
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
 
@@ -35,7 +35,6 @@ from .__version__ import __url__, __version__
 
 
 __all__ = (
-    'API',
     'SConAPI',
     'get_input',
     'get_username',
