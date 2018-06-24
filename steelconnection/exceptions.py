@@ -6,12 +6,10 @@ Contains exceptions raised by steelconnection.
 """
 
 class AuthenticationError(RuntimeError):
-    """Authentication Failed."""
-
-class APIUnavailableError(RuntimeError):
-    """REST API not enabled."""
+    """401 - Authentication Failed."""
 
 class NotFoundError(RuntimeError):
-    """Path or resource not found."""
+    """404 - Path or resource not found."""
 
-
+class APIUnavailableError(RuntimeError):
+    """502 - REST API not enabled."""
