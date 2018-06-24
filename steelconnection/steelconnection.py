@@ -68,24 +68,48 @@ class SConAPI(object):
         }
         self.lookup = _LookUp(self)
         self.__version__ = __version__
-        status = self._authenticate(username, password)
-        scm_version = status.get('scm_version'), status.get('scm_build')
-        self.scm_version = '.'.join(s for s in scm_version if s)
+        self.scm_version = self._get_scm_version(username, password)
+        # status = self._authenticate(username, password)
+        # scm_version = status.get('scm_version'), status.get('scm_build')
+        # self.scm_version = '.'.join(s for s in scm_version if s)
 
-    def _authenticate(self, username, password):
-        if self.username is None and self.password is None:
-            # Allow requests to attempt .netrc authentication.
-            return self.get('status')
-        self.username = get_username() if username is None else username
-        self.password = get_password_once() if password is None else password 
-        return self.get('status')       
+    # def _authenticate(self, username, password):
+    #     if self.username is None and self.password is None:
+    #         # Allow requests to attempt .netrc authentication.
+    #         return self.get('status')
+    #     self.username = get_username() if username is None else username
+    #     self.password = get_password_once() if password is None else password 
+    #     return self.get('status')
+
+    def _get_scm_version(self, username=None, password=None):
+        """Get version and build number of SteelConnect Manager."""
+        no_auth_provided = username is None and password is None
+        if no_auth_provided:
+            self.username, self.password = _get_auth(username, password)
+        status = self.get('status')
+        scm_version = status.get('scm_version'), status.get('scm_build')
+        return '.'.join(s for s in scm_version if s)
+
+    def _get_auth(username=None, password=None):
+        """Prompt for username and password if not provided."""
+        username = get_username() if username is None else username
+        password = get_password_once() if password is None else password 
+        return username, password
 
     def __bool__(self):
-        """Return the success of the last request."""
+        """Return the success of the last request.
+
+        :returns: True of False if last request succeeded.
+        :rtype: bool
+        """
         return False if self.response is None else self.response.ok 
 
     def __repr__(self):
-        """Return a string consisting of class name, controller, and api."""
+        """Return a string consisting of class name, controller, and api.
+
+        :returns: Information about this object.
+        :rtype: str
+        """
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
             "scm version: '{0}'".format(self.scm_version),
