@@ -20,7 +20,7 @@ classifiers=(
 with open('README.md', 'rt') as f:
     long_description = f.read()
 
-download_url = base_url + version + '.tar.gz'
+download_url = base_url + __version__ + '.tar.gz'
 
 setuptools.setup(
     name=__title__,
