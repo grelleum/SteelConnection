@@ -36,7 +36,7 @@ import traceback
 import warnings
 
 from .__version__ import __version__
-from .exceptions import AuthenticationError, APIUnavailableError, NotFoundError
+from .exceptions import AuthenticationError, APINotEnabled, NotFoundError
 from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
@@ -79,22 +79,20 @@ class SConAPI(object):
         # ... APIUnavailableError
         if attempt_netrc_auth:
             try:
-                _ = self.get('orgs')
+                self.get('orgs')
             except AuthenticationError:
                 pass
             else:
                 return
         self.username, self.password = self._get_auth(username, password)
-        print('>>>>>>>>', self.username, self.password)
-        orgs = self.get('orgs')
-        print(orgs)
+        self.get('orgs')
 
     def _get_scm_version(self, username=None, password=None):
         """Get version and build number of SteelConnect Manager."""
         try:
             status = self.get('status')
         except NotFoundError:
-            return ''
+            return '2.8 or earlier.'
         else:
             scm_version = status.get('scm_version'), status.get('scm_build')
             return '.'.join(s for s in scm_version if s)
@@ -239,6 +237,8 @@ class SConAPI(object):
                     raise AuthenticationError(error)
                 if self.response.status_code == 404:
                     raise NotFoundError(error)
+                if self.response.status_code == 502:
+                    raise APINotEnabled(error)
                 else:
                     raise RuntimeError(error)
             return {'error': error}
@@ -297,7 +297,3 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
-
-list_of_errors_seen = """
-RuntimeError: 	502 - Bad Gateway -- rest api not enabled.
-"""

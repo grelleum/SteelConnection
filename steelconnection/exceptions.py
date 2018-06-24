@@ -11,5 +11,5 @@ class AuthenticationError(RuntimeError):
 class NotFoundError(RuntimeError):
     """404 - Path or resource not found."""
 
-class APIUnavailableError(RuntimeError):
+class APINotEnabled(RuntimeError):
     """502 - REST API not enabled."""

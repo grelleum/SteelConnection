@@ -22,7 +22,7 @@ from __future__ import division
 from __future__ import print_function
 
 from .steelconnection import SConAPI
-from .exceptions import AuthenticationError, APIUnavailableError, NotFoundError
+from .exceptions import AuthenticationError, APINotEnabled, NotFoundError
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
 
@@ -38,6 +38,8 @@ from .__version__ import __url__, __version__
 __all__ = (
     'SConAPI',
     'AuthenticationError',
+    'APINotEnabled', 
+    'NotFoundError',
     'get_input',
     'get_username',
     'get_password',
