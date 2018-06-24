@@ -85,7 +85,13 @@ class SConAPI(object):
         return '{0}({1})'.format(self.__class__.__name__, details)
 
     def get(self, resource, data=None, params=None):
-        """Make an HTTP GET request for the Config API resource."""
+        r"""Send a GET request to the SteelConnect.Config API.
+
+        :param str resource: api resource to get.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         if data and not params:
             params, data = data, None
         return self._request(
@@ -96,7 +102,13 @@ class SConAPI(object):
         )
 
     def getstatus(self, resource, data=None, params=None):
-        """Make an HTTP GET request for the Reporting API resource."""
+        r"""Send a GET request to the SteelConnect.Reporting API.
+
+        :param str resource: api resource to get.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         if data and not params:
             params, data = data, None
         return self._request(
@@ -107,7 +119,13 @@ class SConAPI(object):
         )
 
     def delete(self, resource, data=None):
-        """Make an HTTP DELETE request for the Config API resource."""
+        r"""Send a DELETE request to the SteelConnect.Config API.
+
+        :param str resource: api resource to get.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         return self._request(
             request_method=self.session.delete,
             api='config',
@@ -116,7 +134,13 @@ class SConAPI(object):
         )
 
     def post(self, resource, data=None):
-        """Make an HTTP POST request for the Config API resource."""
+        r"""Send a POST request to the SteelConnect.Config API.
+
+        :param str resource: api resource to get.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         return self._request(
             request_method=self.session.post,
             api='config',
@@ -125,7 +149,14 @@ class SConAPI(object):
         )
 
     def put(self, resource, data=None, params=None):
-        """Make an HTTP PUT request for the Config API resource."""
+        r"""Send a PUT request to the SteelConnect.Config API.
+
+        :param str resource: api resource to get.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         return self._request(
             request_method=self.session.put,
             api='config',
