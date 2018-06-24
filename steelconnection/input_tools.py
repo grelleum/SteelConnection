@@ -10,7 +10,6 @@ from __future__ import print_function
 import getpass
 import sys
 
-from requests import HTTPError
 
 def get_input(prompt=''):
     """Get input in a Python 2/3 compatible way."""
