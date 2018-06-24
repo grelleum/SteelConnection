@@ -84,7 +84,7 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
-    def get(self, resource, data=None, params=None):
+    def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -92,8 +92,6 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        if data and not params:
-            params, data = data, None
         return self._request(
             request_method=self.session.get,
             api='config',
@@ -101,7 +99,7 @@ class SConAPI(object):
             params=params,
         )
 
-    def getstatus(self, resource, data=None, params=None):
+    def getstatus(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Reporting API.
 
         :param str resource: api resource to get.
@@ -109,8 +107,6 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        if data and not params:
-            params, data = data, None
         return self._request(
             request_method=self.session.get,
             api='reporting',
@@ -118,11 +114,12 @@ class SConAPI(object):
             params=params,
         )
 
-    def delete(self, resource, data=None):
+    def delete(self, resource, data=None, params=None):
         r"""Send a DELETE request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
         :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :param dict params: (optional) Dictionary of query parameters.
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
