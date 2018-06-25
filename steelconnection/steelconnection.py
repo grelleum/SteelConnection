@@ -34,7 +34,7 @@ import traceback
 import warnings
 
 from .__version__ import __version__
-from .exceptions import AuthenticationError, APINotEnabled, NotFoundError
+from .exceptions import AuthenticationError, APINotEnabled, InvalidResource
 from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
@@ -208,7 +208,7 @@ class SConAPI(object):
             if response.status_code == 401:
                 exception = AuthenticationError(error)
             elif response.status_code == 404:
-                exception = NotFoundError(error)
+                exception = InvalidResource(error)
             elif response.status_code == 502:
                 exception = APINotEnabled(error)
             else:
@@ -238,7 +238,7 @@ class SConAPI(object):
         """Get version and build number of SteelConnect Manager."""
         try:
             status = self.get('status')
-        except NotFoundError:
+        except InvalidResource:
             return '2.8 or earlier.'
         else:
             scm_version = status.get('scm_version'), status.get('scm_build')
