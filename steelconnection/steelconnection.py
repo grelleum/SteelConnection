@@ -48,14 +48,12 @@ class SConAPI(object):
         username=None,
         password=None,
         api_version='1.0',
-        raise_on_failure=True,
     ):
         """Initialize attributes."""
         self.controller = controller
         self.username = username
         self.password = password
         self.api_version = api_version
-        self.raise_on_failure = raise_on_failure
         self.session = requests.Session()
         self.result = None
         self.response = None
@@ -136,10 +134,7 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            if self.raise_on_failure:
-                raise exception
-            else:
-               self.result = {'error': str(exception)}
+            raise exception
         return self.result
 
     def getstatus(self, resource, params=None):
@@ -159,10 +154,7 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            if self.raise_on_failure:
-                raise exception
-            else:
-               self.result = {'error': str(exception)}
+            raise exception
         return self.result
 
     def delete(self, resource, data=None, params=None):
@@ -184,10 +176,7 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            if self.raise_on_failure:
-                raise exception
-            else:
-               self.result = {'error': str(exception)}
+            raise exception
         return self.result
 
     def post(self, resource, data=None):
@@ -207,10 +196,7 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            if self.raise_on_failure:
-                raise exception
-            else:
-               self.result = {'error': str(exception)}
+            raise exception
         return self.result
 
     def put(self, resource, data=None, params=None):
@@ -232,10 +218,7 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            if self.raise_on_failure:
-                raise exception
-            else:
-               self.result = {'error': str(exception)}
+            raise exception
         return self.result
 
     def url(self, api, resource):
