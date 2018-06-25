@@ -34,7 +34,8 @@ import traceback
 import warnings
 
 from .__version__ import __version__
-from .exceptions import AuthenticationError, APINotEnabled, InvalidResource
+from .exceptions import AuthenticationError, APINotEnabled
+from .exceptions import BadRequest, InvalidResource
 from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
@@ -205,7 +206,9 @@ class SConAPI(object):
     def _determine_exception(self, response):
         if not response.ok:
             error = _error_string(response)
-            if response.status_code == 401:
+            if response.status_code == 400:
+                exception = BadRequest(error)
+            elif response.status_code == 401:
                 exception = AuthenticationError(error)
             elif response.status_code == 404:
                 exception = InvalidResource(error)

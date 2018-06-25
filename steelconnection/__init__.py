@@ -18,7 +18,8 @@ Full documentation available at https://pypi.org/project/steelconnection/
 """
 
 from .steelconnection import SConAPI
-from .exceptions import AuthenticationError, APINotEnabled, InvalidResource
+from .exceptions import AuthenticationError, APINotEnabled
+from .exceptions import BadRequest, InvalidResource
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
 
@@ -34,7 +35,8 @@ from .__version__ import __url__, __version__
 __all__ = (
     'SConAPI',
     'AuthenticationError',
-    'APINotEnabled', 
+    'APINotEnabled',
+    'BadRequest',
     'InvalidResource',
     'get_input',
     'get_username',
