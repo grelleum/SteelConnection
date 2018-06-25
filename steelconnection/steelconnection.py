@@ -131,12 +131,20 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self._request(
+        self.response = self._request(
             request_method=self.session.get,
             api='config',
             resource=resource,
             params=params,
         )
+        self.result = self._get_result(self.response)
+        if self.result is None:
+            exception = self._determine_exception(self.response)
+            if self.raise_on_failure:
+                raise exception
+            else:
+               self.result = {'error': str(exception)}
+        return self.result
 
     def getstatus(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Reporting API.
@@ -146,12 +154,20 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self._request(
+        self.response = self._request(
             request_method=self.session.get,
             api='reporting',
             resource=resource,
             params=params,
         )
+        self.result = self._get_result(self.response)
+        if self.result is None:
+            exception = self._determine_exception(self.response)
+            if self.raise_on_failure:
+                raise exception
+            else:
+               self.result = {'error': str(exception)}
+        return self.result
 
     def delete(self, resource, data=None, params=None):
         r"""Send a DELETE request to the SteelConnect.Config API.
@@ -162,12 +178,20 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self._request(
+        self.response = self._request(
             request_method=self.session.delete,
             api='config',
             resource=resource,
             data=data, 
         )
+        self.result = self._get_result(self.response)
+        if self.result is None:
+            exception = self._determine_exception(self.response)
+            if self.raise_on_failure:
+                raise exception
+            else:
+               self.result = {'error': str(exception)}
+        return self.result
 
     def post(self, resource, data=None):
         r"""Send a POST request to the SteelConnect.Config API.
@@ -177,12 +201,20 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self._request(
+        self.response = self._request(
             request_method=self.session.post,
             api='config',
             resource=resource,
             data=data, 
         )
+        self.result = self._get_result(self.response)
+        if self.result is None:
+            exception = self._determine_exception(self.response)
+            if self.raise_on_failure:
+                raise exception
+            else:
+               self.result = {'error': str(exception)}
+        return self.result
 
     def put(self, resource, data=None, params=None):
         r"""Send a PUT request to the SteelConnect.Config API.
@@ -193,12 +225,20 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self._request(
+        self.response = self._request(
             request_method=self.session.put,
             api='config',
             resource=resource,
             data=data, 
         )
+        self.result = self._get_result(self.response)
+        if self.result is None:
+            exception = self._determine_exception(self.response)
+            if self.raise_on_failure:
+                raise exception
+            else:
+               self.result = {'error': str(exception)}
+        return self.result
 
     def url(self, api, resource):
         """Combine attributes and resource as a url string."""
@@ -213,49 +253,6 @@ class SConAPI(object):
             f.write(self.response.content)
     
     def _request(self, request_method, api, resource, data=None, params=None):
-        """Send request to controller and handle response."""
-        self.response = self._make_request(
-            request_method=request_method,
-            api=api,
-            resource=resource,
-            data=data, 
-            params=params,
-        )
-        if not self.response.ok:
-            # work-around for bug in get:'/node/{node_id}/image_status' response
-            if self.response.text and 'Queued' in self.response.text:
-                return self.response.json()
-            error = _error_string(self.response)
-            if self.exit_on_error:
-                print(error, file=sys.stderr)
-                sys.exit(1)
-            elif self.raise_on_failure:
-                self._tb = traceback.extract_stack()
-                if self.response.status_code == 401:
-                    raise AuthenticationError(error)
-                if self.response.status_code == 404:
-                    raise NotFoundError(error)
-                if self.response.status_code == 502:
-                    raise APINotEnabled(error)
-                else:
-                    raise RuntimeError(error)
-            return {'error': error}
-        if self.response.headers['Content-Type'] == 'application/octet-stream':
-            message = ' '.join(
-                "Binary data returned."
-                "Use '.savefile(filename)' method"
-                "or access using '.response.content'."
-            )
-            return {'status': message}
-        if not self.response.json():
-            self.result = {}
-        elif 'items' in self.response.json():
-            self.result = self.response.json()['items']
-        else:
-            self.result = self.response.json()
-        return self.result
-
-    def _make_request(self, request_method, api, resource, data=None, params=None):
         """Send HTTP request to SteelConnect manager."""
         if data and isinstance(data, dict):
             data = json.dumps(data)
@@ -276,6 +273,42 @@ class SConAPI(object):
             else:
                 raise e
         return response
+
+    def _get_result(self, response):
+        if not response.ok:
+            if response.text and 'Queued' in response.text:
+                # work-around for get:'/node/{node_id}/image_status'
+                return response.json()
+            return None
+        if response.headers['Content-Type'] == 'application/octet-stream':
+            message = ' '.join(
+                "Binary data returned."
+                "Use '.savefile(filename)' method"
+                "or access using '.response.content'."
+            )
+            return {'status': message}
+        if not response.json():
+            return {}
+        elif 'items' in response.json():
+            return response.json()['items']
+        else:
+            return response.json()
+
+    def _determine_exception(self, response):
+        if not response.ok:
+            error = _error_string(response)
+            if self.exit_on_error:
+                print(error, file=sys.stderr)
+                sys.exit(1)
+            if response.status_code == 401:
+                exception = AuthenticationError(error)
+            elif response.status_code == 404:
+                exception = NotFoundError(error)
+            elif response.status_code == 502:
+                exception = APINotEnabled(error)
+            else:
+                exception = RuntimeError(error)
+            return exception
 
 
 def _error_string(response):
