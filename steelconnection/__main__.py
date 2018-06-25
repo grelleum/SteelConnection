@@ -7,4 +7,4 @@ from .__version__ import __url__, __version__
 
 if __name__ == '__main__':
     print('SteelConnection version:', __version__)
-    print('Documentation available at', __url__)
+    print('Project home:', __url__)
