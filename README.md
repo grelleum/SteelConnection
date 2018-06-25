@@ -157,16 +157,13 @@ The **_Zen of Python_** states:
 > Errors should never pass silently.\
 Unless explicitly silenced.
 
-With this in mind, all API calls should complete without error.  Any call to the REST API that fails will result something other than a 200-level response.  By default, SteelConnection will flag these as failures and raise a steelconnection.SConError.  Exception handling should therefore attempt to catch the steelconnection.SConError exception:
+With this in mind, steelconnection assumes all REST API calls should complete without error.  Succeful requests will return with an HTTP 200-level response.  Any other response if considered a failed request and will cause steelconnection to raise a `RuntimeError`.  Exception handling can be used to catch the exception:
 ```python
 try:
     sconnect.put(f'node/{node_id}', data={'location': 'LAB'})
-except steelconnection.SConError as e:
+except RuntimeError as e:
     handle_exception(e)
 ```
-Alternatively, to avoid the need for writing `try/except` blocks in your code, if you simply want to print the exception and exit everytime, you can set the `sconnect.exit_on_error = True` anytime after creating your object, or set the value at the time of object creation:\
-`sconnect = steelconnection.SConAPI('REALM.riverbed.cc', exit_on_error=True)`
-
 
 #### Convienience functions:
 ##### Object-level Convienience functions:
