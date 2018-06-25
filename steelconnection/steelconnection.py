@@ -81,6 +81,12 @@ class SConAPI(object):
         self.username, self.password = self._get_auth(username, password)
         self.get('orgs')
 
+    def _get_auth(self, username=None, password=None):
+        """Prompt for username and password if not provided."""
+        username = get_username() if username is None else username
+        password = get_password_once() if password is None else password 
+        return username, password
+
     def _get_scm_version(self, username=None, password=None):
         """Get version and build number of SteelConnect Manager."""
         try:
@@ -90,12 +96,6 @@ class SConAPI(object):
         else:
             scm_version = status.get('scm_version'), status.get('scm_build')
             return '.'.join(s for s in scm_version if s)
-
-    def _get_auth(self, username=None, password=None):
-        """Prompt for username and password if not provided."""
-        username = get_username() if username is None else username
-        password = get_password_once() if password is None else password 
-        return username, password
 
     def __bool__(self):
         """Return the success of the last request.
