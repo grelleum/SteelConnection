@@ -66,57 +66,6 @@ class SConAPI(object):
         self._authenticate(username, password)
         self.scm_version = self._get_scm_version()
 
-    def _authenticate(self, username=None, password=None):
-        """Attempt authentication."""
-        attempt_netrc_auth = username is None and password is None
-        if attempt_netrc_auth:
-            try:
-                self.get('orgs')
-            except AuthenticationError:
-                pass
-            else:
-                return
-        self.username, self.password = self._get_auth(username, password)
-        self.get('orgs')
-
-    def _get_auth(self, username=None, password=None):
-        """Prompt for username and password if not provided."""
-        username = get_username() if username is None else username
-        password = get_password_once() if password is None else password 
-        return username, password
-
-    def _get_scm_version(self, username=None, password=None):
-        """Get version and build number of SteelConnect Manager."""
-        try:
-            status = self.get('status')
-        except NotFoundError:
-            return '2.8 or earlier.'
-        else:
-            scm_version = status.get('scm_version'), status.get('scm_build')
-            return '.'.join(s for s in scm_version if s)
-
-    def __bool__(self):
-        """Return the success of the last request.
-
-        :returns: True of False if last request succeeded.
-        :rtype: bool
-        """
-        return False if self.response is None else self.response.ok 
-
-    def __repr__(self):
-        """Return a string consisting of class name, controller, and api.
-
-        :returns: Information about this object.
-        :rtype: str
-        """
-        details = ', '.join([
-            "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(self.scm_version),
-            "api version: '{0}'".format(self.api_version),
-            "response: '{0}'".format(self.response),
-        ])
-        return '{0}({1})'.format(self.__class__.__name__, details)
-
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
 
@@ -265,6 +214,57 @@ class SConAPI(object):
             else:
                 exception = RuntimeError(error)
             return exception
+
+    def _authenticate(self, username=None, password=None):
+        """Attempt authentication."""
+        attempt_netrc_auth = username is None and password is None
+        if attempt_netrc_auth:
+            try:
+                self.get('orgs')
+            except AuthenticationError:
+                pass
+            else:
+                return
+        self.username, self.password = self._get_auth(username, password)
+        self.get('orgs')
+
+    def _get_auth(self, username=None, password=None):
+        """Prompt for username and password if not provided."""
+        username = get_username() if username is None else username
+        password = get_password_once() if password is None else password 
+        return username, password
+
+    def _get_scm_version(self, username=None, password=None):
+        """Get version and build number of SteelConnect Manager."""
+        try:
+            status = self.get('status')
+        except NotFoundError:
+            return '2.8 or earlier.'
+        else:
+            scm_version = status.get('scm_version'), status.get('scm_build')
+            return '.'.join(s for s in scm_version if s)
+
+    def __bool__(self):
+        """Return the success of the last request.
+
+        :returns: True of False if last request succeeded.
+        :rtype: bool
+        """
+        return False if self.response is None else self.response.ok 
+
+    def __repr__(self):
+        """Return a string consisting of class name, controller, and api.
+
+        :returns: Information about this object.
+        :rtype: str
+        """
+        details = ', '.join([
+            "controller: '{0}'".format(self.controller),
+            "scm version: '{0}'".format(self.scm_version),
+            "api version: '{0}'".format(self.api_version),
+            "response: '{0}'".format(self.response),
+        ])
+        return '{0}({1})'.format(self.__class__.__name__, details)
 
 
 def _error_string(response):
