@@ -75,8 +75,6 @@ class SConAPI(object):
     def _authenticate(self, username=None, password=None):
         """Attempt authentication."""
         attempt_netrc_auth = username is None and password is None
-        # should test for a 502 bad gateway - could be rest api not enabled.
-        # ... APIUnavailableError
         if attempt_netrc_auth:
             try:
                 self.get('orgs')
