@@ -255,18 +255,6 @@ class SConAPI(object):
         """Save binary return data to a file."""
         with open(filename, 'wb') as f:
             f.write(self.response.content)
-    
-    # def _request(self, request_method, api, resource, data=None, params=None):
-    #     """Send HTTP request to SteelConnect manager."""
-    #     if data and isinstance(data, dict):
-    #         data = json.dumps(data)
-    #     return request_method(
-    #         url=self.url(api, resource),
-    #         auth=(self.username, self.password) if self.username else None,
-    #         headers=self.headers,
-    #         params=params,
-    #         data=data,
-    #     )
 
     def _get_result(self, response):
         if not response.ok:
