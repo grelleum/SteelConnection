@@ -174,14 +174,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        if data and isinstance(data, dict):
-            data = json.dumps(data)
         self.response = self.session.delete(
             url=self.url('config', resource),
             auth=(self.username, self.password) if self.username else None,
             headers=self.headers,
             params=params,
-            data=data,
+            data=_format_body(data),
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -200,13 +198,11 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        if data and isinstance(data, dict):
-            data = json.dumps(data)
         self.response = self.session.post(
             url=self.url('config', resource),
             auth=(self.username, self.password) if self.username else None,
             headers=self.headers,
-            data=data,
+            data=_format_body(data),
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -226,14 +222,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        if data and isinstance(data, dict):
-            data = json.dumps(data)
         self.response = self.session.put(
             url=self.url('config', resource),
             auth=(self.username, self.password) if self.username else None,
             headers=self.headers,
             params=params,
-            data=data,
+            data=_format_body(data),
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -307,3 +301,7 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
+
+
+def _format_body(data):
+    return json.dumps(data) if data and isinstance(data, dict) else data
