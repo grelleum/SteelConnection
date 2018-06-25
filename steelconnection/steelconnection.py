@@ -48,7 +48,6 @@ class SConAPI(object):
         username=None,
         password=None,
         api_version='1.0',
-        exit_on_error=False,
         raise_on_failure=True,
     ):
         """Initialize attributes."""
@@ -56,7 +55,6 @@ class SConAPI(object):
         self.username = username
         self.password = password
         self.api_version = api_version
-        self.exit_on_error = exit_on_error
         self.raise_on_failure = raise_on_failure
         self.session = requests.Session()
         self.result = None
@@ -254,23 +252,13 @@ class SConAPI(object):
         """Send HTTP request to SteelConnect manager."""
         if data and isinstance(data, dict):
             data = json.dumps(data)
-        try:
-            response = request_method(
-                url=self.url(api, resource),
-                auth=(self.username, self.password) if self.username else None,
-                headers=self.headers,
-                params=params,
-                data=data,
-            )
-        except Exception as e:
-            if self.exit_on_error:
-                error = 'Connection to SteelConnect Manager failed:'
-                print(error, file=sys.stderr)
-                print(e, file=sys.stderr)
-                sys.exit(1)
-            else:
-                raise e
-        return response
+        return request_method(
+            url=self.url(api, resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
+            params=params,
+            data=data,
+        )
 
     def _get_result(self, response):
         if not response.ok:
@@ -295,9 +283,6 @@ class SConAPI(object):
     def _determine_exception(self, response):
         if not response.ok:
             error = _error_string(response)
-            if self.exit_on_error:
-                print(error, file=sys.stderr)
-                sys.exit(1)
             if response.status_code == 401:
                 exception = AuthenticationError(error)
             elif response.status_code == 404:

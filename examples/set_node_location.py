@@ -32,7 +32,6 @@ def main(argv):
         scm,
         username=args.username,
         password=args.password,
-        exit_on_error = True,
     )
 
     org_id, org = sconnect.lookup.org(organization)
