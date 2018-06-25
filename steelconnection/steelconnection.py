@@ -127,10 +127,10 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.get,
-            api='config',
-            resource=resource,
+        self.response = self.session.get(
+            url=self.url('config', resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -150,10 +150,10 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.get,
-            api='reporting',
-            resource=resource,
+        self.response = self.session.get(
+            url=self.url('reporting', resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -174,11 +174,14 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.delete,
-            api='config',
-            resource=resource,
-            data=data, 
+        if data and isinstance(data, dict):
+            data = json.dumps(data)
+        self.response = self.session.delete(
+            url=self.url('config', resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
+            params=params,
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -197,11 +200,13 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.post,
-            api='config',
-            resource=resource,
-            data=data, 
+        if data and isinstance(data, dict):
+            data = json.dumps(data)
+        self.response = self.session.post(
+            url=self.url('config', resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -221,11 +226,14 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.put,
-            api='config',
-            resource=resource,
-            data=data, 
+        if data and isinstance(data, dict):
+            data = json.dumps(data)
+        self.response = self.session.put(
+            url=self.url('config', resource),
+            auth=(self.username, self.password) if self.username else None,
+            headers=self.headers,
+            params=params,
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -248,17 +256,17 @@ class SConAPI(object):
         with open(filename, 'wb') as f:
             f.write(self.response.content)
     
-    def _request(self, request_method, api, resource, data=None, params=None):
-        """Send HTTP request to SteelConnect manager."""
-        if data and isinstance(data, dict):
-            data = json.dumps(data)
-        return request_method(
-            url=self.url(api, resource),
-            auth=(self.username, self.password) if self.username else None,
-            headers=self.headers,
-            params=params,
-            data=data,
-        )
+    # def _request(self, request_method, api, resource, data=None, params=None):
+    #     """Send HTTP request to SteelConnect manager."""
+    #     if data and isinstance(data, dict):
+    #         data = json.dumps(data)
+    #     return request_method(
+    #         url=self.url(api, resource),
+    #         auth=(self.username, self.password) if self.username else None,
+    #         headers=self.headers,
+    #         params=params,
+    #         data=data,
+    #     )
 
     def _get_result(self, response):
         if not response.ok:
