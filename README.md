@@ -164,6 +164,12 @@ try:
 except RuntimeError as e:
     handle_exception(e)
 ```
+More specific exceptions that might be generated (all inherit from `RuntimeError`):
+* `steelconnection.exceptions.AuthenticationError`:  401 - Check your username and password.
+* `steelconnection.exceptions.APINotEnabled`: 502 - Check if REST API is enabled on Realm settings.
+* `steelconnection.exceptions.BadRequest`: 400 - Possibly tried creating a resource that already exists.
+* `steelconnection.exceptions.InvalidResource`: 404 - Path or resource not found.
+
 If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConAPIwithoutExceptions` to create your object.  The `SConAPIwithoutExceptions` class replaces the exception handling method with a method that does nothing.
 ```python
 sconnect = SConAPIwithoutExceptions('REALM.riverbed.cc')
