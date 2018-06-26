@@ -199,7 +199,10 @@ class SConAPI(object):
         )
 
     def savefile(self, filename):
-        """Save binary return data to a file."""
+        r"""Save binary return data to a file.
+
+        :param str filename: Where to save the response.content.
+        """       
         with open(filename, 'wb') as f:
             f.write(self.response.content)
 
