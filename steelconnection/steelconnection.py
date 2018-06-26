@@ -322,3 +322,27 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
+
+
+class SConAPIwithoutExceptions(SConAPI):
+    r"""Make REST API calls to Riverbed SteelConnect Manager.
+
+    This version of the class does not generate exceptions
+    when an HTTP response has a non-200 series status code.
+    
+    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str username: (optional) Admin account name.
+    :param str password: (optional) Admin account password.
+    :param str api_version: (optional) REST API version.
+    :returns: Dictionary or List of Dictionaries based on request.
+    :rtype: dict, or list
+    """    
+
+    def _determine_exception(self, response):
+        r"""Return None to short-circuit the exception process.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        return None
