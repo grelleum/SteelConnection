@@ -259,7 +259,18 @@ class SConAPI(object):
             return exception
 
     def _authenticate(self, username=None, password=None):
-        """Attempt authentication."""
+        r"""Attempt authentication.
+
+        Makes GET request against 'orgs' (because 'status' is not 
+        available 2.8).  If neither username or password are provided,
+        will make the request without auth, to see if requests package
+        can authenticate using basic auth.
+
+        :param str username: (optional) Admin account name.
+        :param str password: (optional) Admin account password.
+        :returns: None.
+        :rtype: None
+        """
         attempt_netrc_auth = username is None and password is None
         if attempt_netrc_auth:
             try:
