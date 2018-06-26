@@ -98,7 +98,8 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            raise exception
+            if exception:
+                raise exception
         return self.result
 
     def getstatus(self, resource, params=None):
@@ -118,7 +119,8 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            raise exception
+            if exception:
+                raise exception
         return self.result
 
     def delete(self, resource, data=None, params=None):
@@ -140,7 +142,8 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            raise exception
+            if exception:
+                raise exception
         return self.result
 
     def post(self, resource, data=None):
@@ -160,7 +163,8 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            raise exception
+            if exception:
+                raise exception
         return self.result
 
     def put(self, resource, data=None, params=None):
@@ -182,7 +186,8 @@ class SConAPI(object):
         self.result = self._get_result(self.response)
         if self.result is None:
             exception = self._determine_exception(self.response)
-            raise exception
+            if exception:
+                raise exception
         return self.result
 
     def url(self, api, resource):
