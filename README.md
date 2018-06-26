@@ -170,7 +170,7 @@ More specific exceptions that might be generated (all inherit from `RuntimeError
 * `steelconnection.exceptions.BadRequest`: 400 - Possibly tried creating a resource that already exists.
 * `steelconnection.exceptions.InvalidResource`: 404 - Path or resource not found.
 
-If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConAPIwithoutExceptions` to create your object.  The `SConAPIwithoutExceptions` class replaces the exception handling method with a method that does nothing.
+If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConAPIwithoutExceptions` to create your object.  The `SConAPIwithoutExceptions` class replaces the exception handling method with a method that does nothing.  The  steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `.response.ok`.
 ```python
 sconnect = SConAPIwithoutExceptions('REALM.riverbed.cc')
 ```
