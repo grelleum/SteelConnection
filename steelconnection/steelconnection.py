@@ -297,10 +297,8 @@ class SConAPI(object):
     def _get_scm_version(self):
         """Get version and build number of SteelConnect Manager.
 
-        :param str username: (optional) Admin account name.
-        :param str password: (optional) Admin account password.
-        :returns: Tuple of strings as (username, password).
-        :rtype: (str, str)
+        :returns: SteelConnect Manager version and build number.
+        :rtype: str
         """
         try:
             status = self.get('status')
