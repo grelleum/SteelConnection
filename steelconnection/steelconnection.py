@@ -24,8 +24,6 @@ Usage:
 """
 
 
-from __future__ import print_function
-
 import getpass
 import json
 import requests
