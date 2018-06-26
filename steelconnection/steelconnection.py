@@ -97,9 +97,7 @@ class SConAPI(object):
         )
         self.result = self._get_result(self.response)
         if self.result is None:
-            exception = self._determine_exception(self.response)
-            if exception:
-                raise exception
+            self._raise_exception(self.response)
         return self.result
 
     def getstatus(self, resource, params=None):
@@ -118,9 +116,7 @@ class SConAPI(object):
         )
         self.result = self._get_result(self.response)
         if self.result is None:
-            exception = self._determine_exception(self.response)
-            if exception:
-                raise exception
+            self._raise_exception(self.response)
         return self.result
 
     def delete(self, resource, data=None, params=None):
@@ -141,9 +137,7 @@ class SConAPI(object):
         )
         self.result = self._get_result(self.response)
         if self.result is None:
-            exception = self._determine_exception(self.response)
-            if exception:
-                raise exception
+            self._raise_exception(self.response)
         return self.result
 
     def post(self, resource, data=None):
@@ -162,9 +156,7 @@ class SConAPI(object):
         )
         self.result = self._get_result(self.response)
         if self.result is None:
-            exception = self._determine_exception(self.response)
-            if exception:
-                raise exception
+            self._raise_exception(self.response)
         return self.result
 
     def put(self, resource, data=None, params=None):
@@ -185,9 +177,7 @@ class SConAPI(object):
         )
         self.result = self._get_result(self.response)
         if self.result is None:
-            exception = self._determine_exception(self.response)
-            if exception:
-                raise exception
+            self._raise_exception(self.response)
         return self.result
 
     def url(self, api, resource):
@@ -237,7 +227,7 @@ class SConAPI(object):
         else:
             return response.json()
 
-    def _determine_exception(self, response):
+    def _raise_exception(self, response):
         r"""Return an appropriate exception if required.
 
         :param requests.response response: Response from HTTP request.
@@ -247,16 +237,15 @@ class SConAPI(object):
         if not response.ok:
             error = _error_string(response)
             if response.status_code == 400:
-                exception = BadRequest(error)
+                raise BadRequest(error)
             elif response.status_code == 401:
-                exception = AuthenticationError(error)
+                raise AuthenticationError(error)
             elif response.status_code == 404:
-                exception = InvalidResource(error)
+                raise InvalidResource(error)
             elif response.status_code == 502:
-                exception = APINotEnabled(error)
+                raise APINotEnabled(error)
             else:
-                exception = RuntimeError(error)
-            return exception
+                raise RuntimeError(error)
 
     def _authenticate(self, username=None, password=None):
         r"""Attempt authentication.
@@ -369,7 +358,7 @@ class SConAPIwithoutExceptions(SConAPI):
     :rtype: dict, or list
     """    
 
-    def _determine_exception(self, response):
+    def _raise_exception(self, response):
         r"""Return None to short-circuit the exception process.
 
         :param requests.response response: Response from HTTP request.
