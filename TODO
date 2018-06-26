@@ -3,12 +3,6 @@ Test against various versions that may have issues with requests / SSL:
 
 Write tests using pytest.
 
-Needs to be [friendlier, more explicit, more helpful] when errors occur.
-
-Re-visit error handling - forced exceptions on non-200 return codes.
-
-docstrings - need to be expanded for better documentation.
-
 better way to store authentication:  Keyring Support??
 
 streaming transfers ...
