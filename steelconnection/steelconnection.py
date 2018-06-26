@@ -294,8 +294,14 @@ class SConAPI(object):
         password = get_password_once() if password is None else password 
         return username, password
 
-    def _get_scm_version(self, username=None, password=None):
-        """Get version and build number of SteelConnect Manager."""
+    def _get_scm_version(self):
+        """Get version and build number of SteelConnect Manager.
+
+        :param str username: (optional) Admin account name.
+        :param str password: (optional) Admin account password.
+        :returns: Tuple of strings as (username, password).
+        :rtype: (str, str)
+        """
         try:
             status = self.get('status')
         except InvalidResource:
