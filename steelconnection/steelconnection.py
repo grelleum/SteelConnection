@@ -303,7 +303,7 @@ class SConAPI(object):
         try:
             status = self.get('status')
         except InvalidResource:
-            return '2.8 or earlier.'
+            return 'unavailable'
         else:
             scm_version = status.get('scm_version'), status.get('scm_build')
             return '.'.join(s for s in scm_version if s)
