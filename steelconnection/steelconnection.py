@@ -207,6 +207,12 @@ class SConAPI(object):
             f.write(self.response.content)
 
     def _get_result(self, response):
+        r"""Return response data as native Python datatype.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: Dictionary or List of Dictionaries based on response.
+        :rtype: dict, list, or None
+        """
         if not response.ok:
             if response.text and 'Queued' in response.text:
                 # work-around for get:'/node/{node_id}/image_status'
@@ -227,6 +233,12 @@ class SConAPI(object):
             return response.json()
 
     def _determine_exception(self, response):
+        r"""Return an appropriate exception if required.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: Exception if non-200 response code else None.
+        :rtype: BaseException, or None
+        """
         if not response.ok:
             error = _error_string(response)
             if response.status_code == 400:
