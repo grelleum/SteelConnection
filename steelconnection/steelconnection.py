@@ -348,7 +348,7 @@ def _error_string(response):
     error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
         response.status_code,
         response.reason,
-        '\nDetails:\t' + details if details else '',
+        '\nDetails: ' + details if details else '',
         response.url,
         repr(response.request.body),
     )
