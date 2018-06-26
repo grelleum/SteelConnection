@@ -48,7 +48,15 @@ class SConAPI(object):
         password=None,
         api_version='1.0',
     ):
-        """Initialize attributes."""
+        r"""Create a new steelconnection object.
+
+        :param str controller: hostname or IP address of SteelConnect Manager.
+        :param str username: (optional) Admin account name.
+        :param str password: (optional) Admin account password.
+        :param str api_version: (optional) REST API version.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
         self.controller = controller
         self.username = username
         self.password = password
