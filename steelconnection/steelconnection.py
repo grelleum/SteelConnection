@@ -320,30 +320,6 @@ class SConAPI(object):
         return '{0}({1})'.format(self.__class__.__name__, details)
 
 
-def _error_string(response):
-    r"""Summarize error conditions and return as a string.
-
-    :param requests.response response: Response from HTTP request.
-    :returns: A multiline string summarizing the error.
-    :rtype: str
-    """
-    details = ''
-    if response.text:
-        try:
-            details = response.json()
-            details = details.get('error', {}).get('message', '')
-        except ValueError:
-            pass
-    error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
-        response.status_code,
-        response.reason,
-        '\nDetails: ' + details if details else '',
-        response.url,
-        repr(response.request.body),
-    )
-    return error
-
-
 class SConAPIwithoutExceptions(SConAPI):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
@@ -366,3 +342,27 @@ class SConAPIwithoutExceptions(SConAPI):
         :rtype: None
         """
         return None
+
+
+def _error_string(response):
+    r"""Summarize error conditions and return as a string.
+
+    :param requests.response response: Response from HTTP request.
+    :returns: A multiline string summarizing the error.
+    :rtype: str
+    """
+    details = ''
+    if response.text:
+        try:
+            details = response.json()
+            details = details.get('error', {}).get('message', '')
+        except ValueError:
+            pass
+    error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
+        response.status_code,
+        response.reason,
+        '\nDetails: ' + details if details else '',
+        response.url,
+        repr(response.request.body),
+    )
+    return error
