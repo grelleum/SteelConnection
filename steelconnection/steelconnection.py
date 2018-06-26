@@ -311,7 +311,12 @@ class SConAPI(object):
 
 
 def _error_string(response):
-    """Summarize error conditions and return as a string."""
+    r"""Summarize error conditions and return as a string.
+
+    :param requests.response response: Response from HTTP request.
+    :returns: A multiline string summarizing the error.
+    :rtype: str
+    """
     details = ''
     if response.text:
         try:
