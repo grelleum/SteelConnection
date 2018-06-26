@@ -39,7 +39,15 @@ from .input_tools import get_username, get_password, get_password_once
 
 
 class SConAPI(object):
-    """Make REST API calls to Riverbed SteelConnect Manager."""
+    r"""Make REST API calls to Riverbed SteelConnect Manager.
+    
+    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str username: (optional) Admin account name.
+    :param str password: (optional) Admin account password.
+    :param str api_version: (optional) REST API version.
+    :returns: Dictionary or List of Dictionaries based on request.
+    :rtype: dict, or list
+    """
 
     def __init__(
         self,
@@ -68,8 +76,8 @@ class SConAPI(object):
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
-        self.lookup = _LookUp(self)
         self.__version__ = __version__
+        self.lookup = _LookUp(self)
         self._authenticate(username, password)
         self.scm_version = self._get_scm_version()
 
@@ -285,7 +293,7 @@ def _error_string(response):
             details = details.get('error', {}).get('message', '')
         except ValueError:
             pass
-    error = '\t{0} - {1}{2}\nURL:\t\t{3}\nData Sent:\t{4}'.format(
+    error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
         response.status_code,
         response.reason,
         '\nDetails:\t' + details if details else '',
