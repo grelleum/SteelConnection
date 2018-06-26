@@ -186,7 +186,13 @@ class SConAPI(object):
         return self.result
 
     def url(self, api, resource):
-        """Combine attributes and resource as a url string."""
+        r"""Combine attributes and resource as a url string.
+
+        :param str api: api route, usually 'config' or 'reporting'.
+        :param str resource: resource path.
+        :returns: Complete URL path to access resource.
+        :rtype: str
+        """        
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.api_version, resource,
