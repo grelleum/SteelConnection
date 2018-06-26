@@ -326,7 +326,7 @@ class SConAPI(object):
             "controller: '{0}'".format(self.controller),
             "scm version: '{0}'".format(self.scm_version),
             "api version: '{0}'".format(self.api_version),
-            "response: '{0}'".format(self.response),
+            "package version: '{0}'".format(self.__version__),
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
