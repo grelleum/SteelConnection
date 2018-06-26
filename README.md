@@ -125,7 +125,7 @@ Take the network section for example:\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/network:
 * `GET` `/networks`  List networks.
 * `GET` `/org/:orgid/networks`  Get network for an org.
-* `POST` `/org/:orgid/networks`  Create network for an org.
+* `POST` `/org/:orgid/networks`  Create network within an org.
 * `DELETE` `/networks/:netid`  Delete network.
 * `GET` `/networks/:netid`  Get network.
 * `PUT` `/networks/:netid`  Update a network.
