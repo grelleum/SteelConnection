@@ -28,20 +28,20 @@ def main(argv):
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
 
-    sconnect = steelconnection.SConAPI(
+    sc = steelconnection.SConAPI(
         scm,
         username=args.username,
         password=args.password,
     )
 
-    org_id, org = sconnect.lookup.org(organization)
+    org_id, org = sc.lookup.org(organization)
     print('\nOrg:', organization, '\tID:', org_id)
-    sites = find_sites(sconnect, organization, org_id)
-    nodes = find_nodes(sconnect, organization, org_id)
-    return update_nodes(nodes, sconnect, organization, org_id, sites)
+    sites = find_sites(sc, organization, org_id)
+    nodes = find_nodes(sc, organization, org_id)
+    return update_nodes(nodes, sc, organization, org_id, sites)
 
 
-def update_nodes(nodes, sconnect, organization, org_id, sites):
+def update_nodes(nodes, sc, organization, org_id, sites):
     """Loop through nodes and push location to SCM where applicable."""
     for node in nodes:
         print('\n' + '=' * 79, '\n')
@@ -64,26 +64,26 @@ def update_nodes(nodes, sconnect, organization, org_id, sites):
             'location': site['name'],
         }
         resource = 'node/' + node['id']
-        result = sconnect.put(resource, data=payload)
-        response = sconnect.response
+        result = sc.put(resource, data=payload)
+        response = sc.response
         print('Response:', response.status_code, response.reason, '\n')
         print(result)
 
 
-def find_sites(sconnect, organization, org_id):
+def find_sites(sc, organization, org_id):
     """Get list of sites for specified organization."""
     print('\nGathering Sites:')
-    sites = sconnect.get('sites')
+    sites = sc.get('sites')
     sites = [site for site in sites if site['org'] == org_id]
     print(status('site', sites, "in '{0}'".format(organization)))
     return sites
 
 
-def find_nodes(sconnect, organization, org_id):
+def find_nodes(sc, organization, org_id):
     """Get nodes that require modification."""
     print('\nGathering Nodes:')
 
-    nodes = sconnect.get('nodes')
+    nodes = sc.get('nodes')
     print(status('node', nodes, 'in Total'))
 
     nodes = [node for node in nodes if node['org'] == org_id]
