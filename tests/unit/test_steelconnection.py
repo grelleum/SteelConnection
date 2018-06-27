@@ -52,6 +52,13 @@ def test_scon_post(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
+def test_scon_url(monkeypatch):
+    """Test SConAPI.url method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('NO.REALM', api_version='999')
+    assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
+
+
 #     def url(self, api, resource):
 #         r"""Combine attributes and resource as a url string.
 
