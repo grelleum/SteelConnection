@@ -6,6 +6,7 @@ import PATCH
 
 
 def test_scon_get(monkeypatch):
+    """Test SConAPI.get method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     assert sc.get('orgs') == PATCH.responses['orgs']
@@ -14,6 +15,7 @@ def test_scon_get(monkeypatch):
 
 
 def test_scon_getstatus(monkeypatch):
+    """Test SConAPI.getstatus method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     assert sc.getstatus('orgs') == PATCH.responses['orgs']
@@ -22,6 +24,7 @@ def test_scon_getstatus(monkeypatch):
 
 
 def test_scon_delete(monkeypatch):
+    """Test SConAPI.delete method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     assert sc.delete('orgs') == PATCH.responses['orgs']
@@ -30,6 +33,7 @@ def test_scon_delete(monkeypatch):
 
 
 def test_scon_put(monkeypatch):
+    """Test SConAPI.put method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
@@ -39,6 +43,7 @@ def test_scon_put(monkeypatch):
 
 
 def test_scon_post(monkeypatch):
+    """Test SConAPI.post method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
