@@ -51,18 +51,26 @@ class Fake_Session(object):
         return Fake_Response(url, status_code, data)
 
     def delete(self, url, auth=None, headers=None, params=None, data=None):
+        # if data is None:
+        #     raise ValueError('delete have data')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
  
     def put(self, url, auth=None, headers=None, params=None, data=None):
+        if data is None:
+            raise ValueError('put have data')        
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
 
     def post(self, url, auth=None, headers=None, params=None, data=None):
+        if params is not None:
+            raise ValueError('post params must be None.')
+        if data is None:
+            raise ValueError('post have data')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         status_code = codes.get(resource, 200)
