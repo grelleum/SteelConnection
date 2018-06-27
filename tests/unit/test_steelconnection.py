@@ -31,16 +31,18 @@ def test_scon_delete(monkeypatch):
 
 def test_scon_put(monkeypatch):
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.put('orgs') == PATCH.responses['orgs']
+    assert sc.put('orgs', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
 
 def test_scon_post(monkeypatch):
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.post('orgs') == PATCH.responses['orgs']
+    assert sc.post('orgs', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
