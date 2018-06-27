@@ -26,7 +26,7 @@ def test_scon_delete(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     assert sc.delete('orgs') == PATCH.responses['orgs']
     assert sc.response.ok
-    assert '/api/scm.reporting/' in sc.response.url
+    assert '/api/scm.config/' in sc.response.url
 
 
 def test_scon_put(monkeypatch):
@@ -34,7 +34,7 @@ def test_scon_put(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     assert sc.put('orgs') == PATCH.responses['orgs']
     assert sc.response.ok
-    assert '/api/scm.reporting/' in sc.response.url
+    assert '/api/scm.config/' in sc.response.url
 
 
 def test_scon_post(monkeypatch):
@@ -42,7 +42,7 @@ def test_scon_post(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     assert sc.post('orgs') == PATCH.responses['orgs']
     assert sc.response.ok
-    assert '/api/scm.reporting/' in sc.response.url
+    assert '/api/scm.config/' in sc.response.url
 
 
 
