@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import sys
 from steelconnection import input_tools
 

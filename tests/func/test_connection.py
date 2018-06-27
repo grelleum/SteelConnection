@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import steelconnection
 
 from PRIVATE import REALM_ADMIN, ORG_ADMIN, PASSWORD
