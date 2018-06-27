@@ -313,7 +313,9 @@ class SConAPI(object):
         """
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(self.scm_version),
+            "scm version: '{0}'".format(
+                self.scm_version if self.scm_version else 'unavailable'
+            ),
             "api version: '{0}'".format(self.api_version),
             "package version: '{0}'".format(self.__version__),
         ])
