@@ -24,9 +24,22 @@ class Fake_Response(object):
 
 
 responses = {
-    'org': {'id': 'not_an_id', 'name': 'steelconnection'},
-    'orgs': [{'id': 'not_an_id', 'name': 'steelconnection'}],
+    'org': {'id': 'not_an_org_id', 'name': 'steelconnection'},
+    'orgs': [{'id': 'not_an_org_id', 'name': 'steelconnection'}],
     'status': {'scm_version': '2.9.1', 'scm_build': '50'},
+    'nodes': [{
+        'org': 'not_an_org_id',
+        'site': 'site-mysite',
+        'id': 'node-somenode',
+        'serial': 'XNABCD0123456789',
+        'model': 'yogi',
+    }], 
+    'sites': [{
+        'org': 'not_an_org_id',
+        'city': 'Anytown, US',
+        'id': 'site-mysite',
+        'name': 'Anytown',
+    }],
 }
 
 codes = {}
