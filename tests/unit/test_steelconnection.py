@@ -47,68 +47,6 @@ def test_scon_post(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
-
-#     def delete(self, resource, data=None, params=None):
-#         r"""Send a DELETE request to the SteelConnect.Config API.
-
-#         :param str resource: api resource to get.
-#         :param dict data: (optional) Dictionary of 'body' data to be sent.
-#         :param dict params: (optional) Dictionary of query parameters.
-#         :returns: Dictionary or List of Dictionaries based on request.
-#         :rtype: dict, or list
-#         """
-#         self.response = self.session.delete(
-#             url=self.url('config', resource),
-#             auth=(self.username, self.password) if self.username else None,
-#             headers=self.headers,
-#             params=params,
-#             data=json.dumps(data) if data and isinstance(data, dict) else data
-#         )
-#         self.result = self._get_result(self.response)
-#         if self.result is None:
-#             self._raise_exception(self.response)
-#         return self.result
-
-#     def post(self, resource, data=None):
-#         r"""Send a POST request to the SteelConnect.Config API.
-
-#         :param str resource: api resource to get.
-#         :param dict data: (optional) Dictionary of 'body' data to be sent.
-#         :returns: Dictionary or List of Dictionaries based on request.
-#         :rtype: dict, or list
-#         """
-#         self.response = self.session.post(
-#             url=self.url('config', resource),
-#             auth=(self.username, self.password) if self.username else None,
-#             headers=self.headers,
-#             data=json.dumps(data) if data and isinstance(data, dict) else data
-#         )
-#         self.result = self._get_result(self.response)
-#         if self.result is None:
-#             self._raise_exception(self.response)
-#         return self.result
-
-#     def put(self, resource, data=None, params=None):
-#         r"""Send a PUT request to the SteelConnect.Config API.
-
-#         :param str resource: api resource to get.
-#         :param dict data: (optional) Dictionary of 'body' data to be sent.
-#         :param dict params: (optional) Dictionary of query parameters.
-#         :returns: Dictionary or List of Dictionaries based on request.
-#         :rtype: dict, or list
-#         """
-#         self.response = self.session.put(
-#             url=self.url('config', resource),
-#             auth=(self.username, self.password) if self.username else None,
-#             headers=self.headers,
-#             params=params,
-#             data=json.dumps(data) if data and isinstance(data, dict) else data
-#         )
-#         self.result = self._get_result(self.response)
-#         if self.result is None:
-#             self._raise_exception(self.response)
-#         return self.result
-
 #     def url(self, api, resource):
 #         r"""Combine attributes and resource as a url string.
 
