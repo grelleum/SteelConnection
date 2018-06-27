@@ -36,7 +36,7 @@ https://github.com/grelleum/SteelConnection/tree/master/examples
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
-sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
+sc = steelconnection.SConAPI('REALM.riverbed.cc')
 ```
 
 #### Realms and Organizations:
@@ -54,7 +54,7 @@ SteelConnect REST API uses Basic Auth, meaning a username and password are requi
 If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
->>> sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
+>>> sc = steelconnection.SConAPI('REALM.riverbed.cc')
 Enter username: admin
 Enter password: 
 >>> 
@@ -77,7 +77,7 @@ import steelconnection
 username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 
-sconnect = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
+sc = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
 ```
 
 #### Understanding the API:
@@ -85,7 +85,7 @@ The Riverbed SteelConnect REST API allows HTTPS access to the SteelConnect Manag
 
 **With** SteelConnection, a request to get a list of all organizations in the realm would look like this:
 ```python
-orgs = sconnect.get('orgs')
+orgs = sc.get('orgs')
 ```
 **Without** SteelConnection, the same request would look like this:
 ```python
@@ -133,16 +133,16 @@ https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/ne
 Within the resource path, you may see a name preceded by a colon `:`. These are considered variables and must be replaced with an actual value.  The `/networks/:netid` would require the `:netid` be replaced with the actual network ID for the network you are requesting.
 
 SteelConnection methods mimic the HTTP Methods and accept the short form resource paths.\
-To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sconnect.put('/network/' +  net_id)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
+To update a network, the documentation lists `PUT` `/networks/:netid`.  With the SteelConnection object, you would call the put method as `sc.put('/network/' +  net_id)`.  Note that the leading `/` in the resource is optional as the SteelConnection object will insert it if it is missing.
 
 ##### Model Schema (Data Payload):
 Post (create) and Put (update) requests require additional data in the form of a payload.  This gets sent to the server in the form of JSON data, however the SteelConnection object will accept either JSON data or a native Python dictionary (`isinstance(data, dict)`).  The Riverbed documentation will specify the format of the data as a "Model Schema".  Not everything listed in the model schema is required.  Generally, you can determine the minimum required data by checking the equivalent function in SteelConnect Manager web GUI.
 
 #### Retrieving Data:
-The SteelConnection methods leverage the popular requests package.  Methods calls always return a native Python dictionary, or a list of dictionaries, depending on the API call.  The `requests.response` object will be stored as an attribute of the object (`sconnect.response`) so the latest response is always easily accessible.  By providing the full `requests.response` object you are free to check status and see all headers.
+The SteelConnection methods leverage the popular requests package.  Methods calls always return a native Python dictionary, or a list of dictionaries, depending on the API call.  The `requests.response` object will be stored as an attribute of the object (`sc.response`) so the latest response is always easily accessible.  By providing the full `requests.response` object you are free to check status and see all headers.
 
 For example, the 'get orgs' request should always provide a list of orgs within the realm, so we can directly assign the result as a native Python list.\
-`list_of_all_orgs = sconnect.get('orgs')`
+`list_of_all_orgs = sc.get('orgs')`
 
 Here are the rules to determine what gets returned by an API request:
 * If response.json() is True and the 'items' key exists, then return a python list of response.json()['items'].
@@ -160,7 +160,7 @@ Unless explicitly silenced.
 With this in mind, steelconnection assumes all REST API calls should complete without error.  Succeful requests will return with an HTTP 200-level response.  Any other response if considered a failed request and will cause steelconnection to raise either a `RuntimeError`, or a custom exceptions that inherits from `RuntimeError`.  Exception handling can be used to catch the exception:
 ```python
 try:
-    sconnect.put(f'node/{node_id}', data={'location': 'LAB'})
+    sc.put(f'node/{node_id}', data={'location': 'LAB'})
 except RuntimeError as e:
     handle_exception(e)
 ```
@@ -172,7 +172,7 @@ More specific exceptions that might be generated (all inherit from `RuntimeError
 
 If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConAPIwithoutExceptions` to create your object.  The `SConAPIwithoutExceptions` class replaces the exception handling method with a method that does nothing.  The  steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `.response.ok`.
 ```python
-sconnect = SConAPIwithoutExceptions('REALM.riverbed.cc')
+sc = SConAPIwithoutExceptions('REALM.riverbed.cc')
 ```
 
 #### Convienience functions:
@@ -189,7 +189,7 @@ These functions are accessed directly from the object you created and are specif
 ###### Lookup Organization:
 Many REST API calls require that you know the org id of your organization.  You can provide the organization short name to the function and it will return the org id and the org object.
 ```python
->>> org_id, org = sconnect.lookup.org('Spacely')
+>>> org_id, org = sc.lookup.org('Spacely')
 >>> org_id
 'org-Spacely-0a0b1cbadb33f34'
 >>> 
@@ -197,7 +197,7 @@ Many REST API calls require that you know the org id of your organization.  You 
 ###### Lookup Node:
 Similarly, the `lookup.node` method exists to privide the node id and node when you supply the commonly known appliance serial number.
 ```python
->>> node_id, node = sconnect.lookup.node('XN00012345ABCDEF')
+>>> node_id, node = sc.lookup.node('XN00012345ABCDEF')
 >>> node_id
 'node-56f1968e222ab789'
 >>> 
@@ -205,7 +205,7 @@ Similarly, the `lookup.node` method exists to privide the node id and node when 
 ###### Lookup Site:
 The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id is required.
 ```python
->>> site_id, site = sconnect.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
+>>> site_id, site = sc.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
 >>> site_id
 'site-Skypad-884b9071141e4bc0'
 >>> 
