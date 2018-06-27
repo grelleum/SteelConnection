@@ -35,16 +35,37 @@ codes = {}
 class Fake_Session(object):
 
     def get(self, url, auth=None, headers=None, params=None, data=None):
+        if data is not None:
+            raise ValueError('get data must be None.')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
 
     def getstatus(self, url, auth=None, headers=None, params=None, data=None):
+        if data is not None:
+            raise ValueError('getstatus data must be None.')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
 
+    def delete(self, url, auth=None, headers=None, params=None, data=None):
+        resource = url.split('/')[-1]
+        data = responses.get(resource, {})
+        status_code = codes.get(resource, 200)
+        return Fake_Response(url, status_code, data)
+ 
+    def put(self, url, auth=None, headers=None, params=None, data=None):
+        resource = url.split('/')[-1]
+        data = responses.get(resource, {})
+        status_code = codes.get(resource, 200)
+        return Fake_Response(url, status_code, data)
+
+    def post(self, url, auth=None, headers=None, params=None, data=None):
+        resource = url.split('/')[-1]
+        data = responses.get(resource, {})
+        status_code = codes.get(resource, 200)
+        return Fake_Response(url, status_code, data)
 
 
