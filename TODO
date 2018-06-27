@@ -11,3 +11,6 @@ http://docs.python-requests.org/en/master/user/quickstart/#raw-response-content
 with open(filename, 'wb') as fd:
     for chunk in r.iter_content(chunk_size=128):
         fd.write(chunk)
+
+
+Move AUTH attempt to first request??
