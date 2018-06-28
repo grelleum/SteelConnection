@@ -217,6 +217,8 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         password = get_password_once() if password is None else password 
 #         return username, password
 
+
+
 #     def _get_scm_version(self):
 #         """Get version and build number of SteelConnect Manager.
 
@@ -231,28 +233,42 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #             scm_version = status.get('scm_version'), status.get('scm_build')
 #             return '.'.join(s for s in scm_version if s)
 
-#     def __bool__(self):
-#         """Return the success of the last request.
 
-#         :returns: True of False if last request succeeded.
-#         :rtype: bool
-#         """
-#         return False if self.response is None else self.response.ok 
+# Dunder Methods:
 
-#     def __repr__(self):
-#         """Return a string consisting of class name, controller, and api.
+def test_scon_bool_returns_true(monkeypatch):
+    """Test __bool__ returns True when reponse is OK."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = True
+    assert bool(sc) == True
 
-#         :returns: Information about this object.
-#         :rtype: str
-#         """
-#         details = ', '.join([
-#             "controller: '{0}'".format(self.controller),
-#             "scm version: '{0}'".format(self.scm_version),
-#             "api version: '{0}'".format(self.api_version),
-#             "package version: '{0}'".format(self.__version__),
-#         ])
-#         return '{0}({1})'.format(self.__class__.__name__, details)
 
+def test_scon_bool_returns_false(monkeypatch):
+    """Test __bool__ returns False when reponse is not OK."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = False
+    assert bool(sc) == False
+
+
+
+def test_scon_repr(monkeypatch):
+    """Test __repr__ returns a proper string."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    realm = 'MYREALM'
+    scm_version = '.'.join(PATCH.responses['status'].values())
+    api_version = 999
+    pkg_version = steelconnection.__version__
+    expected = (
+        "SConAPI(controller: '{0}', scm version: '{1}', "
+        "api version: '{2}', package version: '{3}')"
+    ).format(realm, scm_version, api_version, pkg_version)
+    sc = steelconnection.SConAPI(realm, api_version=api_version)
+    assert repr(sc) == expected
+
+
+# Helper Functions:
 
 # def test_error_string():
 #     sc = steelconnection.SConAPI(REALM_2_10, REALM_ADMIN, PASSWORD)
@@ -285,6 +301,17 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         repr(response.request.body),
 #     )
 #     return error
+
+
+# Alternate Classes:
+
+def test_raise_exception_APINotEnabled(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 502, {})
+    with pytest.raises(steelconnection.exceptions.APINotEnabled):
+        sc._raise_exception(response)
 
 
 # class SConAPIwithoutExceptions(SConAPI):
