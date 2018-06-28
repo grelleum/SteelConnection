@@ -67,6 +67,14 @@ def test_scon_url(monkeypatch):
     assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
+def test_get_scm_version(monkeypatch):
+    """Test SConAPI._get_scm_version method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    scm_version = '.'.join(PATCH.responses['status'].values())
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc._get_scm_version() == scm_version
+
+
 #     def savefile(self, filename):
 #         r"""Save binary return data to a file.
 #         :param str filename: Where to save the response.content.
@@ -214,21 +222,6 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         username = get_username() if username is None else username
 #         password = get_password_once() if password is None else password 
 #         return username, password
-
-
-#     def _get_scm_version(self):
-#         """Get version and build number of SteelConnect Manager.
-
-#         :returns: SteelConnect Manager version and build number.
-#         :rtype: str
-#         """
-#         try:
-#             status = self.get('status')
-#         except InvalidResource:
-#             return 'unavailable'
-#         else:
-#             scm_version = status.get('scm_version'), status.get('scm_build')
-#             return '.'.join(s for s in scm_version if s)
 
 
 # Dunder Methods:
