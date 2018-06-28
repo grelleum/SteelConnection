@@ -252,7 +252,6 @@ def test_scon_bool_returns_false(monkeypatch):
     assert bool(sc) == False
 
 
-
 def test_scon_repr(monkeypatch):
     """Test __repr__ returns a proper string."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
@@ -305,13 +304,12 @@ def test_scon_repr(monkeypatch):
 
 # Alternate Classes:
 
-def test_raise_exception_APINotEnabled(monkeypatch):
+def test_raise_exception_when_disabled(monkeypatch):
     """_raise_exception should raise the correct exceptions based on status."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPIwithoutExceptions('some.realm')
     response = PATCH.Fake_Response('', 502, {})
-    with pytest.raises(steelconnection.exceptions.APINotEnabled):
-        sc._raise_exception(response)
+    sc._raise_exception(response) == None
 
 
 # class SConAPIwithoutExceptions(SConAPI):
