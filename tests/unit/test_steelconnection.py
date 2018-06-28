@@ -7,7 +7,7 @@ import json
 import pytest
 
 
-# Primary Methods.
+# Primary Methods:
 
 def test_scon_get(monkeypatch):
     """Test SConAPI.get method."""
@@ -58,7 +58,7 @@ def test_scon_post(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
-# Helper methods
+# Helper methods:
 
 def test_scon_url(monkeypatch):
     """Test SConAPI.url method."""
@@ -75,7 +75,7 @@ def test_scon_url(monkeypatch):
 #             f.write(self.response.content)
 
 
-# Get Results.
+# Get Results:
 
 def test_scon_get_result_not_ok(monkeypatch):
     """Test SConAPI._get_result method."""
@@ -123,7 +123,7 @@ def test_scon_get_result_with_items(monkeypatch):
     assert sc._get_result(response) == [1, 2, 3]
 
 
-# Raise Exceptions.
+# Raise Exceptions:
 
 def test_raise_exception_no_exception(monkeypatch):
     """_raise_exception should raise the correct exceptions based on status."""
@@ -178,15 +178,15 @@ def test_raise_exception_APINotEnabled(monkeypatch):
         sc._raise_exception(response)
 
 
+# Authentication Methods:
+
 
 #     def _authenticate(self, username=None, password=None):
 #         r"""Attempt authentication.
-
 #         Makes GET request against 'orgs' (because 'status' was introduced 
 #         in 2.9).  If neither username or password are provided,
 #         will make the request without auth, to see if requests package
 #         can authenticate using .netrc.
-
 #         :param str username: (optional) Admin account name.
 #         :param str password: (optional) Admin account password.
 #         :returns: None.
@@ -202,6 +202,8 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #                 return
 #         self.username, self.password = self._get_auth(username, password)
 #         self.get('orgs')
+
+
 
 #     def _get_auth(self, username=None, password=None):
 #         """Prompt for username and password if not provided.
