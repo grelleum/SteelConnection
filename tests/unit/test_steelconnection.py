@@ -211,6 +211,33 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         self.get('orgs')
 
 
+# def test_get_auth_no_args(monkeypatch):
+#     """Test _get_auth ."""
+#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc._get_auth()
+
+
+# def test_get_auth_username_only(monkeypatch):
+#     """Test _get_auth ."""
+#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc._get_auth()
+
+
+# def test_get_auth_password_only(monkeypatch):
+#     """Test _get_auth ."""
+#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc._get_auth()
+
+
+def test_get_auth_auth_provided(monkeypatch):
+    """_get_auth should return user/pass when both are provided."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc._get_auth('A', 'B') == ('A', 'B')
+
 #     def _get_auth(self, username=None, password=None):
 #         """Prompt for username and password if not provided.
 
