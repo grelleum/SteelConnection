@@ -5,6 +5,7 @@ import steelconnection
 import PATCH
 import json
 
+
 def test_scon_get(monkeypatch):
     """Test SConAPI.get method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
@@ -63,46 +64,58 @@ def test_scon_url(monkeypatch):
 
 #     def savefile(self, filename):
 #         r"""Save binary return data to a file.
-
 #         :param str filename: Where to save the response.content.
 #         """       
 #         with open(filename, 'wb') as f:
 #             f.write(self.response.content)
 
 
-# def test_scon__get_result(monkeypatch):
-#     """Test SConAPI._get_result method."""
-#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-#     sc = steelconnection.SConAPI('some.realm')
-#     assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
+def test_scon_get_result_not_ok(monkeypatch):
+    """Test SConAPI._get_result method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = False
+    assert sc._get_result(sc.response) is None
+    sc.response.text = 'Queued'
+    assert sc._get_result(sc.response) == PATCH.responses['status']
 
 
+def test_scon_get_result_octet_stream(monkeypatch):
+    """Test SConAPI._get_result method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.headers = {'Content-Type': 'application/octet-stream'}
+    assert sc._get_result(sc.response) == {'status': ' '.join(
+        "Binary data returned."
+        "Use '.savefile(filename)' method"
+        "or access using '.response.content'."
+    )}
 
-#     def _get_result(self, response):
-#         r"""Return response data as native Python datatype.
 
-#         :param requests.response response: Response from HTTP request.
-#         :returns: Dictionary or List of Dictionaries based on response.
-#         :rtype: dict, list, or None
-#         """
-#         if not response.ok:
-#             if response.text and 'Queued' in response.text:
-#                 # work-around for get:'/node/{node_id}/image_status'
-#                 return response.json()
-#             return None
-#         if response.headers['Content-Type'] == 'application/octet-stream':
-#             message = ' '.join(
-#                 "Binary data returned."
-#                 "Use '.savefile(filename)' method"
-#                 "or access using '.response.content'."
-#             )
-#             return {'status': message}
-#         if not response.json():
-#             return {}
-#         elif 'items' in response.json():
-#             return response.json()['items']
-#         else:
-#             return response.json()
+def test_scon_get_result_no_json(monkeypatch):
+    """Test SConAPI._get_result method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.data = False
+    assert sc._get_result(sc.response) == {}
+
+
+def test_scon_get_result_no_items(monkeypatch):
+    """Test SConAPI._get_result method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 200, {'A': 'B'})
+    assert sc._get_result(response) == {'A': 'B'}
+
+
+def test_scon_get_result_with_items(monkeypatch):
+    """Test SConAPI._get_result method."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 200, {'items': [1, 2, 3]})
+    assert sc._get_result(response) == [1, 2, 3]
+
+
 
 #     def _raise_exception(self, response):
 #         r"""Return an appropriate exception if required.
