@@ -5,6 +5,7 @@ import steelconnection
 import fake_requests
 import json
 import pytest
+import sys
 
 
 # Primary Methods:
@@ -232,7 +233,19 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #     assert sc._get_auth()
 
 
-def test_get_auth_auth_provided(monkeypatch):
+
+def test_get_auth_passwd_provided(monkeypatch):
+    """_get_auth should prompt promot for user when password is provided."""
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc._get_auth(password='B') == ('SteelConnect', 'B')
+
+
+def test_get_auth_both_provided(monkeypatch):
     """_get_auth should return user/pass when both are provided."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
