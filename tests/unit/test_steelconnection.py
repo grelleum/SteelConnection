@@ -3,13 +3,14 @@
 import requests
 import steelconnection
 import PATCH
-
+import json
 
 def test_scon_get(monkeypatch):
     """Test SConAPI.get method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.get('orgs') == PATCH.responses['orgs']
+    assert sc.get('orgs') == PATCH.responses['orgs']['items']
+    assert sc.get('org') == PATCH.responses['org']
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
@@ -18,7 +19,8 @@ def test_scon_getstatus(monkeypatch):
     """Test SConAPI.getstatus method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.getstatus('orgs') == PATCH.responses['orgs']
+    assert sc.getstatus('orgs') == PATCH.responses['orgs']['items']
+    assert sc.getstatus('org') == PATCH.responses['org']
     assert sc.response.ok
     assert '/api/scm.reporting/' in sc.response.url
 
@@ -27,7 +29,7 @@ def test_scon_delete(monkeypatch):
     """Test SConAPI.delete method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.delete('orgs') == PATCH.responses['orgs']
+    assert sc.delete('orgs') == PATCH.responses['orgs']['items']
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
@@ -35,9 +37,9 @@ def test_scon_delete(monkeypatch):
 def test_scon_put(monkeypatch):
     """Test SConAPI.put method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-    data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.put('orgs', data=data) == data
+    data = PATCH.responses['org']
+    assert sc.put('org', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
@@ -45,9 +47,9 @@ def test_scon_put(monkeypatch):
 def test_scon_post(monkeypatch):
     """Test SConAPI.post method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-    data = PATCH.responses['orgs']
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.post('orgs', data=data) == data
+    data = PATCH.responses['org']
+    assert sc.post('org', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
@@ -66,6 +68,15 @@ def test_scon_url(monkeypatch):
 #         """       
 #         with open(filename, 'wb') as f:
 #             f.write(self.response.content)
+
+
+# def test_scon__get_result(monkeypatch):
+#     """Test SConAPI._get_result method."""
+#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
+
+
 
 #     def _get_result(self, response):
 #         r"""Return response data as native Python datatype.
