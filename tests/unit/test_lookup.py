@@ -2,11 +2,11 @@
 
 import requests
 import steelconnection
-import PATCH
+import fake_requests
 
 
 def test_lookup_lookup(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     item = sc.get('orgs')[0]
     key = item['name']
@@ -16,7 +16,7 @@ def test_lookup_lookup(monkeypatch):
 
 
 def test_lookup_node(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     item = sc.get('nodes')[0]
     key = item['serial']
@@ -26,7 +26,7 @@ def test_lookup_node(monkeypatch):
 
 
 def test_lookup_org(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     item = sc.get('orgs')[0]
     key = item['name']
@@ -36,7 +36,7 @@ def test_lookup_org(monkeypatch):
 
 
 def test_lookup_site(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     item = sc.get('sites')[0]
     key = item['name']

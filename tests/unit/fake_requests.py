@@ -5,24 +5,30 @@ import json
 
 codes = {}
 
+org = {'id': 'not_an_org_id', 'name': 'steelconnection'}
+status = {'scm_version': '2.9.1', 'scm_build': '50'}
+node = {
+    'org': 'not_an_org_id',
+    'site': 'site-mysite',
+    'id': 'node-somenode',
+    'serial': 'XNABCD0123456789',
+    'model': 'yogi',
+}
+site = {
+    'org': 'not_an_org_id',
+    'city': 'Anytown, US',
+    'id': 'site-mysite',
+    'name': 'Anytown',
+}
 
 responses = {
-    'org': {'id': 'not_an_org_id', 'name': 'steelconnection'},
-    'orgs': {'items': [{'id': 'not_an_org_id', 'name': 'steelconnection'}]},
-    'status': {'scm_version': '2.9.1', 'scm_build': '50'},
-    'nodes': {'items': [{
-        'org': 'not_an_org_id',
-        'site': 'site-mysite',
-        'id': 'node-somenode',
-        'serial': 'XNABCD0123456789',
-        'model': 'yogi',
-    }]}, 
-    'sites': {'items': [{
-        'org': 'not_an_org_id',
-        'city': 'Anytown, US',
-        'id': 'site-mysite',
-        'name': 'Anytown',
-    }]},
+    'org': org,
+    'orgs': {'items': [org]},
+    'status': status,
+    'node': node,
+    'nodes': {'items': [node]}, 
+    'site': site,
+    'sites': {'items': [site]},
 }
 
 
