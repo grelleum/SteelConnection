@@ -26,14 +26,23 @@ responses = {
 }
 
 
+class Fake_Request(object):
+    def __init__(self, url, data):
+        self.data = json.loads(data) if isinstance(data, str) else data
+        self.url = url
+        self.body = json.dumps(self.data, indent=4)
+
+
 class Fake_Response(object):
     def __init__(self, url, status_code, data, content='json'):
         self.data = json.loads(data) if isinstance(data, str) else data
         self.url = url
         self.ok = True if status_code < 300 else False
+        self.reason = 'successs' if status_code < 300 else 'Failed'
         self.status_code = status_code
         self.headers= {'Content-Type': 'application/' + content}
         self.text = json.dumps(self.data, indent=4)
+        self.request = Fake_Request(url, data)
     def json(self):
         return self.data
 
