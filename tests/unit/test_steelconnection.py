@@ -4,7 +4,10 @@ import requests
 import steelconnection
 import PATCH
 import json
+import pytest
 
+
+# Primary Methods.
 
 def test_scon_get(monkeypatch):
     """Test SConAPI.get method."""
@@ -55,6 +58,8 @@ def test_scon_post(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
+# Helper methods
+
 def test_scon_url(monkeypatch):
     """Test SConAPI.url method."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
@@ -69,6 +74,8 @@ def test_scon_url(monkeypatch):
 #         with open(filename, 'wb') as f:
 #             f.write(self.response.content)
 
+
+# Get Results.
 
 def test_scon_get_result_not_ok(monkeypatch):
     """Test SConAPI._get_result method."""
@@ -93,7 +100,7 @@ def test_scon_get_result_octet_stream(monkeypatch):
 
 
 def test_scon_get_result_no_json(monkeypatch):
-    """Test SConAPI._get_result method."""
+    """_get_results should return an empty dict when .json returns False."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     sc.response.data = False
@@ -101,7 +108,7 @@ def test_scon_get_result_no_json(monkeypatch):
 
 
 def test_scon_get_result_no_items(monkeypatch):
-    """Test SConAPI._get_result method."""
+    """_get_results should return a dict when 'items' is not in response."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = PATCH.Fake_Response('', 200, {'A': 'B'})
@@ -109,17 +116,27 @@ def test_scon_get_result_no_items(monkeypatch):
 
 
 def test_scon_get_result_with_items(monkeypatch):
-    """Test SConAPI._get_result method."""
+    """_get_results should return a list when 'items' is in response."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = PATCH.Fake_Response('', 200, {'items': [1, 2, 3]})
     assert sc._get_result(response) == [1, 2, 3]
 
 
+# Raise Exceptions.
+
+def test_raise_exception(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 777, {})
+    response.reason = 'failed'
+    with pytest.raises(RuntimeError):
+        sc._raise_exception(response)
+
 
 #     def _raise_exception(self, response):
 #         r"""Return an appropriate exception if required.
-
 #         :param requests.response response: Response from HTTP request.
 #         :returns: Exception if non-200 response code else None.
 #         :rtype: BaseException, or None
