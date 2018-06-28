@@ -125,34 +125,59 @@ def test_scon_get_result_with_items(monkeypatch):
 
 # Raise Exceptions.
 
-def test_raise_exception(monkeypatch):
+def test_raise_exception_no_exception(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 201, {})
+    sc._raise_exception(response) == None
+
+
+def test_raise_exception_RuntimeError(monkeypatch):
     """_raise_exception should raise the correct exceptions based on status."""
     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = PATCH.Fake_Response('', 777, {})
-    response.reason = 'failed'
     with pytest.raises(RuntimeError):
         sc._raise_exception(response)
 
 
-#     def _raise_exception(self, response):
-#         r"""Return an appropriate exception if required.
-#         :param requests.response response: Response from HTTP request.
-#         :returns: Exception if non-200 response code else None.
-#         :rtype: BaseException, or None
-#         """
-#         if not response.ok:
-#             error = _error_string(response)
-#             if response.status_code == 400:
-#                 raise BadRequest(error)
-#             elif response.status_code == 401:
-#                 raise AuthenticationError(error)
-#             elif response.status_code == 404:
-#                 raise InvalidResource(error)
-#             elif response.status_code == 502:
-#                 raise APINotEnabled(error)
-#             else:
-#                 raise RuntimeError(error)
+def test_raise_exception_BadRequest(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 400, {})
+    with pytest.raises(steelconnection.exceptions.BadRequest):
+        sc._raise_exception(response)
+
+
+def test_raise_exception_AuthenticationError(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 401, {})
+    with pytest.raises(steelconnection.exceptions.AuthenticationError):
+        sc._raise_exception(response)
+
+
+def test_raise_exception_InvalidResource(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 404, {})
+    with pytest.raises(steelconnection.exceptions.InvalidResource):
+        sc._raise_exception(response)
+
+
+def test_raise_exception_APINotEnabled(monkeypatch):
+    """_raise_exception should raise the correct exceptions based on status."""
+    monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    response = PATCH.Fake_Response('', 502, {})
+    with pytest.raises(steelconnection.exceptions.APINotEnabled):
+        sc._raise_exception(response)
+
+
 
 #     def _authenticate(self, username=None, password=None):
 #         r"""Attempt authentication.
