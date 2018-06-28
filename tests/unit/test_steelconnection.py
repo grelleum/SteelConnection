@@ -180,7 +180,6 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 
 # Authentication Methods:
 
-
 #     def _authenticate(self, username=None, password=None):
 #         r"""Attempt authentication.
 #         Makes GET request against 'orgs' (because 'status' was introduced 
@@ -204,7 +203,6 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         self.get('orgs')
 
 
-
 #     def _get_auth(self, username=None, password=None):
 #         """Prompt for username and password if not provided.
 
@@ -216,7 +214,6 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         username = get_username() if username is None else username
 #         password = get_password_once() if password is None else password 
 #         return username, password
-
 
 
 #     def _get_scm_version(self):
@@ -269,37 +266,16 @@ def test_scon_repr(monkeypatch):
 
 # Helper Functions:
 
-# def test_error_string():
-#     sc = steelconnection.SConAPI(REALM_2_10, REALM_ADMIN, PASSWORD)
-#     items = sc.get('orgs')
-#     items = (item for item in items if 'name' in item)
-#     item = next(items)
-#     key = item['name']
-#     key_id = item['id']
-#     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
-#     assert result == (key_id, item)
-# def _error_string(response):
-#     r"""Summarize error conditions and return as a string.
-
-#     :param requests.response response: Response from HTTP request.
-#     :returns: A multiline string summarizing the error.
-#     :rtype: str
-#     """
-#     details = ''
-#     if response.text:
-#         try:
-#             details = response.json()
-#             details = details.get('error', {}).get('message', '')
-#         except ValueError:
-#             pass
-#     error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
-#         response.status_code,
-#         response.reason,
-#         '\nDetails: ' + details if details else '',
-#         response.url,
-#         repr(response.request.body),
-#     )
-#     return error
+def test_error_string():
+    """Test _error_string generates a properly formatted string."""
+    url = 'MYREALM'
+    status_code = 600
+    response = PATCH.Fake_Response(url, status_code, {'no': 'data'})
+    expected = "{0} - Failed\nURL: {1}\nData Sent: {2}".format(
+        status_code, url, repr(response.text)
+    )
+    error = steelconnection.steelconnection._error_string(response)
+    assert error == expected
 
 
 # Alternate Classes:
@@ -311,26 +287,3 @@ def test_raise_exception_when_disabled(monkeypatch):
     response = PATCH.Fake_Response('', 502, {})
     sc._raise_exception(response) == None
 
-
-# class SConAPIwithoutExceptions(SConAPI):
-#     r"""Make REST API calls to Riverbed SteelConnect Manager.
-
-#     This version of the class does not raise exceptions
-#     when an HTTP response has a non-200 series status code.
-    
-#     :param str controller: hostname or IP address of SteelConnect Manager.
-#     :param str username: (optional) Admin account name.
-#     :param str password: (optional) Admin account password.
-#     :param str api_version: (optional) REST API version.
-#     :returns: Dictionary or List of Dictionaries based on request.
-#     :rtype: dict, or list
-#     """    
-
-#     def _raise_exception(self, response):
-#         r"""Return None to short-circuit the exception process.
-
-#         :param requests.response response: Response from HTTP request.
-#         :returns: None.
-#         :rtype: None
-#         """
-#         return None
