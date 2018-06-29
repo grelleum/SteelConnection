@@ -298,7 +298,15 @@ class SConAPI(object):
             return '.'.join(s for s in scm_version if s)
 
     def __bool__(self):
-        """Return the success of the last request.
+        """Return the success of the last request in Python3.
+
+        :returns: True of False if last request succeeded.
+        :rtype: bool
+        """
+        return False if self.response is None else self.response.ok 
+
+    def __nonzero__(self):
+        """Return the success of the last request in Python2.
 
         :returns: True of False if last request succeeded.
         :rtype: bool
