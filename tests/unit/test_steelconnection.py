@@ -6,6 +6,7 @@ import sys
 import pytest
 import requests
 import steelconnection
+import steelconnection.__main__  # for cvoerage sake.
 import fake_requests
 
 
