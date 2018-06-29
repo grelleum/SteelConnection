@@ -61,6 +61,50 @@ def test_scon_post(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
+# Primary Methods can generate exceptions:
+
+def test_scon_get_exception(monkeypatch):
+    """Test SConAPI.get method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    with pytest.raises(RuntimeError):
+        sc.get('nonesuch')
+
+
+def test_scon_getstatus_exception(monkeypatch):
+    """Test SConAPI.getstatus method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    with pytest.raises(RuntimeError):
+        sc.getstatus('nonesuch')
+
+
+def test_scon_delete_exception(monkeypatch):
+    """Test SConAPI.delete method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    with pytest.raises(RuntimeError):
+        sc.delete('nonesuch')
+
+
+def test_scon_put_exception(monkeypatch):
+    """Test SConAPI.put method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    data = fake_requests.responses['org']
+    with pytest.raises(RuntimeError):
+        sc.put('nonesuch', data=data)
+
+
+def test_scon_post(monkeypatch):
+    """Test SConAPI.post method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    data = fake_requests.responses['org']
+    with pytest.raises(RuntimeError):
+        sc.post('nonesuch', data=data)
+
+
 # Helper methods:
 
 def test_scon_url(monkeypatch):

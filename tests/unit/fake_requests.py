@@ -3,7 +3,9 @@
 import json
 
 
-codes = {}
+codes = {
+    'nonesuch': 404,
+}
 
 org = {'id': 'not_an_org_id', 'name': 'steelconnection'}
 status = {'scm_version': '2.9.1', 'scm_build': '50'}
