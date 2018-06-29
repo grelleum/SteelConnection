@@ -78,12 +78,16 @@ def test_get_scm_version(monkeypatch):
     assert sc._get_scm_version() == scm_version
 
 
-#     def savefile(self, filename):
-#         r"""Save binary return data to a file.
-#         :param str filename: Where to save the response.content.
-#         """       
-#         with open(filename, 'wb') as f:
-#             f.write(self.response.content)
+def test_savefile(monkeypatch):
+    """Test SConAPI.savefile method."""
+    filename = 'delete.me'
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.content = b'ABCDEFG1234567890'
+    sc.savefile(filename)
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    assert sc.response.content == contents
 
 
 # Get Results:
