@@ -190,31 +190,24 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 
 # Authentication Methods:
 
-#     def _authenticate(self, username=None, password=None):
-#         r"""Attempt authentication.
-#         Makes GET request against 'orgs' (because 'status' was introduced 
-#         in 2.9).  If neither username or password are provided,
-#         will make the request without auth, to see if requests package
-#         can authenticate using .netrc.
-#         :param str username: (optional) Admin account name.
-#         :param str password: (optional) Admin account password.
-#         :returns: None.
-#         :rtype: None
-#         """
-#         attempt_netrc_auth = username is None and password is None
-#         if attempt_netrc_auth:
-#             try:
-#                 self.get('orgs')
-#             except AuthenticationError:
-#                 pass
-#             else:
-#                 return
-#         self.username, self.password = self._get_auth(username, password)
-#         self.get('orgs')
+
+# Challenge here is to make first FAKE request fail, due to lack of auth.
+
+# def test_authenticate_without_providing_auth(monkeypatch):
+#     """_authenticate should prompt for user and password when netrc fails."""
+#     if sys.version_info.major < 3:
+#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
+#     else:
+#         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
+#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc.username == 'SteelConnect'
+#     assert sc.password == 'mypassword'
 
 
 def test_get_auth_when_not_provided(monkeypatch):
-    """_get_auth should prompt promot for user when password is provided."""
+    """_get_auth should prompt for both user and password."""
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
@@ -226,7 +219,7 @@ def test_get_auth_when_not_provided(monkeypatch):
 
 
 def test_get_auth_username_provided(monkeypatch):
-    """_get_auth should prompt promot for user when password is provided."""
+    """_get_auth should prompt for password only when username is provided."""
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
@@ -234,7 +227,7 @@ def test_get_auth_username_provided(monkeypatch):
 
 
 def test_get_auth_passwd_provided(monkeypatch):
-    """_get_auth should prompt promot for user when password is provided."""
+    """_get_auth should prompt for username only when password is provided."""
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
