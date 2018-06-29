@@ -1,11 +1,12 @@
 # coding: utf-8
 
+import getpass
+import json
+import sys
+import pytest
 import requests
 import steelconnection
 import fake_requests
-import json
-import pytest
-import sys
 
 
 # Primary Methods:
@@ -212,26 +213,24 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #         self.get('orgs')
 
 
-# def test_get_auth_no_args(monkeypatch):
-#     """Test _get_auth ."""
-#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-#     sc = steelconnection.SConAPI('some.realm')
-#     assert sc._get_auth()
+def test_get_auth_when_not_provided(monkeypatch):
+    """_get_auth should prompt promot for user when password is provided."""
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc._get_auth() == ('SteelConnect', 'mypassword')
 
 
-# def test_get_auth_username_only(monkeypatch):
-#     """Test _get_auth ."""
-#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-#     sc = steelconnection.SConAPI('some.realm')
-#     assert sc._get_auth()
-
-
-# def test_get_auth_password_only(monkeypatch):
-#     """Test _get_auth ."""
-#     monkeypatch.setattr(requests, 'Session', PATCH.Fake_Session)
-#     sc = steelconnection.SConAPI('some.realm')
-#     assert sc._get_auth()
-
+def test_get_auth_username_provided(monkeypatch):
+    """_get_auth should prompt promot for user when password is provided."""
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc._get_auth(username='A') == ('A', 'mypassword')
 
 
 def test_get_auth_passwd_provided(monkeypatch):
