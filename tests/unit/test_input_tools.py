@@ -29,6 +29,14 @@ def test_get_password(monkeypatch):
     assert password == 'mypassword'
 
 
+def test_get_password_validate(monkeypatch):
+    def fake_getpass(_, words=['MATCH', 'MATCH', 'DOES', 'NOT']):
+        return words.pop()
+    monkeypatch.setattr('getpass.getpass', fake_getpass)
+    password = input_tools.get_password()
+    assert password == 'MATCH'
+
+
 def test_get_password_once(monkeypatch):
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     password = input_tools.get_password_once()
