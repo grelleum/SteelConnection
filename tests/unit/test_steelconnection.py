@@ -250,18 +250,6 @@ def test_get_auth_both_provided(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     assert sc._get_auth('A', 'B') == ('A', 'B')
 
-#     def _get_auth(self, username=None, password=None):
-#         """Prompt for username and password if not provided.
-
-#         :param str username: (optional) Admin account name.
-#         :param str password: (optional) Admin account password.
-#         :returns: Tuple of strings as (username, password).
-#         :rtype: (str, str)
-#         """
-#         username = get_username() if username is None else username
-#         password = get_password_once() if password is None else password 
-#         return username, password
-
 
 # Dunder Methods:
 
