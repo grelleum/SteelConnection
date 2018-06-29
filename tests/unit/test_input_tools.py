@@ -18,7 +18,7 @@ def test_get_username(monkeypatch):
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
-    name = input_tools.get_input()
+    name = input_tools.get_username()
     assert name == 'SteelConnect'
 
 
@@ -27,7 +27,7 @@ def test_get_password(monkeypatch):
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
-    name = input_tools.get_input()
+    name = input_tools.get_password()
     assert name == 'SteelConnect'
 
 
@@ -36,5 +36,5 @@ def test_get_password_once(monkeypatch):
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
-    name = input_tools.get_input()
+    name = input_tools.get_password_once()
     assert name == 'SteelConnect'
