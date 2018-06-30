@@ -43,5 +43,8 @@ setuptools.setup(
     download_url=download_url,
     keywords = keywords,
     packages=setuptools.find_packages(),
+    install_requires=[
+        'requests',
+    ],
     classifiers=classifiers
 )
