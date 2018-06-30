@@ -255,6 +255,26 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 #     assert sc.password == 'mypassword'
 
 
+def test_get_auth_with_netrc(monkeypatch):
+    """_get_auth should prompt for both user and password."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc.get('netrc') == fake_requests.netrc
+
+
+# def test_get_auth_without_netrc(monkeypatch):
+#     """_get_auth should prompt for both user and password."""
+#     if sys.version_info.major < 3:
+#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
+#     else:
+#         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
+#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+#     sc = steelconnection.SConAPI('some.realm')
+#     assert sc.get('netrc401') == fake_requests.netrc
+#     assert sc.username, sc.password == ('SteelConnect', 'mypassword')
+
+
 def test_get_auth_when_not_provided(monkeypatch):
     """_get_auth should prompt for both user and password."""
     if sys.version_info.major < 3:
