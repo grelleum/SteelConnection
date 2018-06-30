@@ -311,7 +311,7 @@ class SConAPI(object):
         :returns: True of False if last request succeeded.
         :rtype: bool
         """
-        return False if self.response is None else self.response.ok 
+        return self.__bool__()
 
     def __repr__(self):
         """Return a string consisting of class name, controller, and api.
