@@ -295,12 +295,28 @@ def test_get_auth_both_provided(monkeypatch):
 
 # Dunder Methods:
 
+def test_scon_returns_true(monkeypatch):
+    """Test object returns True when reponse is OK."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = True
+    assert bool(sc)
+
+
+def test_scon_returns_false(monkeypatch):
+    """Test object returns False when reponse is not OK."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = False
+    assert not bool(sc)
+
+
 def test_scon_bool_returns_true(monkeypatch):
     """Test __bool__ returns True when reponse is OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     sc.response.ok = True
-    assert bool(sc) == True
+    assert sc.__bool__()
 
 
 def test_scon_bool_returns_false(monkeypatch):
@@ -308,7 +324,23 @@ def test_scon_bool_returns_false(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     sc.response.ok = False
-    assert bool(sc) == False
+    assert not sc.__bool__()
+
+
+def test_scon_nonzero_returns_true(monkeypatch):
+    """Test __bool__ returns True when reponse is OK."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = True
+    assert sc.__nonzero__()
+
+
+def test_scon_nonzero_returns_false(monkeypatch):
+    """Test __bool__ returns False when reponse is not OK."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.response.ok = False
+    assert not sc.__nonzero__()
 
 
 def test_scon_repr(monkeypatch):
