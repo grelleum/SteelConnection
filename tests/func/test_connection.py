@@ -39,5 +39,5 @@ def test_auth_attempt_netrc_fails(monkeypatch):
         monkeypatch.setattr('builtins.input', lambda x: REALM_ADMIN)
     monkeypatch.setattr('getpass.getpass', lambda x: PASSWORD)
     sc = steelconnection.SConAPI(REALM_2_8)
-    orgs = sc.get('orgs')
+    _ = sc.get('orgs')
     assert sc
