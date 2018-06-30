@@ -4,6 +4,7 @@ import json
 
 
 codes = {
+    'netrc401': 401,
     'nonesuch': 404,
 }
 
@@ -23,6 +24,9 @@ site = {
     'name': 'Anytown',
 }
 
+netrc = node
+netrc401 = node
+
 responses = {
     'org': org,
     'orgs': {'items': [org]},
@@ -31,6 +35,8 @@ responses = {
     'nodes': {'items': [node]}, 
     'site': site,
     'sites': {'items': [site]},
+    'netrc': node,
+    'netrc401': node,
 }
 
 
@@ -62,6 +68,8 @@ class Fake_Session(object):
             raise ValueError('get data must be None.')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
+        if resource == 'netrc401' and auth_provided(auth):
+                resource = 'netrc'
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
 
@@ -95,3 +103,6 @@ class Fake_Session(object):
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
 
+def auth_provided(auth):
+    params = [a for a in auth if a]
+    return bool(params)
