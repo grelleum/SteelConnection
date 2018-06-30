@@ -41,22 +41,23 @@ def test_scon_delete(monkeypatch):
     assert '/api/scm.config/' in sc.response.url
 
 
+def test_scon_post(monkeypatch):
+    """Test SConAPI.post method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm')
+    data = fake_requests.responses['org']
+    assert False
+    assert sc.post('org', data=data) == data
+    assert sc.response.ok
+    assert '/api/scm.config/' in sc.response.url
+
+
 def test_scon_put(monkeypatch):
     """Test SConAPI.put method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     data = fake_requests.responses['org']
     assert sc.put('org', data=data) == data
-    assert sc.response.ok
-    assert '/api/scm.config/' in sc.response.url
-
-
-def test_scon_post(monkeypatch):
-    """Test SConAPI.post method."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
-    data = fake_requests.responses['org']
-    assert sc.post('org', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
 
@@ -96,7 +97,7 @@ def test_scon_put_exception(monkeypatch):
         sc.put('nonesuch', data=data)
 
 
-def test_scon_post(monkeypatch):
+def test_scon_post_exception(monkeypatch):
     """Test SConAPI.post method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
