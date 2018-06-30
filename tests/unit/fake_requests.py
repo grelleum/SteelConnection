@@ -68,7 +68,7 @@ class Fake_Session(object):
             raise ValueError('get data must be None.')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
-        if resource == 'netrc401' and auth_provided(auth):
+        if resource == 'netrc401' and auth:
                 resource = 'netrc'
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
@@ -102,7 +102,3 @@ class Fake_Session(object):
         resource = url.split('/')[-1]
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
-
-def auth_provided(auth):
-    params = [a for a in auth if a]
-    return bool(params)
