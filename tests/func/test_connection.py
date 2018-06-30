@@ -2,13 +2,10 @@
 
 
 import getpass
-# import json
 import sys
 import pytest
-# import requests
 import steelconnection
-# import steelconnection.__main__  # for cvoerage sake.
-# import fake_requests
+
 
 from PRIVATE import REALM_ADMIN, ORG_ADMIN, PASSWORD
 from PRIVATE import REALM_2_8, REALM_2_9, REALM_2_10, REALM_2_11
