@@ -46,7 +46,6 @@ def test_scon_post(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     data = fake_requests.responses['org']
-    assert False
     assert sc.post('org', data=data) == data
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
