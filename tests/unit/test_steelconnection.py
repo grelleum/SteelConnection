@@ -8,6 +8,7 @@ import requests
 import steelconnection
 import steelconnection.__main__  # for cvoerage sake.
 import fake_requests
+from steelconnection.steelconnection import _get_auth
 
 
 # Primary Methods:
@@ -282,17 +283,13 @@ def test_get_auth_when_not_provided(monkeypatch):
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
-    assert sc._get_auth() == ('SteelConnect', 'mypassword')
+    assert _get_auth() == ('SteelConnect', 'mypassword')
 
 
 def test_get_auth_username_provided(monkeypatch):
     """_get_auth should prompt for password only when username is provided."""
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
-    assert sc._get_auth(username='A') == ('A', 'mypassword')
+    assert _get_auth(username='A') == ('A', 'mypassword')
 
 
 def test_get_auth_passwd_provided(monkeypatch):
@@ -301,16 +298,12 @@ def test_get_auth_passwd_provided(monkeypatch):
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
-    assert sc._get_auth(password='B') == ('SteelConnect', 'B')
+    assert _get_auth(password='B') == ('SteelConnect', 'B')
 
 
 def test_get_auth_both_provided(monkeypatch):
     """_get_auth should return user/pass when both are provided."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
-    assert sc._get_auth('A', 'B') == ('A', 'B')
+    assert _get_auth('A', 'B') == ('A', 'B')
 
 
 # Dunder Methods:
