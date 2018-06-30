@@ -41,7 +41,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url=__url__,
     download_url=download_url,
-    keywords = keywords,
+    keywords=keywords,
     packages=setuptools.find_packages(),
     install_requires=[
         'requests',
