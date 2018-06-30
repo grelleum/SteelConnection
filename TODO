@@ -13,5 +13,8 @@ with open(filename, 'wb') as fd:
         fd.write(chunk)
 
 Move AUTH attempt to first request??
+perhaps test connection to 443 and raise if
+- DNS fails to resolve.
+- connection cannot be opened.
 
 Add input validation everywhere.
