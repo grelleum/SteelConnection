@@ -66,8 +66,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.controller = controller
-        _creds.username = username
-        _creds.password = password
+        self.__username = username
+        self.__password = password
         self.api_version = api_version
         self.session = requests.Session()
         self.result = None
@@ -78,7 +78,7 @@ class SConAPI(object):
         }
         self.__version__ = __version__
         self.lookup = _LookUp(self)
-        self._authenticate(_creds.username, _creds.password)
+        self._authenticate(self.__username, self.__password)
         self.scm_version = self._get_scm_version()
 
     def get(self, resource, params=None):
@@ -91,7 +91,7 @@ class SConAPI(object):
         """
         self.response = self.session.get(
             url=self.url('config', resource),
-            auth=(_creds.username, _creds.password) if _creds.username else None,
+            auth=(self.__username, self.__password) if self.__username else None,
             headers=self.headers,
             params=params,
         )
@@ -110,7 +110,7 @@ class SConAPI(object):
         """
         self.response = self.session.get(
             url=self.url('reporting', resource),
-            auth=(_creds.username, _creds.password) if _creds.username else None,
+            auth=(self.__username, self.__password) if self.__username else None,
             headers=self.headers,
             params=params,
         )
@@ -130,7 +130,7 @@ class SConAPI(object):
         """
         self.response = self.session.delete(
             url=self.url('config', resource),
-            auth=(_creds.username, _creds.password) if _creds.username else None,
+            auth=(self.__username, self.__password) if self.__username else None,
             headers=self.headers,
             params=params,
             data=json.dumps(data) if data and isinstance(data, dict) else data
@@ -150,7 +150,7 @@ class SConAPI(object):
         """
         self.response = self.session.post(
             url=self.url('config', resource),
-            auth=(_creds.username, _creds.password) if _creds.username else None,
+            auth=(self.__username, self.__password) if self.__username else None,
             headers=self.headers,
             data=json.dumps(data) if data and isinstance(data, dict) else data
         )
@@ -170,7 +170,7 @@ class SConAPI(object):
         """
         self.response = self.session.put(
             url=self.url('config', resource),
-            auth=(_creds.username, _creds.password) if _creds.username else None,
+            auth=(self.__username, self.__password) if self.__username else None,
             headers=self.headers,
             params=params,
             data=json.dumps(data) if data and isinstance(data, dict) else data
@@ -268,8 +268,7 @@ class SConAPI(object):
                 pass
             else:
                 return
-        # _creds.username, _creds.password = self._get_auth(username, password)
-        _creds.username, _creds.password = _get_auth(username, password)
+        self.__username, self.__password = _get_auth(username, password)
         self.get('orgs')
 
     def _get_scm_version(self):
@@ -341,14 +340,6 @@ class SConAPIwithoutExceptions(SConAPI):
         :rtype: None
         """
         return None
-
-
-class _Credentials(object):
-    """Namespace object."""
-    pass
-
-
-_creds = _Credentials()
 
 
 def _error_string(response):
