@@ -66,8 +66,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.controller = controller
-        self.username = username
-        self.password = password
+        _creds.username = username
+        _creds.password = password
         self.api_version = api_version
         self.session = requests.Session()
         self.result = None
@@ -78,7 +78,7 @@ class SConAPI(object):
         }
         self.__version__ = __version__
         self.lookup = _LookUp(self)
-        self._authenticate(username, password)
+        self._authenticate(_creds.username, _creds.password)
         self.scm_version = self._get_scm_version()
 
     def get(self, resource, params=None):
@@ -91,7 +91,7 @@ class SConAPI(object):
         """
         self.response = self.session.get(
             url=self.url('config', resource),
-            auth=(self.username, self.password) if self.username else None,
+            auth=(_creds.username, _creds.password) if _creds.username else None,
             headers=self.headers,
             params=params,
         )
@@ -110,7 +110,7 @@ class SConAPI(object):
         """
         self.response = self.session.get(
             url=self.url('reporting', resource),
-            auth=(self.username, self.password) if self.username else None,
+            auth=(_creds.username, _creds.password) if _creds.username else None,
             headers=self.headers,
             params=params,
         )
@@ -130,7 +130,7 @@ class SConAPI(object):
         """
         self.response = self.session.delete(
             url=self.url('config', resource),
-            auth=(self.username, self.password) if self.username else None,
+            auth=(_creds.username, _creds.password) if _creds.username else None,
             headers=self.headers,
             params=params,
             data=json.dumps(data) if data and isinstance(data, dict) else data
@@ -150,7 +150,7 @@ class SConAPI(object):
         """
         self.response = self.session.post(
             url=self.url('config', resource),
-            auth=(self.username, self.password) if self.username else None,
+            auth=(_creds.username, _creds.password) if _creds.username else None,
             headers=self.headers,
             data=json.dumps(data) if data and isinstance(data, dict) else data
         )
@@ -170,7 +170,7 @@ class SConAPI(object):
         """
         self.response = self.session.put(
             url=self.url('config', resource),
-            auth=(self.username, self.password) if self.username else None,
+            auth=(_creds.username, _creds.password) if _creds.username else None,
             headers=self.headers,
             params=params,
             data=json.dumps(data) if data and isinstance(data, dict) else data
@@ -268,20 +268,9 @@ class SConAPI(object):
                 pass
             else:
                 return
-        self.username, self.password = self._get_auth(username, password)
+        # _creds.username, _creds.password = self._get_auth(username, password)
+        _creds.username, _creds.password = _get_auth(username, password)
         self.get('orgs')
-
-    def _get_auth(self, username=None, password=None):
-        """Prompt for username and password if not provided.
-
-        :param str username: (optional) Admin account name.
-        :param str password: (optional) Admin account password.
-        :returns: Tuple of strings as (username, password).
-        :rtype: (str, str)
-        """
-        username = get_username() if username is None else username
-        password = get_password_once() if password is None else password 
-        return username, password
 
     def _get_scm_version(self):
         """Get version and build number of SteelConnect Manager.
@@ -354,6 +343,14 @@ class SConAPIwithoutExceptions(SConAPI):
         return None
 
 
+class _Credentials(object):
+    """Namespace object."""
+    pass
+
+
+_creds = _Credentials()
+
+
 def _error_string(response):
     r"""Summarize error conditions and return as a string.
 
@@ -376,3 +373,16 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
+
+def _get_auth(username=None, password=None):
+    """Prompt for username and password if not provided.
+
+    :param str username: (optional) Admin account name.
+    :param str password: (optional) Admin account password.
+    :returns: Tuple of strings as (username, password).
+    :rtype: (str, str)
+    """
+    username = get_username() if username is None else username
+    password = get_password_once() if password is None else password 
+    return username, password
+
