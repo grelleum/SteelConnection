@@ -374,6 +374,7 @@ def _error_string(response):
     )
     return error
 
+
 def _get_auth(username=None, password=None):
     """Prompt for username and password if not provided.
 
