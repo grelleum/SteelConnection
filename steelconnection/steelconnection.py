@@ -78,8 +78,8 @@ class SConAPI(object):
         }
         self.__version__ = __version__
         self.lookup = _LookUp(self)
+        self.scm_version = None
         self._authenticate(self.__username, self.__password)
-        self.scm_version = self._get_scm_version()
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
@@ -273,16 +273,17 @@ class SConAPI(object):
         :returns: None.
         :rtype: None
         """
-        attempt_netrc_auth = username is None and password is None
-        if attempt_netrc_auth:
+        netrc_auth = username is None and password is None
+        if netrc_auth:
             try:
-                self.get('orgs')
+                result = self.get('orgs')
             except AuthenticationError:
-                pass
-            else:
-                return
-        self.__username, self.__password = _get_auth(username, password)
-        self.get('orgs')
+                netrc_auth = False
+        if not netrc_auth:
+            self.__username, self.__password = _get_auth(username, password)
+            result = self.get('orgs')
+        if result:
+            self.scm_version = self._get_scm_version()
 
     def _get_scm_version(self):
         """Get version and build number of SteelConnect Manager.
