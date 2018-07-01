@@ -26,10 +26,13 @@ long_description = re.sub(
     readme,
 )
 
-with open('README.md', 'wt') as f:
-    f.write(long_description)
+if readme != long_description:
+    with open('README.md', 'wt') as f:
+        f.write(long_description)
 
 download_url = base_url + __version__ + '.tar.gz'
+
+packages = setuptools.find_packages()
 
 setuptools.setup(
     name=__title__,
@@ -42,7 +45,7 @@ setuptools.setup(
     url=__url__,
     download_url=download_url,
     keywords=keywords,
-    packages=setuptools.find_packages(),
+    packages=packages,
     install_requires=[
         'requests',
     ],
