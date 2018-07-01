@@ -89,12 +89,8 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.session.get(
-            url=self.url('config', resource),
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
-            params=params,
-        )
+        url=self.url('config', resource)
+        self.response = self._request(self.session.get, url, params=params)
         self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
@@ -108,12 +104,8 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.session.get(
-            url=self.url('reporting', resource),
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
-            params=params,
-        )
+        url=self.url('reporting', resource)
+        self.response = self._request(self.session.get, url, params=params)
         self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
