@@ -89,10 +89,9 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        url=self.url('config', resource)
         self.response = self._request(
             request_method=self.session.get,
-            url=url,
+            url=self.url('config', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -108,10 +107,9 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        url=self.url('reporting', resource)
         self.response = self._request(
             request_method=self.session.get,
-            url=url,
+            url=self.url('reporting', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -128,10 +126,9 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        url=self.url('config', resource)
         self.response = self._request(
             request_method=self.session.delete,
-            url=url,
+            url=self.url('config', resource),
             params=params,
             data=data,
         )
@@ -148,10 +145,9 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        url=self.url('config', resource)
         self.response = self._request(
             request_method=self.session.post,
-            url=url,
+            url=self.url('config', resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -168,10 +164,9 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        url=self.url('config', resource)
         self.response = self._request(
             request_method=self.session.put,
-            url=url,
+            url=self.url('config', resource),
             params=params,
             data=data,
         )
