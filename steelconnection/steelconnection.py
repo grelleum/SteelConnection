@@ -90,7 +90,11 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         url=self.url('config', resource)
-        self.response = self._request(self.session.get, url, params=params)
+        self.response = self._request(
+            request_method=self.session.get,
+            url=url,
+            params=params,
+        )
         self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
@@ -105,7 +109,11 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         url=self.url('reporting', resource)
-        self.response = self._request(self.session.get, url, params=params)
+        self.response = self._request(
+            request_method=self.session.get,
+            url=url,
+            params=params,
+        )
         self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
@@ -120,12 +128,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.session.delete(
-            url=self.url('config', resource),
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
+        url=self.url('config', resource)
+        self.response = self._request(
+            request_method=self.session.delete,
+            url=url,
             params=params,
-            data=json.dumps(data) if data and isinstance(data, dict) else data
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -140,11 +148,11 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.session.post(
-            url=self.url('config', resource),
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
-            data=json.dumps(data) if data and isinstance(data, dict) else data
+        url=self.url('config', resource)
+        self.response = self._request(
+            request_method=self.session.post,
+            url=url,
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
@@ -160,12 +168,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.session.put(
-            url=self.url('config', resource),
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
+        url=self.url('config', resource)
+        self.response = self._request(
+            request_method=self.session.put,
+            url=url,
             params=params,
-            data=json.dumps(data) if data and isinstance(data, dict) else data
+            data=data,
         )
         self.result = self._get_result(self.response)
         if self.result is None:
