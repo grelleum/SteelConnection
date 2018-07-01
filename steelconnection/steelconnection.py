@@ -201,6 +201,24 @@ class SConAPI(object):
         with open(filename, 'wb') as f:
             f.write(self.response.content)
 
+    def _request(self, request_method, url, data=None, params=None):
+        r"""Send a request using the specified method.
+
+        :param request_method: requests.session verb.
+        :param str url: complete url and path.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
+        return request_method(
+            url=url,
+            auth=(self.__username, self.__password) if self.__username else None,
+            headers=self.headers,
+            params=params,
+            data=json.dumps(data) if data and isinstance(data, dict) else data
+        )
+
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
 
