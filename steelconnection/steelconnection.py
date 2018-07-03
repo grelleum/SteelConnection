@@ -283,10 +283,6 @@ class SConAPI(object):
         if not netrc_auth:
             self.__username, self.__password = _get_auth(username, password)
             result = self.get('orgs')
-        # below code to be removed after tests pass
-        if result:
-            _ = self.scm_version
-            # self.scm_version = self._get_scm_version()
 
     @property
     def scm_version(self):
