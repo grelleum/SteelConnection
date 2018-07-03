@@ -127,6 +127,7 @@ def test_savefile(monkeypatch):
     filename = 'delete.me'
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.content = b'ABCDEFG1234567890'
     sc.savefile(filename)
     with open(filename, 'rb') as f:
@@ -140,7 +141,7 @@ def test_scon_get_result_not_ok(monkeypatch):
     """Test SConAPI._get_result method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    scm_version = sc.scm_version
+    _ = sc.scm_version
     sc.response.ok = False
     assert sc._get_result(sc.response) is None
     sc.response.text = 'Queued'
@@ -151,6 +152,7 @@ def test_scon_get_result_octet_stream(monkeypatch):
     """Test SConAPI._get_result method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.headers = {'Content-Type': 'application/octet-stream'}
     assert sc._get_result(sc.response) == {'status': ' '.join(
         "Binary data returned."
@@ -163,6 +165,7 @@ def test_scon_get_result_no_json(monkeypatch):
     """_get_results should return an empty dict when .json returns False."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.data = False
     assert sc._get_result(sc.response) == {}
 
@@ -324,6 +327,7 @@ def test_scon_returns_true(monkeypatch):
     """Test object returns True when reponse is OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = True
     assert bool(sc)
 
@@ -332,6 +336,7 @@ def test_scon_returns_false(monkeypatch):
     """Test object returns False when reponse is not OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = False
     assert not bool(sc)
 
@@ -340,6 +345,7 @@ def test_scon_bool_returns_true(monkeypatch):
     """Test __bool__ returns True when reponse is OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = True
     assert sc.__bool__()
 
@@ -348,6 +354,7 @@ def test_scon_bool_returns_false(monkeypatch):
     """Test __bool__ returns False when reponse is not OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = False
     assert not sc.__bool__()
 
@@ -356,6 +363,7 @@ def test_scon_nonzero_returns_true(monkeypatch):
     """Test __bool__ returns True when reponse is OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = True
     assert sc.__nonzero__()
 
@@ -364,6 +372,7 @@ def test_scon_nonzero_returns_false(monkeypatch):
     """Test __bool__ returns False when reponse is not OK."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    sc.get('orgs')
     sc.response.ok = False
     assert not sc.__nonzero__()
 
