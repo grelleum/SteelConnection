@@ -17,8 +17,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 :license: MIT, see LICENSE for more details.
 """
 
-from .steelconnection import SConAPI
-from .steelconnection import SConAPIwithoutExceptions
+from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource
 from .input_tools import get_input, get_username
