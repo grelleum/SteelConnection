@@ -233,12 +233,19 @@ class SConAPI(object):
             params=params, data=data,
         )
         if response.status_code == 401 and self.__username is None:
-            self.__username, self.__password = _get_auth(username, password)
+            self.__ask_for_auth()
             response = request_method(
                 url=url, auth=self.__auth, headers=self.headers,
                 params=params, data=data,
             )
         return response
+
+    def __ask_for_auth(self):
+        """Prompt for username and password if not provided."""
+        if self.__username is None:
+            self.__username = get_username()
+        if self.__password is None:
+            self.__password = get_password_once()
 
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
@@ -392,17 +399,3 @@ def _error_string(response):
         repr(response.request.body),
     )
     return error
-
-
-def _get_auth(username=None, password=None):
-    """Prompt for username and password if not provided.
-
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :returns: Tuple of strings as (username, password).
-    :rtype: (str, str)
-    """
-    username = get_username() if username is None else username
-    password = get_password_once() if password is None else password
-    return username, password
-
