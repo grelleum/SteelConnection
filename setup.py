@@ -4,7 +4,7 @@ import re
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
-version = '0.9.11'
+version = '0.9.12'
 copyright = 'Copyright 2018 Greg Mueller'
 
 info = {
