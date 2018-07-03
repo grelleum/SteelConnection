@@ -80,7 +80,6 @@ class SConAPI(object):
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
-        self._authenticate(self.__username, self.__password)
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
@@ -198,6 +197,10 @@ class SConAPI(object):
             f.write(self.response.content)
 
     @property
+    def __auth(self):
+        return (self.__username, self.__password) if self.__username else None
+
+    @property
     def scm_version(self):
         """Return version and build number of SteelConnect Manager.
 
@@ -224,13 +227,18 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return request_method(
-            url=url,
-            auth=(self.__username, self.__password) if self.__username else None,
-            headers=self.headers,
-            params=params,
-            data=json.dumps(data) if data and isinstance(data, dict) else data
+        data=json.dumps(data) if data and isinstance(data, dict) else data
+        response = request_method(
+            url=url, auth=self.__auth, headers=self.headers,
+            params=params, data=data,
         )
+        if response.status_code == 401 and self.__username is None:
+            self.__username, self.__password = _get_auth(username, password)
+            response = request_method(
+                url=url, auth=self.__auth, headers=self.headers,
+                params=params, data=data,
+            )
+        return response
 
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
@@ -277,29 +285,6 @@ class SConAPI(object):
                 raise APINotEnabled(error)
             else:
                 raise RuntimeError(error)
-
-    def _authenticate(self, username=None, password=None):
-        r"""Attempt authentication.
-
-        Makes GET request against 'orgs' (because 'status' was introduced
-        in 2.9).  If neither username or password are provided,
-        will make the request without auth, to see if requests package
-        can authenticate using .netrc.
-
-        :param str username: (optional) Admin account name.
-        :param str password: (optional) Admin account password.
-        :returns: None.
-        :rtype: None
-        """
-        netrc_auth = username is None and password is None
-        if netrc_auth:
-            try:
-                result = self.get('orgs')
-            except AuthenticationError:
-                netrc_auth = False
-        if not netrc_auth:
-            self.__username, self.__password = _get_auth(username, password)
-            result = self.get('orgs')
 
     def __bool__(self):
         """Return the success of the last request in Python3.
