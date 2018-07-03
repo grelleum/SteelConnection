@@ -102,7 +102,7 @@ class SConAPI(object):
         )
         self.result = self.__get_result(self.response)
         if self.result is None:
-            self._raise_exception(self.response)
+            self.__raise_exception(self.response)
         return self.result
 
     def getstatus(self, resource, params=None):
@@ -120,7 +120,7 @@ class SConAPI(object):
         )
         self.result = self.__get_result(self.response)
         if self.result is None:
-            self._raise_exception(self.response)
+            self.__raise_exception(self.response)
         return self.result
 
     def delete(self, resource, data=None, params=None):
@@ -140,7 +140,7 @@ class SConAPI(object):
         )
         self.result = self.__get_result(self.response)
         if self.result is None:
-            self._raise_exception(self.response)
+            self.__raise_exception(self.response)
         return self.result
 
     def post(self, resource, data=None):
@@ -158,7 +158,7 @@ class SConAPI(object):
         )
         self.result = self.__get_result(self.response)
         if self.result is None:
-            self._raise_exception(self.response)
+            self.__raise_exception(self.response)
         return self.result
 
     def put(self, resource, data=None, params=None):
@@ -178,7 +178,7 @@ class SConAPI(object):
         )
         self.result = self.__get_result(self.response)
         if self.result is None:
-            self._raise_exception(self.response)
+            self.__raise_exception(self.response)
         return self.result
 
     def url(self, api, resource):
@@ -275,7 +275,7 @@ class SConAPI(object):
         else:
             return response.json()
 
-    def _raise_exception(self, response):
+    def __raise_exception(self, response):
         r"""Return an appropriate exception if required.
 
         :param requests.response response: Response from HTTP request.
@@ -342,7 +342,7 @@ class SConWithoutExceptions(SConAPI):
     :rtype: dict, or list
     """
 
-    def _raise_exception(self, response):
+    def __raise_exception(self, response):
         r"""Return None to short-circuit the exception process.
 
         :param requests.response response: Response from HTTP request.
@@ -366,7 +366,7 @@ class SConExitOnError(SConAPI):
     :rtype: dict, or list
     """
 
-    def _raise_exception(self, response):
+    def __raise_exception(self, response):
         r"""Display error and exit.
 
         :param requests.response response: Response from HTTP request.
