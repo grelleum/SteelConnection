@@ -258,7 +258,8 @@ class SConAPI(object):
             if response.text and 'Queued' in response.text:
                 # work-around for get:'/node/{node_id}/image_status'
                 return response.json()
-            return None
+            else:
+                return None
         if response.headers['Content-Type'] == 'application/octet-stream':
             message = ' '.join(
                 "Binary data returned."
