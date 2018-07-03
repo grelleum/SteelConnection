@@ -65,8 +65,8 @@ If you do not specify a username and password, and a .netrc file is not configur
 >>> import steelconnection
 >>> sc = steelconnection.SConAPI('REALM.riverbed.cc')
 Enter username: admin
-Enter password: 
->>> 
+Enter password:
+>>>
 ```
 
 ##### Using a .netrc file (Optional):
@@ -99,7 +99,7 @@ orgs = sc.get('orgs')
 **Without** SteelConnection, the same request would look like this:
 ```python
 response = requests.get(
-    'https://REALM.riverbed.cc/api/scm.config/1.0/orgs', 
+    'https://REALM.riverbed.cc/api/scm.config/1.0/orgs',
     auth=(username, password)
 )
 orgs = response.json()['items']
@@ -128,7 +128,7 @@ For example: Calling `.get('/port/' + port)` would retireve configuration settin
 
 ##### Crafting your API calls:
 The Riverbed documentation describes the various REST API calls that can be made.\
-These take the form:  "_HTTP Method_" "_resource path_".  
+These take the form:  "_HTTP Method_" "_resource path_".
 
 Take the network section for example:\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html#!/network:
@@ -179,7 +179,7 @@ More specific exceptions that might be generated (all inherit from `RuntimeError
 * `steelconnection.exceptions.BadRequest`: 400 - Possibly tried creating a resource that already exists.
 * `steelconnection.exceptions.InvalidResource`: 404 - Path or resource not found.
 
-If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmeds, you can instead use the child class `SConExitOnError` to create your object.  The `SConExitOnError` class replaces the exception handling method with a method that prints the error detail and exists with an error status of 1. 
+If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmeds, you can instead use the child class `SConExitOnError` to create your object.  The `SConExitOnError` class replaces the exception handling method with a method that prints the error detail and exists with an error status of 1.
 ```python
 sc = SConExitOnError('REALM.riverbed.cc')
 ```
@@ -206,7 +206,7 @@ Many REST API calls require that you know the org id of your organization.  You 
 >>> org_id, org = sc.lookup.org('Spacely')
 >>> org_id
 'org-Spacely-0a0b1cbadb33f34'
->>> 
+>>>
 ```
 ###### Lookup Node:
 Similarly, the `lookup.node` method exists to privide the node id and node when you supply the commonly known appliance serial number.
@@ -214,7 +214,7 @@ Similarly, the `lookup.node` method exists to privide the node id and node when 
 >>> node_id, node = sc.lookup.node('XN00012345ABCDEF')
 >>> node_id
 'node-56f1968e222ab789'
->>> 
+>>>
 ```
 ###### Lookup Site:
 The site id can be found in a similar way, but since the same site name, like HQ, could exist in multiple organizations, the org_id is required.
@@ -222,7 +222,7 @@ The site id can be found in a similar way, but since the same site name, like HQ
 >>> site_id, site = sc.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
 >>> site_id
 'site-Skypad-884b9071141e4bc0'
->>> 
+>>>
 ```
 
 ##### Module-level Convienience functions:

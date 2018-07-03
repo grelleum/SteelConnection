@@ -17,8 +17,8 @@ Usage:
     For example, to get all nodes in the realm:
     nodes = sconnect.config.get('nodes')
     ... or in a specifc org:
-    nodes = sconnect.config.get('/org/' + orgid + '/nodes')  
-    
+    nodes = sconnect.config.get('/org/' + orgid + '/nodes')
+
     Any call that does not result in a success (HTTP status code 200)
     will raise an exception, so calls should be wrapped in a try/except pair.
 """
@@ -41,7 +41,7 @@ from .input_tools import get_username, get_password, get_password_once
 
 class SConAPI(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
-    
+
     :param str controller: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
@@ -183,7 +183,7 @@ class SConAPI(object):
         :param str resource: resource path.
         :returns: Complete URL path to access resource.
         :rtype: str
-        """        
+        """
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.api_version, resource,
@@ -193,7 +193,7 @@ class SConAPI(object):
         r"""Save binary return data to a file.
 
         :param str filename: Where to save the response.content.
-        """       
+        """
         with open(filename, 'wb') as f:
             f.write(self.response.content)
 
@@ -264,7 +264,7 @@ class SConAPI(object):
     def _authenticate(self, username=None, password=None):
         r"""Attempt authentication.
 
-        Makes GET request against 'orgs' (because 'status' was introduced 
+        Makes GET request against 'orgs' (because 'status' was introduced
         in 2.9).  If neither username or password are provided,
         will make the request without auth, to see if requests package
         can authenticate using .netrc.
@@ -306,7 +306,7 @@ class SConAPI(object):
         :returns: True of False if last request succeeded.
         :rtype: bool
         """
-        return False if self.response is None else self.response.ok 
+        return False if self.response is None else self.response.ok
 
     def __nonzero__(self):
         """Return the success of the last request in Python2.
@@ -338,14 +338,14 @@ class SConWithoutExceptions(SConAPI):
 
     This version of the class does not raise exceptions
     when an HTTP response has a non-200 series status code.
-    
+
     :param str controller: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
     :returns: Dictionary or List of Dictionaries based on request.
     :rtype: dict, or list
-    """    
+    """
 
     def _raise_exception(self, response):
         r"""Return None to short-circuit the exception process.
@@ -362,14 +362,14 @@ class SConExitOnError(SConAPI):
 
     This version of the class will exit withou a traceback
     when an HTTP response has a non-200 series status code.
-    
+
     :param str controller: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
     :returns: Dictionary or List of Dictionaries based on request.
     :rtype: dict, or list
-    """    
+    """
 
     def _raise_exception(self, response):
         r"""Display error and exit.
@@ -417,6 +417,6 @@ def _get_auth(username=None, password=None):
     :rtype: (str, str)
     """
     username = get_username() if username is None else username
-    password = get_password_once() if password is None else password 
+    password = get_password_once() if password is None else password
     return username, password
 

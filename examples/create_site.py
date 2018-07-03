@@ -3,7 +3,7 @@ import steelconnection
 # Change the below values to match the realm and org as seen in the URL for your SteelConnect Manager.
 # for example:  https://realm.riverbed.cc/admin/TestLab
 scm_name = 'realm.riverbed.cc'
-org_name = 'TestLab'   
+org_name = 'TestLab'
 
 # Details for the site to be created:
 new_site = {
