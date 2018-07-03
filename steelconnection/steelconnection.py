@@ -203,10 +203,6 @@ class SConAPI(object):
             f.write(self.response.content)
 
     @property
-    def __auth(self):
-        return (self.__username, self.__password) if self.__username else None
-
-    @property
     def scm_version(self):
         """Return version and build number of SteelConnect Manager.
 
@@ -222,6 +218,10 @@ class SConAPI(object):
                 version = status.get('scm_version'), status.get('scm_build')
                 self.__scm_version = '.'.join(s for s in version if s)
         return self.__scm_version
+
+    @property
+    def __auth(self):
+        return (self.__username, self.__password) if self.__username else None
 
     def __request(self, request_method, url, data=None, params=None):
         r"""Send a request using the specified method.
