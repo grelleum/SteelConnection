@@ -23,6 +23,7 @@ Usage:
     will raise an exception, so calls should be wrapped in a try/except pair.
 """
 
+from __future__ import print_function
 
 import getpass
 import json
@@ -332,7 +333,7 @@ class SConAPI(object):
         return '{0}({1})'.format(self.__class__.__name__, details)
 
 
-class SConAPIwithoutExceptions(SConAPI):
+class SConWithoutExceptions(SConAPI):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
     This version of the class does not raise exceptions
@@ -354,6 +355,33 @@ class SConAPIwithoutExceptions(SConAPI):
         :rtype: None
         """
         return None
+
+
+class SConExitOnError(SConAPI):
+    r"""Make REST API calls to Riverbed SteelConnect Manager.
+
+    This version of the class will exit withou a traceback
+    when an HTTP response has a non-200 series status code.
+    
+    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str username: (optional) Admin account name.
+    :param str password: (optional) Admin account password.
+    :param str api_version: (optional) REST API version.
+    :returns: Dictionary or List of Dictionaries based on request.
+    :rtype: dict, or list
+    """    
+
+    def _raise_exception(self, response):
+        r"""Display error and exit.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        if not response.ok:
+            error = _error_string(response)
+            print(error, file=sys.stderr)
+            sys.exit(1)
 
 
 def _error_string(response):
