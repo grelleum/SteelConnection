@@ -115,12 +115,12 @@ def test_scon_url(monkeypatch):
     assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
-def test_get_scm_version(monkeypatch):
-    """Test SConAPI._get_scm_version method."""
+def test_scm_version(monkeypatch):
+    """Test SConAPI.scm_version method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     scm_version = '.'.join(fake_requests.responses['status'].values())
     sc = steelconnection.SConAPI('some.realm')
-    assert sc._get_scm_version() == scm_version
+    assert sc.scm_version == scm_version
 
 
 def test_savefile(monkeypatch):

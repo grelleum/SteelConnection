@@ -79,7 +79,7 @@ class SConAPI(object):
         }
         self.__version__ = __version__
         self.lookup = _LookUp(self)
-        self.scm_version = None
+        self.__scm_version = None
         self._authenticate(self.__username, self.__password)
 
     def get(self, resource, params=None):
@@ -283,22 +283,27 @@ class SConAPI(object):
         if not netrc_auth:
             self.__username, self.__password = _get_auth(username, password)
             result = self.get('orgs')
+        # below code to be removed after tests pass
         if result:
-            self.scm_version = self._get_scm_version()
+            _ = self.scm_version
+            # self.scm_version = self._get_scm_version()
 
-    def _get_scm_version(self):
-        """Get version and build number of SteelConnect Manager.
+    @property
+    def scm_version(self):
+        """Return version and build number of SteelConnect Manager.
 
         :returns: SteelConnect Manager version and build number.
         :rtype: str
         """
-        try:
-            status = self.get('status')
-        except InvalidResource:
-            return 'unavailable'
-        else:
-            scm_version = status.get('scm_version'), status.get('scm_build')
-            return '.'.join(s for s in scm_version if s)
+        if self.__scm_version is None:
+            try:
+                status = self.get('status')
+            except InvalidResource:
+                self.__scm_version = 'unavailable'
+            else:
+                version = status.get('scm_version'), status.get('scm_build')
+                self.__scm_version = '.'.join(s for s in version if s)
+        return self.__scm_version
 
     def __bool__(self):
         """Return the success of the last request in Python3.
