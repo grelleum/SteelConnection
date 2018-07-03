@@ -141,6 +141,7 @@ def test_scon_get_result_not_ok(monkeypatch):
     """Test SConAPI._get_result method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
+    scm_version = sc.scm_version
     sc.response.ok = False
     assert sc._get_result(sc.response) is None
     sc.response.text = 'Queued'
