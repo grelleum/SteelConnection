@@ -95,7 +95,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
+        self.response = self.__request(
             request_method=self.session.get,
             url=self.url('config', resource),
             params=params,
@@ -113,7 +113,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
+        self.response = self.__request(
             request_method=self.session.get,
             url=self.url('reporting', resource),
             params=params,
@@ -132,7 +132,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
+        self.response = self.__request(
             request_method=self.session.delete,
             url=self.url('config', resource),
             params=params,
@@ -151,7 +151,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
+        self.response = self.__request(
             request_method=self.session.post,
             url=self.url('config', resource),
             data=data,
@@ -170,7 +170,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
+        self.response = self.__request(
             request_method=self.session.put,
             url=self.url('config', resource),
             params=params,
@@ -223,7 +223,7 @@ class SConAPI(object):
                 self.__scm_version = '.'.join(s for s in version if s)
         return self.__scm_version
 
-    def _request(self, request_method, url, data=None, params=None):
+    def __request(self, request_method, url, data=None, params=None):
         r"""Send a request using the specified method.
 
         :param request_method: requests.session verb.
