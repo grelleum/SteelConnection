@@ -155,9 +155,8 @@ def test_scon_get_result_octet_stream(monkeypatch):
     sc.get('orgs')
     sc.response.headers = {'Content-Type': 'application/octet-stream'}
     assert sc._get_result(sc.response) == {'status': ' '.join(
-        "Binary data returned."
-        "Use '.savefile(filename)' method"
-        "or access using '.response.content'."
+        "Binary data returned.\n"
+        "Use '.savefile(filename)' method or access using '.response.content'."
     )}
 
 

@@ -39,6 +39,12 @@ from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
 
+BINARY_DATA_MESSAGE = ' '.join(
+    "Binary data returned.\n"
+    "Use '.savefile(filename)' method or access using '.response.content'."
+)
+
+
 class SConAPI(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
@@ -261,12 +267,7 @@ class SConAPI(object):
             else:
                 return None
         if response.headers['Content-Type'] == 'application/octet-stream':
-            message = ' '.join(
-                "Binary data returned."
-                "Use '.savefile(filename)' method"
-                "or access using '.response.content'."
-            )
-            return {'status': message}
+            return {'status': BINARY_DATA_MESSAGE}
         if not response.json():
             return {}
         elif 'items' in response.json():
