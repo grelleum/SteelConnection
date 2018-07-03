@@ -100,7 +100,7 @@ class SConAPI(object):
             url=self.url('config', resource),
             params=params,
         )
-        self.result = self._get_result(self.response)
+        self.result = self.__get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -118,7 +118,7 @@ class SConAPI(object):
             url=self.url('reporting', resource),
             params=params,
         )
-        self.result = self._get_result(self.response)
+        self.result = self.__get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -138,7 +138,7 @@ class SConAPI(object):
             params=params,
             data=data,
         )
-        self.result = self._get_result(self.response)
+        self.result = self.__get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -156,7 +156,7 @@ class SConAPI(object):
             url=self.url('config', resource),
             data=data,
         )
-        self.result = self._get_result(self.response)
+        self.result = self.__get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -176,7 +176,7 @@ class SConAPI(object):
             params=params,
             data=data,
         )
-        self.result = self._get_result(self.response)
+        self.result = self.__get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -253,7 +253,7 @@ class SConAPI(object):
         if self.__password is None:
             self.__password = get_password_once()
 
-    def _get_result(self, response):
+    def __get_result(self, response):
         r"""Return response data as native Python datatype.
 
         :param requests.response response: Response from HTTP request.

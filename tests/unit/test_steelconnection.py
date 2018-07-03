@@ -138,14 +138,14 @@ def test_savefile(monkeypatch):
 # Get Results:
 
 def test_scon_get_result_not_ok(monkeypatch):
-    """Test SConAPI._get_result method."""
+    """Test SConAPI.__get_result method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     _ = sc.scm_version
     sc.response.ok = False
-    assert sc._get_result(sc.response) is None
+    assert sc._SConAPI__get_result(sc.response) is None
     sc.response.text = 'Queued'
-    assert sc._get_result(sc.response) == fake_requests.responses['status']
+    assert sc._SConAPI__get_result(sc.response) == fake_requests.responses['status']
 
 
 def test_scon_get_result_octet_stream(monkeypatch):
@@ -154,7 +154,7 @@ def test_scon_get_result_octet_stream(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     sc.get('orgs')
     sc.response.headers = {'Content-Type': 'application/octet-stream'}
-    assert sc._get_result(sc.response) == {'status': ' '.join(
+    assert sc._SConAPI__get_result(sc.response) == {'status': ' '.join(
         "Binary data returned.\n"
         "Use '.savefile(filename)' method or access using '.response.content'."
     )}
@@ -166,7 +166,7 @@ def test_scon_get_result_no_json(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     sc.get('orgs')
     sc.response.data = False
-    assert sc._get_result(sc.response) == {}
+    assert sc._SConAPI__get_result(sc.response) == {}
 
 
 def test_scon_get_result_no_items(monkeypatch):
@@ -174,7 +174,7 @@ def test_scon_get_result_no_items(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 200, {'A': 'B'})
-    assert sc._get_result(response) == {'A': 'B'}
+    assert sc._SConAPI__get_result(response) == {'A': 'B'}
 
 
 def test_scon_get_result_with_items(monkeypatch):
@@ -182,7 +182,7 @@ def test_scon_get_result_with_items(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 200, {'items': [1, 2, 3]})
-    assert sc._get_result(response) == [1, 2, 3]
+    assert sc._SConAPI__get_result(response) == [1, 2, 3]
 
 
 # Raise Exceptions:
