@@ -197,6 +197,23 @@ class SConAPI(object):
         with open(filename, 'wb') as f:
             f.write(self.response.content)
 
+    @property
+    def scm_version(self):
+        """Return version and build number of SteelConnect Manager.
+
+        :returns: SteelConnect Manager version and build number.
+        :rtype: str
+        """
+        if self.__scm_version is None:
+            try:
+                status = self.get('status')
+            except InvalidResource:
+                self.__scm_version = 'unavailable'
+            else:
+                version = status.get('scm_version'), status.get('scm_build')
+                self.__scm_version = '.'.join(s for s in version if s)
+        return self.__scm_version
+
     def _request(self, request_method, url, data=None, params=None):
         r"""Send a request using the specified method.
 
@@ -283,23 +300,6 @@ class SConAPI(object):
         if not netrc_auth:
             self.__username, self.__password = _get_auth(username, password)
             result = self.get('orgs')
-
-    @property
-    def scm_version(self):
-        """Return version and build number of SteelConnect Manager.
-
-        :returns: SteelConnect Manager version and build number.
-        :rtype: str
-        """
-        if self.__scm_version is None:
-            try:
-                status = self.get('status')
-            except InvalidResource:
-                self.__scm_version = 'unavailable'
-            else:
-                version = status.get('scm_version'), status.get('scm_build')
-                self.__scm_version = '.'.join(s for s in version if s)
-        return self.__scm_version
 
     def __bool__(self):
         """Return the success of the last request in Python3.
