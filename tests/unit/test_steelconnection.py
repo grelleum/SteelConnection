@@ -143,9 +143,9 @@ def test_scon_get_result_not_ok(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     _ = sc.scm_version
     sc.response.ok = False
-    assert sc._SConAPI__get_result(sc.response) is None
+    assert sc._get_result(sc.response) is None
     sc.response.text = 'Queued'
-    assert sc._SConAPI__get_result(sc.response) == fake_requests.responses['status']
+    assert sc._get_result(sc.response) == fake_requests.responses['status']
 
 
 def test_scon_get_result_octet_stream(monkeypatch):
@@ -154,7 +154,7 @@ def test_scon_get_result_octet_stream(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     sc.get('orgs')
     sc.response.headers = {'Content-Type': 'application/octet-stream'}
-    assert sc._SConAPI__get_result(sc.response) == {'status': ' '.join(
+    assert sc._get_result(sc.response) == {'status': ' '.join(
         "Binary data returned.\n"
         "Use '.savefile(filename)' method or access using '.response.content'."
     )}
@@ -166,7 +166,7 @@ def test_scon_get_result_no_json(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     sc.get('orgs')
     sc.response.data = False
-    assert sc._SConAPI__get_result(sc.response) == {}
+    assert sc._get_result(sc.response) == {}
 
 
 def test_scon_get_result_no_items(monkeypatch):
@@ -174,7 +174,7 @@ def test_scon_get_result_no_items(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 200, {'A': 'B'})
-    assert sc._SConAPI__get_result(response) == {'A': 'B'}
+    assert sc._get_result(response) == {'A': 'B'}
 
 
 def test_scon_get_result_with_items(monkeypatch):
@@ -182,7 +182,7 @@ def test_scon_get_result_with_items(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 200, {'items': [1, 2, 3]})
-    assert sc._SConAPI__get_result(response) == [1, 2, 3]
+    assert sc._get_result(response) == [1, 2, 3]
 
 
 # Raise Exceptions:
@@ -192,7 +192,7 @@ def test_raise_exception_no_exception(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 201, {})
-    sc._SConAPI__raise_exception(response) == None
+    sc._raise_exception(response) == None
 
 
 def test_raise_exception_RuntimeError(monkeypatch):
@@ -201,7 +201,7 @@ def test_raise_exception_RuntimeError(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 777, {})
     with pytest.raises(RuntimeError):
-        sc._SConAPI__raise_exception(response)
+        sc._raise_exception(response)
 
 
 def test_raise_exception_BadRequest(monkeypatch):
@@ -210,7 +210,7 @@ def test_raise_exception_BadRequest(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 400, {})
     with pytest.raises(steelconnection.exceptions.BadRequest):
-        sc._SConAPI__raise_exception(response)
+        sc._raise_exception(response)
 
 
 def test_raise_exception_AuthenticationError(monkeypatch):
@@ -219,7 +219,7 @@ def test_raise_exception_AuthenticationError(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 401, {})
     with pytest.raises(steelconnection.exceptions.AuthenticationError):
-        sc._SConAPI__raise_exception(response)
+        sc._raise_exception(response)
 
 
 def test_raise_exception_InvalidResource(monkeypatch):
@@ -228,7 +228,7 @@ def test_raise_exception_InvalidResource(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 404, {})
     with pytest.raises(steelconnection.exceptions.InvalidResource):
-        sc._SConAPI__raise_exception(response)
+        sc._raise_exception(response)
 
 
 def test_raise_exception_APINotEnabled(monkeypatch):
@@ -237,7 +237,7 @@ def test_raise_exception_APINotEnabled(monkeypatch):
     sc = steelconnection.SConAPI('some.realm')
     response = fake_requests.Fake_Response('', 502, {})
     with pytest.raises(steelconnection.exceptions.APINotEnabled):
-        sc._SConAPI__raise_exception(response)
+        sc._raise_exception(response)
 
 
 # Authentication Methods:
@@ -287,7 +287,7 @@ def test_ask_for_auth_when_not_provided(monkeypatch):
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc._SConAPI__ask_for_auth()
+    sc._ask_for_auth()
     assert sc._SConAPI__auth == ('SteelConnect', 'mypassword')
 
 
@@ -296,7 +296,7 @@ def test_ask_for_auth_username_provided(monkeypatch):
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A')
-    sc._SConAPI__ask_for_auth()
+    sc._ask_for_auth()
     assert sc._SConAPI__auth == ('A', 'mypassword')
 
 
@@ -308,7 +308,7 @@ def test_ask_for_auth_passwd_provided(monkeypatch):
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', password='B')
-    sc._SConAPI__ask_for_auth()
+    sc._ask_for_auth()
     assert sc._SConAPI__auth == ('SteelConnect', 'B')
 
 
@@ -316,7 +316,7 @@ def test_ask_for_auth_both_provided(monkeypatch):
     """_ask_for_auth should return user/pass when both are provided."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A', password='B')
-    sc._SConAPI__ask_for_auth()
+    sc._ask_for_auth()
     assert sc._SConAPI__auth == ('A', 'B')
 
 
@@ -412,7 +412,7 @@ def test_raise_exception_when_disabled(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConWithoutExceptions('some.realm')
     response = fake_requests.Fake_Response('', 502, {})
-    sc._SConWithoutExceptions__raise_exception(response) == None
+    sc._raise_exception(response) == None
 
 def test_raise_exception_when_exit_on_error(monkeypatch):
     """_raise_exception should raise the correct exceptions based on status."""
@@ -420,5 +420,5 @@ def test_raise_exception_when_exit_on_error(monkeypatch):
     monkeypatch.setattr('sys.exit', lambda x: 'EXIT')
     sc = steelconnection.SConExitOnError('some.realm')
     response = fake_requests.Fake_Response('', 502, {})
-    sc._SConExitOnError__raise_exception(response) == None
+    sc._raise_exception(response) == None
 
