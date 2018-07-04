@@ -221,7 +221,10 @@ class SConAPI(object):
 
     @property
     def __auth(self):
-        return (self.__username, self.__password) if self.__username else None
+        if self.__username and self.__password:
+            return (self.__username, self.__password)
+        else:
+            return None
 
     def __request(self, request_method, url, data=None, params=None):
         r"""Send a request using the specified method.
@@ -238,7 +241,7 @@ class SConAPI(object):
             url=url, auth=self.__auth, headers=self.headers,
             params=params, data=data,
         )
-        if response.status_code == 401 and self.__username is None:
+        if response.status_code == 401 and self.__auth is None:
             self.__ask_for_auth()
             response = request_method(
                 url=url, auth=self.__auth, headers=self.headers,

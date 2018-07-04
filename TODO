@@ -13,3 +13,4 @@ with open(filename, 'wb') as fd:
 Add input validation everywhere.
 
 Need a test to verify __all__ imports everything.
+Need a FUNC test to verify password prompts when only username is supplied.
