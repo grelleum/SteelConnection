@@ -95,12 +95,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.__request(
+        self.response = self._request(
             request_method=self.session.get,
             url=self.url('config', resource),
             params=params,
         )
-        self.result = self.__get_result(self.response)
+        self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -113,12 +113,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.__request(
+        self.response = self._request(
             request_method=self.session.get,
             url=self.url('reporting', resource),
             params=params,
         )
-        self.result = self.__get_result(self.response)
+        self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -132,13 +132,13 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.__request(
+        self.response = self._request(
             request_method=self.session.delete,
             url=self.url('config', resource),
             params=params,
             data=data,
         )
-        self.result = self.__get_result(self.response)
+        self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -151,12 +151,12 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.__request(
+        self.response = self._request(
             request_method=self.session.post,
             url=self.url('config', resource),
             data=data,
         )
-        self.result = self.__get_result(self.response)
+        self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -170,13 +170,13 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.__request(
+        self.response = self._request(
             request_method=self.session.put,
             url=self.url('config', resource),
             params=params,
             data=data,
         )
-        self.result = self.__get_result(self.response)
+        self.result = self._get_result(self.response)
         if self.result is None:
             self._raise_exception(self.response)
         return self.result
@@ -226,7 +226,7 @@ class SConAPI(object):
         else:
             return None
 
-    def __request(self, request_method, url, data=None, params=None):
+    def _request(self, request_method, url, data=None, params=None):
         r"""Send a request using the specified method.
 
         :param request_method: requests.session verb.
@@ -238,13 +238,13 @@ class SConAPI(object):
         """
         data=json.dumps(data) if data and isinstance(data, dict) else data
         if self.__username and not self.__password:
-            self.__ask_for_auth()
+            self.__ask_for__auth()
         response = request_method(
             url=url, auth=self.__auth, headers=self.headers,
             params=params, data=data,
         )
         if response.status_code == 401 and self.__auth is None:
-            self.__ask_for_auth()
+            self.__ask_for__auth()
             response = request_method(
                 url=url, auth=self.__auth, headers=self.headers,
                 params=params, data=data,
@@ -258,7 +258,7 @@ class SConAPI(object):
         if self.__password is None:
             self.__password = get_password_once()
 
-    def __get_result(self, response):
+    def _get_result(self, response):
         r"""Return response data as native Python datatype.
 
         :param requests.response response: Response from HTTP request.
