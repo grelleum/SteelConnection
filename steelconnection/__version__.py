@@ -1,6 +1,6 @@
 __title__ = 'steelconnection'
 __description__ = 'Simplify access to the Riverbed SteelConnect REST API.'
-__version__ = '0.9.15'
+__version__ = '0.9.16'
 __author__ = 'Greg Mueller'
 __author_email__ = 'steelconnection@grelleum.com'
 __copyright__ = 'Copyright 2018 Greg Mueller'
