@@ -1,8 +1,6 @@
 Test against various versions that may have issues with requests / SSL:
     and may require urllib3 disable warnings.
 
-Write tests using pytest.
-
 better way to store authentication:  Keyring Support??
 
 streaming transfers ...
