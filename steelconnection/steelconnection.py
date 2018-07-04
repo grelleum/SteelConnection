@@ -251,7 +251,7 @@ class SConAPI(object):
             )
         return response
 
-    def __ask_for_auth(self):
+    def _ask_for_auth(self):
         """Prompt for username and password if not provided."""
         if self.__username is None:
             self.__username = get_username()
