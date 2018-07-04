@@ -34,7 +34,8 @@ from .__version__ import __url__, __version__
 
 __all__ = (
     'SConAPI',
-    'SConAPIwithoutExceptions',
+    'SConWithoutExceptions',
+    'SConExitOnError',
     'AuthenticationError',
     'APINotEnabled',
     'BadRequest',
