@@ -14,3 +14,4 @@ Add input validation everywhere.
 
 Need a test to verify __all__ imports everything.
 Need a FUNC test to verify password prompts when only username is supplied.
+Need better tests to validate alternate classes are functioning properly.
