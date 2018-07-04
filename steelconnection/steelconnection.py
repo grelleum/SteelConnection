@@ -237,6 +237,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         data=json.dumps(data) if data and isinstance(data, dict) else data
+        if self.__username and not self.__password:
+            self.__ask_for_auth()
         response = request_method(
             url=url, auth=self.__auth, headers=self.headers,
             params=params, data=data,
