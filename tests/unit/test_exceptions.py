@@ -82,7 +82,7 @@ def test_exit_when_raise_exception_with_exit_on_error(capsys, monkeypatch):
     sc = steelconnection.SConExitOnError('some.realm')
     response = fake_requests.Fake_Response('', 502, {})
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        result = sc._raise_exception(response)
+        sc._raise_exception(response)
     captured = capsys.readouterr()
     assert captured.err == "502 - Failed\nURL: \nData Sent: '{}'\n"
     assert pytest_wrapped_e.type == SystemExit
