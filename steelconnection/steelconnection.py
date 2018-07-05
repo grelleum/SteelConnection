@@ -287,7 +287,6 @@ class SConAPI(object):
         :returns: Exception if non-200 response code else None.
         :rtype: BaseException, or None
         """
-        print('crying!')
         if not response.ok:
             error = _error_string(response)
             if response.status_code == 400:
@@ -379,7 +378,6 @@ class SConExitOnError(SConAPI):
         :returns: None.
         :rtype: None
         """
-        print('HAHAA')
         if not response.ok:
             error = _error_string(response)
             print(error, file=sys.stderr)
