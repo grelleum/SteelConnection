@@ -6,7 +6,7 @@ import sys
 import pytest
 import requests
 import steelconnection
-import steelconnection.__main__  # for coverage sake.
+# import steelconnection.__main__  # for coverage sake.
 import fake_requests
 
 
