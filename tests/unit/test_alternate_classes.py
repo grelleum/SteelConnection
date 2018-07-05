@@ -11,7 +11,7 @@ import fake_requests
 
 # Alternate Classes:
 
-def test_raise_exception_when_disabled(monkeypatch):
+def test_raise_exception_without_exceptions(monkeypatch):
     """_raise_exception should raise the correct exceptions based on status."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConWithoutExceptions('some.realm')
