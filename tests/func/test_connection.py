@@ -4,6 +4,7 @@
 import getpass
 import sys
 import pytest
+import subprocess
 import steelconnection
 
 
@@ -41,3 +42,14 @@ def test_auth_attempt_netrc_fails(monkeypatch):
     sc = steelconnection.SConAPI(REALM_2_8)
     _ = sc.get('orgs')
     assert sc
+
+
+def test_import_on_command_line():
+    output = subprocess.check_output('python -m steelconnection', shell=True)
+    output = output.decode()
+    expected = u'SteelConnection version: {0}\nProject home: {1}\n'.format(
+        steelconnection.__version__,
+        steelconnection.__url__,
+    )
+    assert repr(output) == repr(expected)
+    
