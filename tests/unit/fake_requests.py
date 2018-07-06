@@ -32,7 +32,7 @@ responses = {
     'orgs': {'items': [org]},
     'status': status,
     'node': node,
-    'nodes': {'items': [node]}, 
+    'nodes': {'items': [node]},
     'site': site,
     'sites': {'items': [site]},
     'netrc': node,
@@ -58,7 +58,7 @@ class Fake_Response(object):
         self.text = json.dumps(self.data, indent=4)
         self.request = Fake_Request(url, data)
     def json(self):
-        return self.data
+        return json.loads(self.text)
 
 
 class Fake_Session(object):
@@ -86,7 +86,7 @@ class Fake_Session(object):
         data = responses.get(resource, {}) if not data else data
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data)
- 
+
     def post(self, url, auth=None, headers=None, params=None, data=None):
         if params is not None:
             raise ValueError('post params must be None.')
