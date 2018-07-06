@@ -57,7 +57,8 @@ def test_ask_for_auth_when_not_provided(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     sc._ask_for_auth()
-    assert sc._SConAPI__auth == ('SteelConnect', 'mypassword')
+    sc.get('status')
+    assert sc.response.auth == ('SteelConnect', 'mypassword')
 
 
 def test_ask_for_auth_username_provided(monkeypatch):
@@ -66,7 +67,8 @@ def test_ask_for_auth_username_provided(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A')
     sc._ask_for_auth()
-    assert sc._SConAPI__auth == ('A', 'mypassword')
+    sc.get('status')
+    assert sc.response.auth == ('A', 'mypassword')
 
 
 def test_ask_for_auth_passwd_provided(monkeypatch):
@@ -78,7 +80,8 @@ def test_ask_for_auth_passwd_provided(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', password='B')
     sc._ask_for_auth()
-    assert sc._SConAPI__auth == ('SteelConnect', 'B')
+    sc.get('status')
+    assert sc.response.auth == ('SteelConnect', 'B')
 
 
 def test_ask_for_auth_both_provided(monkeypatch):
@@ -86,7 +89,9 @@ def test_ask_for_auth_both_provided(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A', password='B')
     sc._ask_for_auth()
-    assert sc._SConAPI__auth == ('A', 'B')
+    sc.get('status')
+    assert sc.response.auth == ('A', 'B')
+
 
 def test_request_prompts_password_when_username_provided(monkeypatch):
     """_request should prompt for password only when username is provided."""
@@ -94,4 +99,5 @@ def test_request_prompts_password_when_username_provided(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A')
     assert sc._request(sc.session.get, 'url')
-    assert sc._SConAPI__auth == ('A', 'mypassword')
+    sc.get('status')
+    assert sc.response.auth == ('A', 'mypassword')
