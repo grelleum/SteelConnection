@@ -15,7 +15,6 @@ from PRIVATE import REALM_2_8, REALM_2_9, REALM_2_10, REALM_2_11
 def test_create_object_2_8():
     sc = steelconnection.SConAPI(REALM_2_8, REALM_ADMIN, PASSWORD)
     sc.get('orgs')
-    # sc.get('status')  # fixes last four lines left in coverage!
     assert isinstance(sc, steelconnection.SConAPI)
 
 
