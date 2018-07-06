@@ -143,8 +143,8 @@ def test_scon_get_result_not_ok(monkeypatch):
     _ = sc.scm_version
     sc.response.ok = False
     assert sc._get_result(sc.response) is None
-    sc.response.text = 'Queued'
-    assert sc._get_result(sc.response) == fake_requests.responses['status']
+    sc.response.text = '{"error":{"message":"Queued","code":404}}'
+    assert sc._get_result(sc.response) == json.loads(sc.response.text)
 
 
 def test_scon_get_result_octet_stream(monkeypatch):
@@ -164,7 +164,7 @@ def test_scon_get_result_no_json(monkeypatch):
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
     sc.get('orgs')
-    sc.response.data = False
+    sc.response.text = '{}'
     assert sc._get_result(sc.response) == {}
 
 
