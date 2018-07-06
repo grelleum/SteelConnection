@@ -87,3 +87,11 @@ def test_ask_for_auth_both_provided(monkeypatch):
     sc = steelconnection.SConAPI('some.realm', username='A', password='B')
     sc._ask_for_auth()
     assert sc._SConAPI__auth == ('A', 'B')
+
+def test_request_prompts_password_when_username_provided(monkeypatch):
+    """_request should prompt for password only when username is provided."""
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('some.realm', username='A')
+    assert sc._request(sc.session.get, 'url')
+    assert sc._SConAPI__auth == ('A', 'mypassword')
