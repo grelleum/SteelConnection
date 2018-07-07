@@ -41,6 +41,7 @@ responses = {
 
 
 class Fake_Request(object):
+
     def __init__(self, url, data):
         self.data = json.loads(data) if isinstance(data, str) else data
         self.url = url
@@ -48,18 +49,28 @@ class Fake_Request(object):
 
 
 class Fake_Response(object):
+
     def __init__(self, url, status_code, data, auth=None, content='json'):
-        self.data = json.loads(data) if isinstance(data, str) else data
         self.url = url
         self.ok = True if status_code < 300 else False
         self.reason = 'successs' if status_code < 300 else 'Failed'
         self.status_code = status_code
         self.headers= {'Content-Type': 'application/' + content}
-        self.text = json.dumps(self.data, indent=4)
+        self.text = get_text(data)
         self.request = Fake_Request(url, data)
         self.auth = auth
+
     def json(self):
         return json.loads(self.text)
+
+
+def get_text(data):
+    if isinstance(data, dict) or isinstance(data, list):
+        try:
+            return json.dumps(data)
+        except ValueError:
+            pass
+    return data
 
 
 class Fake_Session(object):
