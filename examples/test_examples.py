@@ -6,12 +6,10 @@ This relies on a PRIVATE import (not supplied) containing personalized details.
 """
 
 import subprocess
-# import os
 import sys
 import pytest
 import steelconnection
 
-# sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
 
 from PRIVATE import REALM_ADMIN, PASSWORD, ORG, REALM
 
