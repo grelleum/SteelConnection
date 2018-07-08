@@ -77,6 +77,8 @@ class Fake_Session(object):
     def get(self, url, auth=None, headers=None, params=None, data=None):
         if data is not None:
             raise ValueError('get data must be None.')
+        if url == 'https://old.school/api/scm.config/1.0/status':
+            return Fake_Response(url, 404, data, auth)
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         if resource == 'netrc401' and auth:
