@@ -40,12 +40,20 @@ responses = {
 }
 
 
+def get_text(data):
+    if isinstance(data, dict) or isinstance(data, list):
+        try:
+            return json.dumps(data)
+        except ValueError:
+            pass
+    return data
+
+
 class Fake_Request(object):
 
     def __init__(self, url, data):
-        self.data = json.loads(data) if isinstance(data, str) else data
         self.url = url
-        self.body = json.dumps(self.data, indent=4)
+        self.body = get_text(data)
 
 
 class Fake_Response(object):
@@ -62,15 +70,6 @@ class Fake_Response(object):
 
     def json(self):
         return json.loads(self.text)
-
-
-def get_text(data):
-    if isinstance(data, dict) or isinstance(data, list):
-        try:
-            return json.dumps(data)
-        except ValueError:
-            pass
-    return data
 
 
 class Fake_Session(object):
