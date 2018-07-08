@@ -10,7 +10,7 @@ realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
 sc = steelconnection.SConAPI(realm)
 
 appliance = steelconnection.get_input(
-    '\nPlease enter the appliance serial number: '
+    'Please enter the appliance serial number: '
 )
 node_id, node = sc.lookup.node(appliance)
 
