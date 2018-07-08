@@ -6,17 +6,20 @@ This relies on a PRIVATE import (not supplied) containing personalized details.
 """
 
 import subprocess
+# import os
 import sys
 import pytest
 import steelconnection
 
-from PRIVATE import USER, PASSWORD, ORG, REALM
+# sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
+
+from PRIVATE import REALM_ADMIN, PASSWORD, ORG, REALM
 
 
 # examples/set_node_location.py
 
 def test_clear_location_fields():
-    sc = steelconnection.SConAPI(REALM, USER, PASSWORD)
+    sc = steelconnection.SConAPI(REALM, REALM_ADMIN, PASSWORD)
     org_id, _ = sc.lookup.org(ORG)
     assert org_id
     nodes = sc.get('org/' + org_id + '/nodes')
@@ -30,14 +33,14 @@ def test_clear_location_fields():
 def test_set_node_location():
     script = 'examples/set_node_location.py'
     command = 'python "{}" "{}" "{}" -u="{}" -p="{}"'.format(
-        script, REALM, ORG, USER, PASSWORD,
+        script, REALM, ORG, REALM_ADMIN, PASSWORD,
     )
     output = subprocess.check_output(command, shell=True)
     assert output
 
 
 def test_populated_location_fields():
-    sc = steelconnection.SConAPI(REALM, USER, PASSWORD)
+    sc = steelconnection.SConAPI(REALM, REALM_ADMIN, PASSWORD)
     org_id, _ = sc.lookup.org(ORG)
     nodes =  sc.get('org/' + org_id + '/nodes')
     for node in nodes:
@@ -48,9 +51,9 @@ def test_populated_location_fields():
 
 def test_create_site(monkeypatch):
     if sys.version_info.major < 3:
-        monkeypatch.setattr('__builtin__.raw_input', lambda x: USER)
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: REALM_ADMIN)
     else:
-        monkeypatch.setattr('builtins.input', lambda x: USER)
+        monkeypatch.setattr('builtins.input', lambda x: REALM_ADMIN)
     monkeypatch.setattr('getpass.getpass', lambda x: PASSWORD)
     import create_site
     create_site.scm_name = REALM
@@ -63,7 +66,7 @@ def test_create_site(monkeypatch):
         'timezone': 'America/New_York',
     }
     create_site.main()
-    sc = steelconnection.SConAPI(REALM, USER, PASSWORD)
+    sc = steelconnection.SConAPI(REALM, REALM_ADMIN, PASSWORD)
     org_id, _ = sc.lookup.org(ORG)
     site_id, site = sc.lookup.site(create_site.new_site['name'], org_id)
     assert site_id
