@@ -21,13 +21,15 @@ def test_error_string():
     assert error == expected
 
 
-# def test_error_string_bad_input():
-#     """Test _error_string generates a ValueError Exception."""
-#     with pytest.raises(ValueError):
-#         response = fake_requests.Fake_Response(
-#             'old.sch.ool/status',
-#             600,
-#             '<!DOCTYPE html>\n\n\n<html>\n'
-#         )
-#     with pytest.raises(UnboundLocalError):
-#         error = steelconnection.steelconnection._error_string(response)
+def test_error_string_bad_input():
+    """Test _error_string generates a ValueError Exception."""
+    url = 'ValueError'
+    status_code = 700
+    data = '<!DOCTYPE html>'
+    response = fake_requests.Fake_Response(url, status_code, data)
+    expected = "{0} - Failed\nURL: {1}\nData Sent: {2}".format(
+        status_code, url, repr(data)
+    )
+    error = steelconnection.steelconnection._error_string(response)
+    assert error == expected
+
