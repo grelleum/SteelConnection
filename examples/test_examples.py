@@ -2,7 +2,7 @@
 
 """
 This is a set of pytest functions intended to validate the examples.
-These leverage a PRIVATE import containing personalized details.
+This relies on a PRIVATE import (not supplied) containing personalized details.
 """
 
 import subprocess
