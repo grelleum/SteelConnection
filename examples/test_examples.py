@@ -51,7 +51,7 @@ def test_populated_location_fields():
 
 # examples/create_site.py
 
-def test_create_site(monkeypatch):
+def test_create_site(capsys, monkeypatch):
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: username)
     else:
@@ -77,6 +77,4 @@ def test_create_site(monkeypatch):
     sc.delete('site/' + site_id)
     site_id, _ = sc.lookup.site(create_site.new_site['name'], org_id)
     assert site_id is None
-
-
 
