@@ -121,6 +121,13 @@ def test_scm_version(monkeypatch):
     assert sc.scm_version == scm_version
 
 
+def test_scm_version_invalid(monkeypatch):
+    """Test SConAPI.scm_version method."""
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConAPI('old.school')
+    assert sc.scm_version == 'unavailable'
+
+
 def test_savefile(monkeypatch):
     """Test SConAPI.savefile method."""
     filename = 'delete.me'

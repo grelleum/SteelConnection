@@ -40,12 +40,20 @@ responses = {
 }
 
 
+def get_text(data):
+    if isinstance(data, dict) or isinstance(data, list):
+        try:
+            return json.dumps(data)
+        except ValueError:
+            pass
+    return data
+
+
 class Fake_Request(object):
 
     def __init__(self, url, data):
-        self.data = json.loads(data) if isinstance(data, str) else data
         self.url = url
-        self.body = json.dumps(self.data, indent=4)
+        self.body = get_text(data)
 
 
 class Fake_Response(object):
@@ -64,20 +72,13 @@ class Fake_Response(object):
         return json.loads(self.text)
 
 
-def get_text(data):
-    if isinstance(data, dict) or isinstance(data, list):
-        try:
-            return json.dumps(data)
-        except ValueError:
-            pass
-    return data
-
-
 class Fake_Session(object):
 
     def get(self, url, auth=None, headers=None, params=None, data=None):
         if data is not None:
             raise ValueError('get data must be None.')
+        if url == 'https://old.school/api/scm.config/1.0/status':
+            return Fake_Response(url, 404, data, auth)
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         if resource == 'netrc401' and auth:
