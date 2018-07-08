@@ -5,9 +5,6 @@ This is a functional test of the script to see if it performs the task required.
 Must be run from the examples directory until I figure out a way around that.
 """
 
-import getpass
-import sys
-import pytest
 import subprocess
 import steelconnection
 
