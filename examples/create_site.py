@@ -20,7 +20,7 @@ def main():
 
     # Get the org ID for your organization.
     org_id, org = sc.lookup.org(org_name)
-    print('Org name: {},  org_id: {}'.format(org_name, org_id))
+    print('Org name: {},  org_id: {}'.format(org['name'], org_id))
 
     # API resource for posting.
     resource = '/org/{}/sites'.format(org_id)
