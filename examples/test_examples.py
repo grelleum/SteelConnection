@@ -1,8 +1,8 @@
 # coding: utf-8
 
 """
-This is a functional test of the script to see if it performs the task required.
-Must be run from the examples directory until I figure out a way around that.
+This is a set of pytest functions intended to validate the examples.
+These leverage a PRIVATE import containing personalized details.
 """
 
 import subprocess
@@ -11,8 +11,8 @@ import steelconnection
 
 from PRIVATE import REALM_ADMIN, PASSWORD, ORG_2_9, REALM_2_9
 
-script = 'examples/set_node_location.py'
 
+# examples/set_node_location.py
 
 def test_clear_location_fields():
     sc = steelconnection.SConAPI(REALM_2_9, REALM_ADMIN, PASSWORD)
@@ -27,6 +27,7 @@ def test_clear_location_fields():
 
 
 def test_set_node_location():
+    script = 'examples/set_node_location.py'
     command = 'python "{}" "{}" "{}" -u="{}" -p="{}"'.format(
         script, REALM_2_9, ORG_2_9, REALM_ADMIN, PASSWORD,
     )
