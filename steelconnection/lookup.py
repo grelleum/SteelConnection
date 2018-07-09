@@ -29,8 +29,10 @@ class _LookUp(object):
             key_value = item.get(key, '')
             if key_value and value in key_value:
                 self.sconnection.result = item.get(return_value, '')
-                return self.sconnection.result, item
-        return None, {'status': 'Failed', 'message': 'Not Found'}
+                return item
+        return None
+        #         return self.sconnection.result, item
+        # return None, {'status': 'Failed', 'message': 'Not Found'}
 
     def node(self, serial, key='serial'):
         """
