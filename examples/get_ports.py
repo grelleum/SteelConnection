@@ -4,11 +4,14 @@ from __future__ import print_function
 
 import steelconnection
 
+
 print("Note: SteelConnect Realm is usually in the form 'realm.riverbed.cc'")
 realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
 sc = steelconnection.SConAPI(realm)
 
-appliance = steelconnection.get_input('\nPlease enter the appliance serial number: ')
+appliance = steelconnection.get_input(
+    'Please enter the appliance serial number: '
+)
 node_id, node = sc.lookup.node(appliance)
 
 ports = sc.get('node/' + node_id + '/ports')
