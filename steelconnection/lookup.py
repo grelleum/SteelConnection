@@ -31,8 +31,6 @@ class _LookUp(object):
                 self.sconnection.result = item.get(return_value, '')
                 return item
         return None
-        #         return self.sconnection.result, item
-        # return None, {'status': 'Failed', 'message': 'Not Found'}
 
     def node(self, serial, key='serial'):
         """
