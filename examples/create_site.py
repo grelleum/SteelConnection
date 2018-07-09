@@ -19,11 +19,11 @@ def main():
     sc = steelconnection.SConAPI(scm_name)
 
     # Get the org ID for your organization.
-    org_id, org = sc.lookup.org(org_name)
-    print('Org name: {},  org_id: {}'.format(org['name'], org_id))
+    org = sc.lookup.org(org_name)
+    print('Org name: {},  Org id: {}'.format(org['name'], org['id']))
 
     # API resource for posting.
-    resource = '/org/{}/sites'.format(org_id)
+    resource = '/org/{}/sites'.format(org['id'])
 
     # Make the post request.
     result = sc.post(resource, data=new_site)

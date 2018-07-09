@@ -34,11 +34,11 @@ def main(argv):
         password=args.password,
     )
 
-    org_id, org = sc.lookup.org(organization)
-    print('\nOrg:', organization, '\tID:', org_id)
-    sites = find_sites(sc, organization, org_id)
-    nodes = find_nodes(sc, organization, org_id)
-    return update_nodes(nodes, sc, organization, org_id, sites)
+    org = sc.lookup.org(organization)
+    print('\nOrg:', organization, '\tID:', org['id'])
+    sites = find_sites(sc, organization, org['id'])
+    nodes = find_nodes(sc, organization, org['id'])
+    return update_nodes(nodes, sc, organization, org['id'], sites)
 
 
 def update_nodes(nodes, sc, organization, org_id, sites):
