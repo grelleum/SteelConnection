@@ -22,9 +22,9 @@ org_name = os.environ.get('SCONORG')
 
 def test_clear_location_fields():
     sc = steelconnection.SConAPI(realm, username, password)
-    org_id, _ = sc.lookup.org(org_name)
-    assert org_id
-    nodes = sc.get('org/' + org_id + '/nodes')
+    org = sc.lookup.org(org_name)
+    assert org['id']
+    nodes = sc.get('org/' + org['id'] + '/nodes')
     assert nodes
     for node in nodes:
         node['location'] = None
@@ -43,8 +43,8 @@ def test_set_node_location():
 
 def test_populated_location_fields():
     sc = steelconnection.SConAPI(realm, username, password)
-    org_id, _ = sc.lookup.org(org_name)
-    nodes =  sc.get('org/' + org_id + '/nodes')
+    org = sc.lookup.org(org_name)
+    nodes =  sc.get('org/' + org['id'] + '/nodes')
     for node in nodes:
         assert node['location'] is not None
 
@@ -67,14 +67,17 @@ def test_create_site(capsys, monkeypatch):
         'country': 'US',
         'timezone': 'America/New_York',
     }
-    create_site.main()
     sc = steelconnection.SConAPI(realm, username, password)
-    org_id, _ = sc.lookup.org(org_name)
-    site_id, site = sc.lookup.site(create_site.new_site['name'], org_id)
-    assert site_id
+    org = sc.lookup.org(org_name)
+    site = sc.lookup.site(create_site.new_site['name'], org['id'])
+    if site:
+        sc.delete('site/' + site['id'])
+    create_site.main()
+    site = sc.lookup.site(create_site.new_site['name'], org['id'])
+    assert site['id']
     for key in create_site.new_site:
         assert site[key] == create_site.new_site[key]
-    sc.delete('site/' + site_id)
-    site_id, _ = sc.lookup.site(create_site.new_site['name'], org_id)
-    assert site_id is None
+    sc.delete('site/' + site['id'])
+    site = sc.lookup.site(create_site.new_site['name'], org['id'])
+    assert site is None
 

@@ -12,9 +12,9 @@ sc = steelconnection.SConAPI(realm)
 appliance = steelconnection.get_input(
     'Please enter the appliance serial number: '
 )
-node_id, node = sc.lookup.node(appliance)
+node = sc.lookup.node(appliance)
 
-ports = sc.get('node/' + node_id + '/ports')
+ports = sc.get('node/' + node['id'] + '/ports')
 
 line = '{:14}{:10}{:8}{:8}{:8}'
 print(line.format('\nPort ID', 'ifname', 'Link', 'Speed', 'Duplex'))
