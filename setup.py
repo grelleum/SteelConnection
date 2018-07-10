@@ -33,7 +33,7 @@ info = {
 
 
 def create_version_file(info):
-    export_info = {k: info[k] for k in info}
+    export_info = {k: v for k, v in info.items()}
     export_info['title'] = name
     export_info['copyright'] = copyright
     keys = [
