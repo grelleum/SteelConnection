@@ -34,10 +34,27 @@ def main(argv):
         password=args.password,
     )
 
+    # Find the target organization.
     org = sc.lookup.org(organization)
     print('\nOrg:', organization, '\tID:', org['id'])
-    sites = find_sites(sc, organization, org['id'])
-    nodes = find_nodes(sc, organization, org['id'])
+
+    # Get list of all sites in target organization.
+    sites = sc.get('org/{}/sites'.format(org['id']))
+    print(status('site', sites, "in '{0}'".format(organization)))
+
+    # Get list of all nodes in target organization.
+    nodes = sc.get('org/{}/nodes'.format(org['id']))
+    print(status('node', nodes, "in '{0}'".format(organization)))
+
+    # Reduce list of nodes to those assigned to a site.
+    nodes = [node for node in nodes if node['site']]
+    print(status('node', nodes, 'assigned to a site'))
+
+    # Reduce list of nodes to those not already assigned a loction.
+    nodes = [node for node in nodes if not node['location']]
+    print(status('node', nodes, 'with no specified location'))
+
+    # Update location for the remaining nodes.
     return update_nodes(nodes, sc, organization, org['id'], sites)
 
 
@@ -68,33 +85,6 @@ def update_nodes(nodes, sc, organization, org_id, sites):
         response = sc.response
         print('Response:', response.status_code, response.reason, '\n')
         print(result)
-
-
-def find_sites(sc, organization, org_id):
-    """Get list of sites for specified organization."""
-    print('\nGathering Sites:')
-    sites = sc.get('sites')
-    sites = [site for site in sites if site['org'] == org_id]
-    print(status('site', sites, "in '{0}'".format(organization)))
-    return sites
-
-
-def find_nodes(sc, organization, org_id):
-    """Get nodes that require modification."""
-    print('\nGathering Nodes:')
-
-    nodes = sc.get('nodes')
-    print(status('node', nodes, 'in Total'))
-
-    nodes = [node for node in nodes if node['org'] == org_id]
-    print(status('node', nodes, "in '{0}'".format(organization)))
-
-    nodes = [node for node in nodes if node['site']]
-    print(status('node', nodes, 'assigned to a site'))
-
-    nodes = [node for node in nodes if not node['location']]
-    print(status('node', nodes, 'with no specified location'))
-    return nodes
 
 
 def status(category, values, suffix=''):
