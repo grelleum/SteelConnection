@@ -15,3 +15,6 @@ Add input validation everywhere.
 Need a test to verify __all__ imports everything.
 
 calling  sc.get('status') on granny 2.8 fixes last four lines left in coverage!
+
+
+Use 'responses' package for tests :  https://github.com/getsentry/responses
