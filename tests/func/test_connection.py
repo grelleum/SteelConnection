@@ -2,58 +2,29 @@
 
 
 import getpass
+import os
 import sys
 import pytest
 import subprocess
 import steelconnection
 
 
-from PRIVATE import REALM_ADMIN, ORG_ADMIN, PASSWORD
-from PRIVATE import REALM_2_8, REALM_2_9, REALM_2_10, REALM_2_11
+REALM_ADMIN = os.environ.get('SCONUSER')
+PASSWORD = os.environ.get('SCONPASSWD')
+ORG_NAME = os.environ.get('SCONORG')
+ORG_ADMIN = os.environ.get('SCONORGADMIN')
+APPLIANCE = os.environ.get('SCONAPPLIANCE')
+REALM = os.environ.get('SCONREALM')
+ALT_REALM = os.environ.get('SCONALTREALM')
 
 
-def test_create_object_2_8():
-    sc = steelconnection.SConAPI(REALM_2_8, REALM_ADMIN, PASSWORD)
+def test_create_object():
+    sc = steelconnection.SConAPI(REALM, REALM_ADMIN, PASSWORD)
     orgs = sc.get('orgs')
     assert orgs
     assert isinstance(orgs, list)
     assert isinstance(sc, steelconnection.SConAPI)
-
-
-def test_create_object_2_9():
-    sc = steelconnection.SConAPI(REALM_2_9, REALM_ADMIN, PASSWORD)
-    orgs = sc.get('orgs')
-    status = sc.get('status')
-    assert orgs
-    assert isinstance(orgs, list)
-    assert status
-    assert isinstance(status, dict)
-    assert 'scm_version' in status
-    assert isinstance(sc, steelconnection.SConAPI)
-
-
-def test_create_object_2_10():
-    sc = steelconnection.SConAPI(REALM_2_10, REALM_ADMIN, PASSWORD)
-    orgs = sc.get('orgs')
-    status = sc.get('status')
-    assert orgs
-    assert isinstance(orgs, list)
-    assert status
-    assert isinstance(status, dict)
-    assert 'scm_version' in status
-    assert isinstance(sc, steelconnection.SConAPI)
-
-
-def test_create_object_2_11():
-    sc = steelconnection.SConAPI(REALM_2_11, REALM_ADMIN, PASSWORD)
-    orgs = sc.get('orgs')
-    status = sc.get('status')
-    assert orgs
-    assert isinstance(orgs, list)
-    assert status
-    assert isinstance(status, dict)
-    assert 'scm_version' in status
-    assert isinstance(sc, steelconnection.SConAPI)
+    assert orgs[0]['id']
 
 
 def test_auth_attempt_netrc_fails(monkeypatch):
@@ -63,6 +34,6 @@ def test_auth_attempt_netrc_fails(monkeypatch):
     else:
         monkeypatch.setattr('builtins.input', lambda x: REALM_ADMIN)
     monkeypatch.setattr('getpass.getpass', lambda x: PASSWORD)
-    sc = steelconnection.SConAPI(REALM_2_8)
+    sc = steelconnection.SConAPI(ALT_REALM)
     sc.get('orgs')
     assert sc
