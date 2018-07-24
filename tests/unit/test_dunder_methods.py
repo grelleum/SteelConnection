@@ -66,7 +66,10 @@ def test_scon_repr(monkeypatch):
     """Test __repr__ returns a proper string."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     realm = 'MYREALM'
-    scm_version = '.'.join(fake_requests.responses['status'].values())
+    scm_version = '.'.join((
+        fake_requests.responses['status']['scm_version'],
+        fake_requests.responses['status']['scm_build'],
+    ))
     api_version = 999
     pkg_version = steelconnection.__version__
     expected = (
