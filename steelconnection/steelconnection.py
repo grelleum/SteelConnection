@@ -215,8 +215,12 @@ class SConAPI(object):
             except InvalidResource:
                 self.__scm_version = 'unavailable'
             else:
-                version = status.get('scm_version'), status.get('scm_build')
-                self.__scm_version = '.'.join(s for s in version if s)
+                version = status.get('scm_version')
+                build = status.get('scm_build')
+                if version and build:
+                    self.__scm_version = '.'.join((version, build)) 
+                else:
+                    self.__scm_version = 'unavailable'
         return self.__scm_version
 
     @property
