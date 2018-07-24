@@ -116,7 +116,10 @@ def test_scon_url(monkeypatch):
 def test_scm_version(monkeypatch):
     """Test SConAPI.scm_version method."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    scm_version = '.'.join(fake_requests.responses['status'].values())
+    scm_version = '.'.join((
+        fake_requests.responses['status']['scm_version'],
+        fake_requests.responses['status']['scm_build'],
+    ))
     sc = steelconnection.SConAPI('some.realm')
     assert sc.scm_version == scm_version
 
