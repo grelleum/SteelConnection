@@ -39,10 +39,10 @@ from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
 
-BINARY_DATA_MESSAGE = ' '.join(
-    "Binary data returned.\n"
+BINARY_DATA_MESSAGE = ' '.join((
+    "Binary data returned.",
     "Use '.savefile(filename)' method or access using '.response.content'."
-)
+))
 
 
 class SConAPI(object):
@@ -218,7 +218,7 @@ class SConAPI(object):
                 version = status.get('scm_version')
                 build = status.get('scm_build')
                 if version and build:
-                    self.__scm_version = '.'.join((version, build)) 
+                    self.__scm_version = '.'.join((version, build))
                 else:
                     self.__scm_version = 'unavailable'
         return self.__scm_version
