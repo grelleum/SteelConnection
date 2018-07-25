@@ -3,13 +3,6 @@ Test against various versions that may have issues with requests / SSL:
 
 better way to store authentication:  Keyring Support??
 
-streaming transfers ...
-http://docs.python-requests.org/en/master/user/quickstart/#raw-response-content
-
-with open(filename, 'wb') as fd:
-    for chunk in r.iter_content(chunk_size=128):
-        fd.write(chunk)
-
 Add input validation everywhere.
 
 Need a test to verify __all__ imports everything.
