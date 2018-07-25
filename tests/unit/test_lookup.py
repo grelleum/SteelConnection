@@ -12,19 +12,37 @@ db = {
         'scm_build': '56',
     },
     'orgs': {
-        'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]
+        'items': [
+            {
+                'id': 'org-12345',
+                'name': 'WineAndCheese',
+            }
+        ]
     },
     'sites': {
         'items': [
-            {'id': 'site-12345', 'org': 'org-12345', 'city': 'Uptown, US', 'name': 'UP'},
-            {'id': 'site-56789', 'org': 'org-56789', 'city': 'Downtown, US', 'name': 'DOWN'},
+            {
+                'id': 'site-12345',
+                'org': 'org-12345',
+                'city': 'Uptown, US',
+                'name': 'UP',
+            },
+            {
+                'id': 'site-56789',
+                'org': 'org-56789',
+                'city': 'Downtown, US',
+                'name': 'DOWN',
+            },
         ],
     },
     'nodes': {
         'items': [
              {
-                'id': 'node-12345', 'org': 'org-12345', 'site': 'site-12345',
-                'serial': 'XNABCD0123456789', 'model': 'yogi'
+                'id': 'node-12345',
+                'org': 'org-12345',
+                'site': 'site-12345',
+                'serial': 'XNABCD0123456789',
+                'model': 'yogi'
              }
         ],
     }
