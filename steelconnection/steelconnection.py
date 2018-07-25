@@ -202,7 +202,7 @@ class SConAPI(object):
         :param str filename: Where to save the response.content.
         """
         warnings.warn(
-            '.savefile method is deprecated, use .download_image instead',
+            "'.savefile' method is deprecated, use '.download_image' instead",
             category=DeprecationWarning,
             stacklevel=2
         )
