@@ -27,8 +27,10 @@ from __future__ import print_function
 
 import getpass
 import json
+import os
 import requests
 import sys
+import time
 import traceback
 import warnings
 
@@ -199,8 +201,44 @@ class SConAPI(object):
 
         :param str filename: Where to save the response.content.
         """
+        warnings.warn(
+            '.savefile method is deprecated, use .download_image instead',
+            category=DeprecationWarning,
+            stacklevel=2
+        )
         with open(filename, 'wb') as f:
             f.write(self.response.content)
+
+    def download_image(self, nodeid, filepath=None):
+        r"""Download image and save to file.
+
+        :param str nodeid: The node id of the appliance.
+        :param str filename: The file path to download the image.
+        """
+        # Check status every second until file is ready.
+        while True:
+            status = self.get('/node/{}/image_status'.format(nodeid))
+            if status.get('status', False):
+                break
+            time.sleep(1)
+        # Get file name and determine destination file path.
+        source_file = status['image_file']
+        if filepath is None:
+            filepath = source_file
+        if os.path.isdir(filepath):
+            filepath = os.path.join(filepath, source_file)
+        # Stream file content and save to disk.
+        self.response = self.session.get(
+            url=self.url('config', '/node/{}/get_image'.format(nodeid)),
+            auth=self.__auth,
+            headers=self.headers,
+            params={'file': source_file},
+            stream=True,
+        )
+        with open(filepath, 'wb') as fd:
+            for chunk in self.response.iter_content(chunk_size=1024):
+                fd.write(chunk)
+        return self.response
 
     @property
     def scm_version(self):
