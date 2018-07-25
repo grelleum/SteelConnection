@@ -1,14 +1,16 @@
 # coding: utf-8
 
 import getpass
+import json
 import sys
 import pytest
 import responses
 import steelconnection
 
-import json
-import requests
-import fake_requests
+
+class NameSpace():
+    def __init__(self):
+        pass
 
 
 db = {
@@ -35,72 +37,6 @@ db = {
         ],
     }
 }
-
-# responses.add(
-#     responses.GET,
-#     'https://some.realm/api/scm.config/1.0/status',
-#     json=db['status'],
-#     status=200,
-# )
-
-# responses.add(
-#     responses.GET,
-#     'https://some.realm/api/scm.config/1.0/orgs',
-#     json=db['orgs'],
-#     status=200,
-# )
-
-# responses.add(
-#     responses.GET,
-#     'https://some.realm/api/scm.config/1.0/sites',
-#     json=db['sites'],
-#     status=200,
-# )
-
-# responses.add(
-#     responses.GET,
-#     'https://some.realm/api/scm.config/1.0/nodes',
-#     json=db['nodes'],
-#     status=200,
-# )
-
-
-# codes = {
-#     'netrc401': 401,
-#     'nonesuch': 404,
-# }
-
-# org = {'id': 'not_an_org_id', 'name': 'steelconnection'}
-# status = {'scm_version': '2.9.1', 'scm_build': '50'}
-# node = {
-#     'org': 'not_an_org_id',
-#     'site': 'site-mysite',
-#     'id': 'node-somenode',
-#     'serial': 'XNABCD0123456789',
-#     'model': 'yogi',
-# }
-# site = {
-#     'org': 'not_an_org_id',
-#     'city': 'Anytown, US',
-#     'id': 'site-mysite',
-#     'name': 'Anytown',
-# }
-
-# netrc = node
-# netrc401 = node
-
-# responses = {
-#     'org': org,
-#     'orgs': {'items': [org]},
-#     'status': status,
-#     'node': node,
-#     'nodes': {'items': [node]},
-#     'site': site,
-#     'sites': {'items': [site]},
-#     'netrc': node,
-#     'netrc401': node,
-# }
-
 
 
 # Primary Methods:
@@ -196,9 +132,8 @@ def test_scon_post_exception():
     """Test SConAPI.post method."""
     responses.add(responses.POST, 'https://some.realm/api/scm.config/1.0/nonesuch', status=404)
     sc = steelconnection.SConAPI('some.realm')
-    data = fake_requests.responses['org']
     with pytest.raises(RuntimeError):
-        sc.post('nonesuch', data=data)
+        sc.post('nonesuch', data={})
 
 
 @responses.activate
@@ -206,9 +141,8 @@ def test_scon_put_exception():
     """Test SConAPI.put method."""
     responses.add(responses.PUT, 'https://some.realm/api/scm.config/1.0/nonesuch', status=404)
     sc = steelconnection.SConAPI('some.realm')
-    data = fake_requests.responses['org']
     with pytest.raises(RuntimeError):
-        sc.put('nonesuch', data=data)
+        sc.put('nonesuch', data={})
 
 
 # Helper methods:
@@ -228,71 +162,85 @@ def test_scm_version():
     assert sc.scm_version == scm_version
 
 
-def test_scm_version_invalid(monkeypatch):
+@responses.activate
+def test_scm_version_invalid():
     """Test SConAPI.scm_version method."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.GET, 'https://old.school/api/scm.config/1.0/status', status=404)
     sc = steelconnection.SConAPI('old.school')
     assert sc.scm_version == 'unavailable'
 
 
-def test_savefile(monkeypatch):
+def test_savefile():
     """Test SConAPI.savefile method."""
     filename = 'delete.me'
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
+    sc.response = NameSpace()
     sc.response.content = b'ABCDEFG1234567890'
     sc.savefile(filename)
     with open(filename, 'rb') as f:
         contents = f.read()
-    assert sc.response.content == contents
+    assert contents == sc.response.content
 
 
 # Get Results:
 
-def test_scon_get_result_not_ok(monkeypatch):
+@responses.activate
+def test_scon_get_result_not_ok():
     """Test SConAPI.__get_result method."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/nonesuch', status=404)
     sc = steelconnection.SConAPI('some.realm')
-    _ = sc.scm_version
-    sc.response.ok = False
+    try:
+        sc.get('nonesuch')
+    except RuntimeError:
+        pass
     assert sc._get_result(sc.response) is None
-    sc.response.text = '{"error":{"message":"Queued","code":404}}'
+
+
+@responses.activate
+def test_scon_get_result_not_ok_with_body():
+    """Test SConAPI.__get_result method."""
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/Queued', body='{"error":{"message":"Queued","code":404}}', status=404)
+    sc = steelconnection.SConAPI('some.realm')
+    sc.get('Queued')
     assert sc._get_result(sc.response) == json.loads(sc.response.text)
 
 
-def test_scon_get_result_octet_stream(monkeypatch):
+@responses.activate
+def test_scon_get_result_octet_stream():
     """Test SConAPI._get_result method."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/image', headers={'Content-Type': 'application/octet-stream'}, body=b'B', status=200)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.headers = {'Content-Type': 'application/octet-stream'}
+    sc.get('image')
     assert sc._get_result(sc.response) == {'status': ' '.join((
         "Binary data returned.",
         "Use '.savefile(filename)' method or access using '.response.content'."
     ))}
 
 
-def test_scon_get_result_no_json(monkeypatch):
+@responses.activate
+def test_scon_get_result_no_json():
     """_get_results should return an empty dict when .json returns False."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.DELETE, 'https://some.realm/api/scm.config/1.0/org/org-12345', json={}, status=200)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.text = '{}'
+    sc.delete('org/org-12345')
     assert sc._get_result(sc.response) == {}
 
 
-def test_scon_get_result_no_items(monkeypatch):
+@responses.activate
+def test_scon_get_result_no_items():
     """_get_results should return a dict when 'items' is not in response."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/node/node-12345', json=db['nodes']['items'][0], status=200)
     sc = steelconnection.SConAPI('some.realm')
-    response = fake_requests.Fake_Response('', 200, {'A': 'B'})
-    assert sc._get_result(response) == {'A': 'B'}
+    sc.get('node/node-12345')
+    assert isinstance(sc._get_result(sc.response), dict)
+    assert sc._get_result(sc.response) == db['nodes']['items'][0]
 
 
-def test_scon_get_result_with_items(monkeypatch):
+@responses.activate
+def test_scon_get_result_with_items():
     """_get_results should return a list when 'items' is in response."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/nodes', json=db['nodes'], status=200)
     sc = steelconnection.SConAPI('some.realm')
-    response = fake_requests.Fake_Response('', 200, {'items': [1, 2, 3]})
-    assert sc._get_result(response) == [1, 2, 3]
+    sc.get('nodes')
+    assert isinstance(sc._get_result(sc.response), list)
+    assert sc._get_result(sc.response) == db['nodes']['items']
