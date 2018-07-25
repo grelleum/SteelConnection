@@ -49,9 +49,31 @@ db = {
 }
 
 
+get_nodes = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/nodes',
+    json=db['nodes'],
+    status=200,
+)
+
+get_sites_from_org = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/org/org-12345/sites',
+    json=db['sites'],
+    status=200,
+)
+
+get_orgs = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/orgs',
+    json=db['orgs'],
+    status=200,
+)
+
+
 @responses.activate
 def test_lookup_lookup_success():
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/orgs', json=db['orgs'], status=200)
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
     item = db['orgs']['items'][0]
     key = item['name']
@@ -61,7 +83,7 @@ def test_lookup_lookup_success():
 
 @responses.activate
 def test_lookup_lookup_fails():
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/orgs', json=db['orgs'], status=200)
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
     key = 'DNE'
     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
@@ -70,7 +92,7 @@ def test_lookup_lookup_fails():
 
 @responses.activate
 def test_lookup_node():
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/nodes', json=db['nodes'], status=200)
+    responses.add(get_nodes)
     sc = steelconnection.SConAPI('some.realm')
     item = db['nodes']['items'][0]
     key = item['serial']
@@ -80,7 +102,7 @@ def test_lookup_node():
 
 @responses.activate
 def test_lookup_org():
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/orgs', json=db['orgs'], status=200)
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
     item = db['orgs']['items'][0]
     key = item['name']
@@ -90,8 +112,8 @@ def test_lookup_org():
 
 @responses.activate
 def test_lookup_site():
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/orgs', json=db['orgs'], status=200)
-    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/org/org-12345/sites', json=db['sites'], status=200)
+    responses.add(get_orgs)
+    responses.add(get_sites_from_org)
     sc = steelconnection.SConAPI('some.realm')
     item = db['sites']['items'][0]
     key = item['name']
