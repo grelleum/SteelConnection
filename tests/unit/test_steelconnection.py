@@ -14,8 +14,8 @@ import fake_requests
 db = {
     'status': {
         'fw_versions': {'yogi': '2.10.2.16-yogi'},
-        'scm_version': '2.10.2',
-        'scm_build': '23',
+        'scm_version': '1.23.4',
+        'scm_build': '56',
     },
     'orgs': {
         'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]
@@ -222,13 +222,8 @@ def test_scon_url():
 @responses.activate
 def test_scm_version():
     """Test SConAPI.scm_version method."""
-    responses.add(
-        responses.GET,
-        'https://some.realm/api/scm.config/1.0/status',
-        json=db['status'],
-        status=200,
-    )
-    scm_version = '2.10.2.23'
+    responses.add(responses.GET, 'https://some.realm/api/scm.config/1.0/status', json=db['status'], status=200)
+    scm_version = '1.23.4.56'
     sc = steelconnection.SConAPI('some.realm')
     assert sc.scm_version == scm_version
 

@@ -8,8 +8,8 @@ import steelconnection
 db = {
     'status': {
         'fw_versions': {'yogi': '2.10.2.16-yogi'},
-        'scm_version': '2.10.2',
-        'scm_build': '23',
+        'scm_version': '1.23.4',
+        'scm_build': '56',
     },
     'orgs': {
         'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]
