@@ -213,9 +213,8 @@ def test_scon_put_exception():
 
 # Helper methods:
 
-def test_scon_url(monkeypatch):
+def test_scon_url():
     """Test SConAPI.url method."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('NO.REALM', api_version='999')
     assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
