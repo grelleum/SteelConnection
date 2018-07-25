@@ -39,10 +39,10 @@ from .lookup import _LookUp
 from .input_tools import get_username, get_password, get_password_once
 
 
-BINARY_DATA_MESSAGE = ' '.join((
-    "Binary data returned.",
+BINARY_DATA_MESSAGE = (
+    "Binary data returned. "
     "Use '.savefile(filename)' method or access using '.response.content'."
-))
+)
 
 
 class SConAPI(object):
