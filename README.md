@@ -188,6 +188,8 @@ sc = SConWithoutExceptions('REALM.riverbed.cc')
 
 #### Convenience functions:
 ##### Object-level Convenience functions:
+In addition to the `download_image` method mentioned above in the "Virtual Appliance Image Download:" section, there are several other functions provided to simplify common tasks.
+
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in, which you might not know off hand.  SteelConnection provides a collection of `lookup` functions to look up the resources based on known values.  These functions return the actual resouce.\
 Currently these are the available lookup functions:
 * `lookup.org(org_short_name)`
