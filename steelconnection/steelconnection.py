@@ -324,18 +324,36 @@ class SConAPI(object):
         :returns: Exception if non-200 response code else None.
         :rtype: BaseException, or None
         """
+        exceptions = {
+            400: BadRequest,
+            401: AuthenticationError,
+            404: InvalidResource,
+            502: APINotEnabled,
+        }
         if not response.ok:
+            exception = exceptions.get(response.status_code, RuntimeError)
             error = _error_string(response)
-            if response.status_code == 400:
-                raise BadRequest(error)
-            elif response.status_code == 401:
-                raise AuthenticationError(error)
-            elif response.status_code == 404:
-                raise InvalidResource(error)
-            elif response.status_code == 502:
-                raise APINotEnabled(error)
-            else:
-                raise RuntimeError(error)
+            raise exception(error)
+
+    # def _raise_exception(self, response):
+    #     r"""Return an appropriate exception if required.
+
+    #     :param requests.response response: Response from HTTP request.
+    #     :returns: Exception if non-200 response code else None.
+    #     :rtype: BaseException, or None
+    #     """
+    #     if not response.ok:
+    #         error = _error_string(response)
+    #         if response.status_code == 400:
+    #             raise BadRequest(error)
+    #         elif response.status_code == 401:
+    #             raise AuthenticationError(error)
+    #         elif response.status_code == 404:
+    #             raise InvalidResource(error)
+    #         elif response.status_code == 502:
+    #             raise APINotEnabled(error)
+    #         else:
+    #             raise RuntimeError(error)
 
     def __bool__(self):
         """Return the success of the last request in Python3.
