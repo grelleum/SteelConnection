@@ -149,8 +149,14 @@ Here are the rules to determine what gets returned by an API request:
 * If response.json() is True and the 'items' key _does not_ exist, then return a python dictionary.
 * If response.json() is False, return an empty python dictionary.
 
-##### Binary Data:
-In the event an API call returns binary data, as is the case with "GET /node/:nodeid/get_image", the return value of the call will include a message on how to access the binary data.  You can access it directly through the object's '.response.content' attribute, or by calling the '.savefile(filename)' method, which will save the binary data to a file.
+##### Virtual Appliance Image Download:
+There is a convenience method `.download_image` that can be used to download a virtual appliance image file.  You will need to first generate the image using the command:\
+`sc.post(f'/node/{node_id}/prepare_image', data={'type': 'kvm'})`\
+You should substitute your target hypervisor platform where I show `kvm`.
+After that, you can use `sc.download_image(node_id, filename)` command to download the image to the filename specification on your local drive.
+
+##### Other Binary Data:
+In the event another API call returns binary data, You can access it directly through the object's '.response.content' attribute, or by calling the '.savefile(filename)' method, which will save the binary data to a file.
 
 #### Errors and Exceptions:
 The **_Zen of Python_** states:
@@ -180,8 +186,8 @@ If you prefer to handle errors manually and do not want steelconnection to gener
 sc = SConWithoutExceptions('REALM.riverbed.cc')
 ```
 
-#### Convienience functions:
-##### Object-level Convienience functions:
+#### Convenience functions:
+##### Object-level Convenience functions:
 The SteelConnect Manager stores resources in a database with a uniquie identifier (id).  Many API calls require that you know the id number of the resource you are interested in, which you might not know off hand.  SteelConnection provides a collection of `lookup` functions to look up the resources based on known values.  These functions return the actual resouce.\
 Currently these are the available lookup functions:
 * `lookup.org(org_short_name)`
@@ -215,7 +221,7 @@ The site id can be found in a similar way, but since the same site name could ex
 >>>
 ```
 
-##### Module-level Convienience functions:
+##### Module-level Convenience functions:
 These functions are accessed directly from the imported module and can be used independently of the SteelConnect API.
 
 ###### Get Input:
