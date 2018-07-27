@@ -362,11 +362,13 @@ class SConAPI(object):
         :returns: Information about this object.
         :rtype: str
         """
+        # Order of operations:
+        # Checking self.scm_version will generate prompt for controller,
+        # if self.controller is None.
+        scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(
-                self.scm_version if self.scm_version else 'unavailable'
-            ),
+            "scm version: '{0}'".format(scm_version),
             "api version: '{0}'".format(self.api_version),
             "package version: '{0}'".format(self.__version__),
         ])
