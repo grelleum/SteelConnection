@@ -209,14 +209,18 @@ class SConAPI(object):
         with open(filename, 'wb') as fd:
             fd.write(self.response.content)
 
-    def download_image(self, nodeid, save_as=None):
+    def download_image(self, nodeid, save_as=None, verbose=False):
         r"""Download image and save to file.
 
         :param str nodeid: The node id of the appliance.
         :param str filename: The file path to download the image.
         """
         # Check status every second until file is ready.
+        if verbose:
+            print('Checking availability of image ', end='', flush=True)
         while True:
+            if verbose:
+                print('.', end='', flush=True)
             status = self.get('/node/{}/image_status'.format(nodeid))
             if status.get('status', False):
                 break
@@ -227,6 +231,8 @@ class SConAPI(object):
             save_as = source_file
         if os.path.isdir(save_as):
             save_as = os.path.join(save_as, source_file)
+        if verbose:
+            print('\nDownloading file as', save_as, end='', flush=True)
         # Stream file content and save to disk.
         self.response = self.requests.get(
             url=self.url('config', '/node/{}/get_image'.format(nodeid)),
@@ -238,6 +244,10 @@ class SConAPI(object):
         with open(save_as, 'wb') as fd:
             for chunk in self.response.iter_content(chunk_size=1024):
                 fd.write(chunk)
+                if verbose:
+                    print('.', end='', flush=True)
+        if verbose:
+            print('\nDownload complete.')
         return self.response
 
     @property
