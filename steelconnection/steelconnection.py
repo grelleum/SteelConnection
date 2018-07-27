@@ -38,7 +38,8 @@ from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource
 from .lookup import _LookUp
-from .input_tools import get_username, get_password, get_password_once
+from .input_tools import get_input, get_username
+from .input_tools import get_password, get_password_once
 
 
 BINARY_DATA_MESSAGE = (
@@ -60,7 +61,7 @@ class SConAPI(object):
 
     def __init__(
         self,
-        controller,
+        controller=None,
         username=None,
         password=None,
         api_version='1.0',
@@ -191,6 +192,10 @@ class SConAPI(object):
         :returns: Complete URL path to access resource.
         :rtype: str
         """
+        if not self.controller:
+            self.controller = get_input(
+                'Enter SteelConnect Manager fully qualified domain name: '
+            )
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.api_version, resource,
