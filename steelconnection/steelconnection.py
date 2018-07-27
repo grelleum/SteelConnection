@@ -79,7 +79,7 @@ class SConAPI(object):
         self.__username = username
         self.__password = password
         self.api_version = api_version
-        self.session = requests.Session()
+        self.requests = requests.Session()
         self.result = None
         self.response = None
         self.headers = {
@@ -99,7 +99,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.get,
+            request_method=self.requests.get,
             url=self.url('config', resource),
             params=params,
         )
@@ -117,7 +117,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.get,
+            request_method=self.requests.get,
             url=self.url('reporting', resource),
             params=params,
         )
@@ -136,7 +136,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.delete,
+            request_method=self.requests.delete,
             url=self.url('config', resource),
             params=params,
             data=data,
@@ -155,7 +155,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.post,
+            request_method=self.requests.post,
             url=self.url('config', resource),
             data=data,
         )
@@ -174,7 +174,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.put,
+            request_method=self.requests.put,
             url=self.url('config', resource),
             params=params,
             data=data,
@@ -228,7 +228,7 @@ class SConAPI(object):
         if os.path.isdir(filepath):
             filepath = os.path.join(filepath, source_file)
         # Stream file content and save to disk.
-        self.response = self.session.get(
+        self.response = self.requests.get(
             url=self.url('config', '/node/{}/get_image'.format(nodeid)),
             auth=self.__auth,
             headers=self.headers,
