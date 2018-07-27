@@ -98,6 +98,6 @@ def test_request_prompts_password_when_username_provided(monkeypatch):
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A')
-    assert sc._request(sc.session.get, 'url')
+    assert sc._request(sc.requests.get, 'url')
     sc.get('status')
     assert sc.response.auth == ('A', 'mypassword')
