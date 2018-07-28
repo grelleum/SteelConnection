@@ -100,7 +100,7 @@ class SConAPI(object):
         """
         self.response = self._request(
             request_method=self.requests.get,
-            url=self.url('config', resource),
+            url=self.make_url('config', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -118,7 +118,7 @@ class SConAPI(object):
         """
         self.response = self._request(
             request_method=self.requests.get,
-            url=self.url('reporting', resource),
+            url=self.make_url('reporting', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -137,7 +137,7 @@ class SConAPI(object):
         """
         self.response = self._request(
             request_method=self.requests.delete,
-            url=self.url('config', resource),
+            url=self.make_url('config', resource),
             params=params,
             data=data,
         )
@@ -156,7 +156,7 @@ class SConAPI(object):
         """
         self.response = self._request(
             request_method=self.requests.post,
-            url=self.url('config', resource),
+            url=self.make_url('config', resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -175,7 +175,7 @@ class SConAPI(object):
         """
         self.response = self._request(
             request_method=self.requests.put,
-            url=self.url('config', resource),
+            url=self.make_url('config', resource),
             params=params,
             data=data,
         )
@@ -184,7 +184,7 @@ class SConAPI(object):
             self._raise_exception(self.response)
         return self.result
 
-    def url(self, api, resource):
+    def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
         :param str api: api route, usually 'config' or 'reporting'.
@@ -235,7 +235,7 @@ class SConAPI(object):
             print('\nDownloading file as', save_as, end='', flush=True)
         # Stream file content and save to disk.
         self.response = self.requests.get(
-            url=self.url('config', '/node/{}/get_image'.format(nodeid)),
+            url=self.make_url('config', '/node/{}/get_image'.format(nodeid)),
             auth=self.__auth,
             headers=self.headers,
             params={'file': source_file},

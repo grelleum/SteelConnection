@@ -275,7 +275,8 @@ def test_scon_put_exception():
 def test_scon_url():
     """Test SConAPI.url method."""
     sc = steelconnection.SConAPI('NO.REALM', api_version='999')
-    assert sc.url('FAKE', 'PATH') == 'https://NO.REALM/api/scm.FAKE/999/PATH'
+    url = sc.make_url('FAKE', 'PATH')
+    assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
 @responses.activate
