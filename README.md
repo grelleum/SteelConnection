@@ -106,7 +106,7 @@ These methods will build the request to include api version, auth, etc, so you o
 * put: Use to edit or update some existing resource.  Requires additional data in the payload.
 * delete: Delete an existing resource.
 
-##### Two APIs:
+##### A Tale of Two APIs:
 Riverbed divides the REST API into two APIs:
 * Config: used to make configurations changes and get information about SteelConnect resources.\
 https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
@@ -153,7 +153,7 @@ Here are the rules to determine what gets returned by an API request:
 There is a convenience method `.download_image` that can be used to download a virtual appliance image file.  You will need to first generate the image using the command:\
 `sc.post(f'/node/{node_id}/prepare_image', data={'type': 'kvm'})`\
 You should substitute your target hypervisor platform where I show `kvm`.
-After that, you can use `sc.download_image(node_id, filename)` command to download the image to the filename specification on your local drive.
+After that, you can use `sc.download_image(node_id, save_as='filename.zip')` command to download the image to the filename specification on your local drive.  The `download_image` will print status messages while checking the status and downloading the file.  To disable status messages, use the `quiet=True` parameter after the filename.
 
 ##### Other Binary Data:
 In the event another API call returns binary data, You can access it directly through the object's '.response.content' attribute, or by calling the '.savefile(filename)' method, which will save the binary data to a file.
