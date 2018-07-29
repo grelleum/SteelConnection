@@ -271,14 +271,47 @@ class SConAPI(object):
                     self.__scm_version = 'unavailable'
         return self.__scm_version
 
+    # @property
+    # def summary(self):   ##############################################
+    #     """Return status of the previous API request.
+
+    #     :returns: Details regarding previous API request.
+    #     :rtype: str
+    #     """
+    #     return LastRequest(self.response)
+
     @property
-    def summary(self):
-        """Return status of the previous API request.
+    def sent(self):
+        """Return summary of the previous API request.
 
         :returns: Details regarding previous API request.
         :rtype: str
         """
-        return LastRequest(self.response)
+        return '{}: {}\nData Sent: {}'.format(
+            self.response.request.method,
+            self.response.request.url,
+            repr(self.response.request.body),
+        )
+
+    @property
+    def answer(self):
+        """Return summary of the previous API response.
+
+        :returns: Details regarding previous API request.
+        :rtype: str
+        """
+        error_message = None
+        if not self.response.ok and self.response.text:
+            try:
+                details = self.response.json()
+                error_message = details.get('error', {}).get('message')
+            except ValueError:
+                pass
+        return 'Status: {} - {}\nError: {}'.format(
+            self.response.status_code,
+            self.response.reason,
+            repr(error_message),
+        )
 
     @property
     def __auth(self):
@@ -356,7 +389,7 @@ class SConAPI(object):
         }
         if not response.ok:
             exception = exceptions.get(response.status_code, RuntimeError)
-            raise exception(LastRequest(response).fail)
+            raise exception('\n'.join((self.answer, self.sent)))
 
     def __bool__(self):
         """Return the success of the last request in Python3.
@@ -439,9 +472,16 @@ class SConExitOnError(SConAPI):
         :rtype: None
         """
         if not response.ok:
-            print(LastRequest(response).fail, file=sys.stderr)
+            print(
+                '\n'.join((self.answer, self.sent)),
+                file=sys.stderr
+            )
             sys.exit(1)
 
+
+
+
+##################################
 
 class LastRequest(object):
     def __init__(self, response):
