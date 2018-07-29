@@ -75,7 +75,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.controller = controller
+        self.__controller = controller
         self.__username = username
         self.__password = password
         self.api_version = api_version
@@ -89,6 +89,14 @@ class SConAPI(object):
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
+
+    @property
+    def controller(self):
+        if not self.__controller:
+            self.__controller = get_input(
+                'Enter SteelConnect Manager fully qualified domain name: '
+            )
+        return self.__controller
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
@@ -192,10 +200,6 @@ class SConAPI(object):
         :returns: Complete URL path to access resource.
         :rtype: str
         """
-        if not self.controller:
-            self.controller = get_input(
-                'Enter SteelConnect Manager fully qualified domain name: '
-            )
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
             self.controller, api, self.api_version, resource,
@@ -404,9 +408,6 @@ class SConAPI(object):
         :returns: Information about this object.
         :rtype: str
         """
-        # Order of operations:
-        # Checking self.scm_version will generate prompt for controller,
-        # if self.controller is None.
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
@@ -422,9 +423,6 @@ class SConAPI(object):
         :returns: Information about this object.
         :rtype: str
         """
-        # Order of operations:
-        # Must check version before getting controller name.
-        #  (perhaps creating controller as @property will resolve this?)
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = [
             'SteelConnection:',
