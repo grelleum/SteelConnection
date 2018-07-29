@@ -6,11 +6,10 @@ import steelconnection
 
 
 print("Note: SteelConnect Realm is usually in the form 'realm.riverbed.cc'")
-realm = steelconnection.get_input('Please enter your SteelConnect Realm: ')
-sc = steelconnection.SConAPI(realm)
+sc = steelconnection.SConAPI()
 
 appliance = steelconnection.get_input(
-    'Please enter the appliance serial number: '
+    'Enter the appliance serial number: '
 )
 node = sc.lookup.node(appliance)
 
