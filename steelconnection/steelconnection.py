@@ -271,15 +271,6 @@ class SConAPI(object):
                     self.__scm_version = 'unavailable'
         return self.__scm_version
 
-    # @property
-    # def summary(self):   ##############################################
-    #     """Return status of the previous API request.
-
-    #     :returns: Details regarding previous API request.
-    #     :rtype: str
-    #     """
-    #     return LastRequest(self.response)
-
     @property
     def sent(self):
         """Return summary of the previous API request.
@@ -477,83 +468,3 @@ class SConExitOnError(SConAPI):
                 file=sys.stderr
             )
             sys.exit(1)
-
-
-
-
-##################################
-
-class LastRequest(object):
-    def __init__(self, response):
-        self.ok = response.ok
-        self.method = response.request.method
-        self.url = response.request.url
-        self.body = response.request.body
-        self.status_code = response.status_code
-        self.reason = response.reason
-        self.error_message = None
-        if not response.ok and response.text:
-            try:
-                details = response.json()
-                self.error_message = details.get('error', {}).get('message')
-            except ValueError:
-                pass
-
-    def __repr__(self):
-        details = ', '.join([
-            "method: '{}'".format(self.method),
-            "url: '{}'".format(self.url),
-            "body: '{}'".format(self.body),
-            "status_code: '{}'".format(self.status_code),
-            "reason: '{}'".format(self.reason),
-            "error_message: '{}'".format(self.error_message),
-        ])
-        return '{}({})'.format(self.__class__.__name__, details)
-
-    def __str__(self):
-        return '{}: {}\nData Sent: {}\nStatus: {} - {}\nError: {}'.format(
-            self.method,
-            self.url,
-            repr(self.body),
-            self.status_code,
-            self.reason,
-            repr(self.error_message),
-        )
-
-    @property
-    def fail(self):
-        # This requires changes to the format - add method, etc.
-        return '' if self.ok else (
-            '{} - {}{}\nURL: {}\nData Sent: {}'.format(
-                self.status_code,
-                self.reason,
-                '\nDetails: ' + self.error_message if self.error_message else '',
-                self.url,
-                repr(self.body),
-            )
-        )
-
-
-def _error_string(response):
-    return LastRequest(response).fail
-#     r"""Summarize error conditions and return as a string.
-
-#     :param requests.response response: Response from HTTP request.
-#     :returns: A multiline string summarizing the error.
-#     :rtype: str
-#     """
-#     details = ''
-#     if response.text:
-#         try:
-#             details = response.json()
-#             details = details.get('error', {}).get('message', '')
-#         except ValueError:
-#             pass
-#     error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
-#         response.status_code,
-#         response.reason,
-#         '\nDetails: ' + details if details else '',
-#         response.url,
-#         repr(response.request.body),
-#     )
-#     return error
