@@ -92,7 +92,7 @@ class SConAPI(object):
 
     @property
     def controller(self):
-        if not self.__controller:
+        while not self.__controller:
             self.__controller = get_input(
                 'Enter SteelConnect Manager fully qualified domain name: '
             )
