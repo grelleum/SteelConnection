@@ -9,54 +9,48 @@ import fake_requests
 
 # Raise Exceptions:
 
-def test_raise_exception_no_exception(monkeypatch):
+def test_raise_exception_no_exception():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 201, {})
     sc._raise_exception(sc.response) == None
 
 
-def test_raise_exception_RuntimeError(monkeypatch):
+def test_raise_exception_RuntimeError():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 777, {})
     with pytest.raises(RuntimeError):
         sc._raise_exception(sc.response)
 
 
-def test_raise_exception_BadRequest(monkeypatch):
+def test_raise_exception_BadRequest():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 400, {})
     with pytest.raises(steelconnection.exceptions.BadRequest):
         sc._raise_exception(sc.response)
 
 
-def test_raise_exception_AuthenticationError(monkeypatch):
+def test_raise_exception_AuthenticationError():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 401, {})
     with pytest.raises(steelconnection.exceptions.AuthenticationError):
         sc._raise_exception(sc.response)
 
 
-def test_raise_exception_InvalidResource(monkeypatch):
+def test_raise_exception_InvalidResource():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 404, {})
     with pytest.raises(steelconnection.exceptions.InvalidResource):
         sc._raise_exception(sc.response)
 
 
-def test_raise_exception_APINotEnabled(monkeypatch):
+def test_raise_exception_APINotEnabled():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 502, {})
     with pytest.raises(steelconnection.exceptions.APINotEnabled):
         sc._raise_exception(sc.response)
@@ -64,10 +58,9 @@ def test_raise_exception_APINotEnabled(monkeypatch):
 
 # Alternate Classes:
 
-def test_raise_exception_without_exceptions(monkeypatch):
+def test_raise_exception_without_exceptions():
     """_raise_exception should raise the correct exceptions based on status."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConWithoutExceptions('some.realm')
+    sc = steelconnection.SConWithoutExceptions()
     sc.response = fake_requests.Fake_Response('', 502, {})
     try:
         result = sc._raise_exception(sc.response)
@@ -77,9 +70,8 @@ def test_raise_exception_without_exceptions(monkeypatch):
         assert result == None
 
 
-def test_exit_when_raise_exception_with_exit_on_error(capsys, monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConExitOnError('some.realm')
+def test_exit_when_raise_exception_with_exit_on_error(capsys):
+    sc = steelconnection.SConExitOnError()
     sc.response = fake_requests.Fake_Response('', 502, {})
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         sc._raise_exception(sc.response)
