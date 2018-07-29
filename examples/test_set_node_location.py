@@ -3,7 +3,7 @@
 """
 test_set_node_location.py
 
-Pytest functions intended to validate examples/set_node_location.py
+Pytest functions intended to validate examples/set_node_location.py.
 This relies on a environment variables to complete.
 """
 
