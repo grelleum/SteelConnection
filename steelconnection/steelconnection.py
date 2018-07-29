@@ -416,6 +416,27 @@ class SConAPI(object):
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
 
+    def __str__(self):
+        """Return a string with information about this object instance.
+
+        :returns: Information about this object.
+        :rtype: str
+        """
+        # Order of operations:
+        # Must check version before getting controller name.
+        #  (perhaps creating controller as @property will resolve this?)
+        scm_version = self.scm_version if self.scm_version else 'unavailable'
+        details = [
+            'SteelConnection:',
+            "controller: '{0}'".format(self.controller),
+            "scm version: '{0}'".format(scm_version),
+            "api version: '{0}'".format(self.api_version),
+            "package version: '{0}'".format(self.__version__),
+        ]
+        details.extend(self.sent.splitlines())
+        details.extend(self.answer.splitlines())
+        return '\n>> '.join(details)
+
 
 class SConWithoutExceptions(SConAPI):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
