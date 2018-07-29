@@ -4,3 +4,7 @@ Test against various versions that may have issues with requests / SSL:
 better way to store authentication:  Keyring Support??
 
 Add input validation everywhere.
+
+Docstrings need additional usage info.
+
+Possibly incorporate pre-built argparser as convenience object.
