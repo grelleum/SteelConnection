@@ -221,7 +221,7 @@ class SConAPI(object):
         """
         # Check status every second until file is ready.
         if not quiet:
-            print('Checking availability of image ', end='', flush=True)
+            print('Checking availability of image', end=' ', flush=True)
         while True:
             if not quiet:
                 print('.', end='', flush=True)
@@ -236,7 +236,7 @@ class SConAPI(object):
         if os.path.isdir(save_as):
             save_as = os.path.join(save_as, source_file)
         if not quiet:
-            print('\nDownloading file as', save_as, end='', flush=True)
+            print('\nDownloading file as', save_as, end=' ', flush=True)
         # Stream file content and save to disk.
         self.response = self.requests.get(
             url=self.make_url('config', '/node/{}/get_image'.format(nodeid)),
