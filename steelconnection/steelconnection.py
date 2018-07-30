@@ -246,7 +246,7 @@ class SConAPI(object):
             stream=True,
         )
         with open(save_as, 'wb') as fd:
-            for index, chunk in enumerate(self.response.iter_content(chunk_size=1024)):
+            for index, chunk in enumerate(self.response.iter_content(chunk_size=65536)):
                 fd.write(chunk)
                 if not quiet and not index % 1000:
                     print('.', end='', flush=True)
