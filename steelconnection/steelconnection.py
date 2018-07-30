@@ -6,7 +6,7 @@ Convienience objects for making REST API calls
 to Riverbed SteelConnect Manager.
 
 Usage:
-    sconnect = steelconnection.SConAPI(scm_name, username, password)
+    sc = steelconnection.SConAPI(scm_name, username, password)
 
     Optional keyword api_version can be used to specify an API version number.
     Currently there is only one API version: '1.0'.
@@ -15,9 +15,9 @@ Usage:
     you can use the object to make calls to the REST API.
 
     For example, to get all nodes in the realm:
-    nodes = sconnect.config.get('nodes')
+    nodes = sc.config.get('nodes')
     ... or in a specifc org:
-    nodes = sconnect.config.get('/org/' + orgid + '/nodes')
+    nodes = sc.config.get('/org/' + orgid + '/nodes')
 
     Any call that does not result in a success (HTTP status code 200)
     will raise an exception, so calls should be wrapped in a try/except pair.
