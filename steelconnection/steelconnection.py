@@ -236,7 +236,7 @@ class SConAPI(object):
                     self.response.iter_content(chunk_size=65536)
                 ):
                 fd.write(chunk)
-                if not quiet and not index % 1000:
+                if not quiet and not index % 50:
                     print('.', end='', flush=True)
         if not quiet:
             print('\nDownload complete.')
