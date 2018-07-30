@@ -1,14 +1,14 @@
 # coding: utf-8
 
 """
-This is a set of pytest functions intended to validate the examples.
+test_create_site.py
+
+Pytest functions intended to validate examples/create_site.py.
 This relies on a environment variables to complete.
 """
 
 import os
-import subprocess
 import sys
-import pytest
 import steelconnection
 
 
@@ -16,40 +16,10 @@ username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 realm = os.environ.get('SCONREALM')
 org_name = os.environ.get('SCONORG')
+appliance = os.environ.get('SCONAPPLIANCE')
 
+# dir_path = os.path.dirname(os.path.realpath(__file__))
 
-# examples/set_node_location.py
-
-def test_clear_location_fields():
-    sc = steelconnection.SConAPI(realm, username, password)
-    org = sc.lookup.org(org_name)
-    assert org['id']
-    nodes = sc.get('org/' + org['id'] + '/nodes')
-    assert nodes
-    for node in nodes:
-        node['location'] = None
-        response = sc.put('node/' + node['id'], data=node)
-        assert response['location'] is None
-
-
-def test_set_node_location():
-    script = 'examples/set_node_location.py'
-    command = 'python "{}" "{}" "{}" -u="{}" -p="{}"'.format(
-        script, realm, org_name, username, password,
-    )
-    output = subprocess.check_output(command, shell=True)
-    assert output
-
-
-def test_populated_location_fields():
-    sc = steelconnection.SConAPI(realm, username, password)
-    org = sc.lookup.org(org_name)
-    nodes =  sc.get('org/' + org['id'] + '/nodes')
-    for node in nodes:
-        assert node['location'] is not None
-
-
-# examples/create_site.py
 
 def test_create_site(capsys, monkeypatch):
     if sys.version_info.major < 3:
@@ -80,4 +50,3 @@ def test_create_site(capsys, monkeypatch):
     sc.delete('site/' + site['id'])
     site = sc.lookup.site(create_site.new_site['name'], org['id'])
     assert site is None
-

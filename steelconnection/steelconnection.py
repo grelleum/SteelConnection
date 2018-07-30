@@ -27,8 +27,10 @@ from __future__ import print_function
 
 import getpass
 import json
+import os
 import requests
 import sys
+import time
 import traceback
 import warnings
 
@@ -36,11 +38,12 @@ from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource
 from .lookup import _LookUp
-from .input_tools import get_username, get_password, get_password_once
+from .input_tools import get_input, get_username
+from .input_tools import get_password, get_password_once
 
 
-BINARY_DATA_MESSAGE = ' '.join(
-    "Binary data returned.\n"
+BINARY_DATA_MESSAGE = (
+    "Binary data returned. "
     "Use '.savefile(filename)' method or access using '.response.content'."
 )
 
@@ -58,7 +61,7 @@ class SConAPI(object):
 
     def __init__(
         self,
-        controller,
+        controller=None,
         username=None,
         password=None,
         api_version='1.0',
@@ -72,11 +75,11 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.controller = controller
+        self.__controller = controller
         self.__username = username
         self.__password = password
         self.api_version = api_version
-        self.session = requests.Session()
+        self.requests = requests.Session()
         self.result = None
         self.response = None
         self.headers = {
@@ -87,6 +90,14 @@ class SConAPI(object):
         self.lookup = _LookUp(self)
         self.__scm_version = None
 
+    @property
+    def controller(self):
+        while not self.__controller:
+            self.__controller = get_input(
+                'Enter SteelConnect Manager fully qualified domain name: '
+            )
+        return self.__controller
+
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
 
@@ -96,8 +107,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.get,
-            url=self.url('config', resource),
+            request_method=self.requests.get,
+            url=self.make_url('config', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -114,8 +125,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.get,
-            url=self.url('reporting', resource),
+            request_method=self.requests.get,
+            url=self.make_url('reporting', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -133,8 +144,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.delete,
-            url=self.url('config', resource),
+            request_method=self.requests.delete,
+            url=self.make_url('config', resource),
             params=params,
             data=data,
         )
@@ -152,8 +163,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.post,
-            url=self.url('config', resource),
+            request_method=self.requests.post,
+            url=self.make_url('config', resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -171,8 +182,8 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.session.put,
-            url=self.url('config', resource),
+            request_method=self.requests.put,
+            url=self.make_url('config', resource),
             params=params,
             data=data,
         )
@@ -181,7 +192,7 @@ class SConAPI(object):
             self._raise_exception(self.response)
         return self.result
 
-    def url(self, api, resource):
+    def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
         :param str api: api route, usually 'config' or 'reporting'.
@@ -199,8 +210,49 @@ class SConAPI(object):
 
         :param str filename: Where to save the response.content.
         """
-        with open(filename, 'wb') as f:
-            f.write(self.response.content)
+        with open(filename, 'wb') as fd:
+            fd.write(self.response.content)
+
+    def download_image(self, nodeid, save_as=None, quiet=False):
+        r"""Download image and save to file.
+
+        :param str nodeid: The node id of the appliance.
+        :param str filename: The file path to download the image.
+        """
+        # Check status every second until file is ready.
+        if not quiet:
+            print('Checking availability of image ', end='', flush=True)
+        while True:
+            if not quiet:
+                print('.', end='', flush=True)
+            status = self.get('/node/{}/image_status'.format(nodeid))
+            if status.get('status', False):
+                break
+            time.sleep(1)
+        # Get file name and determine destination file path.
+        source_file = status['image_file']
+        if save_as is None:
+            save_as = source_file
+        if os.path.isdir(save_as):
+            save_as = os.path.join(save_as, source_file)
+        if not quiet:
+            print('\nDownloading file as', save_as, end='', flush=True)
+        # Stream file content and save to disk.
+        self.response = self.requests.get(
+            url=self.make_url('config', '/node/{}/get_image'.format(nodeid)),
+            auth=self.__auth,
+            headers=self.headers,
+            params={'file': source_file},
+            stream=True,
+        )
+        with open(save_as, 'wb') as fd:
+            for chunk in self.response.iter_content(chunk_size=1024):
+                fd.write(chunk)
+                if not quiet:
+                    print('.', end='', flush=True)
+        if not quiet:
+            print('\nDownload complete.')
+        return self.response
 
     @property
     def scm_version(self):
@@ -215,9 +267,46 @@ class SConAPI(object):
             except InvalidResource:
                 self.__scm_version = 'unavailable'
             else:
-                version = status.get('scm_version'), status.get('scm_build')
-                self.__scm_version = '.'.join(s for s in version if s)
+                version = status.get('scm_version')
+                build = status.get('scm_build')
+                if version and build:
+                    self.__scm_version = '.'.join((version, build))
+                else:
+                    self.__scm_version = 'unavailable'
         return self.__scm_version
+
+    @property
+    def sent(self):
+        """Return summary of the previous API request.
+
+        :returns: Details regarding previous API request.
+        :rtype: str
+        """
+        return '{}: {}\nData Sent: {}'.format(
+            self.response.request.method,
+            self.response.request.url,
+            repr(self.response.request.body),
+        )
+
+    @property
+    def answer(self):
+        """Return summary of the previous API response.
+
+        :returns: Details regarding previous API request.
+        :rtype: str
+        """
+        error_message = None
+        if not self.response.ok and self.response.text:
+            try:
+                details = self.response.json()
+                error_message = details.get('error', {}).get('message')
+            except ValueError:
+                pass
+        return 'Status: {} - {}\nError: {}'.format(
+            self.response.status_code,
+            self.response.reason,
+            repr(error_message),
+        )
 
     @property
     def __auth(self):
@@ -287,18 +376,15 @@ class SConAPI(object):
         :returns: Exception if non-200 response code else None.
         :rtype: BaseException, or None
         """
+        exceptions = {
+            400: BadRequest,
+            401: AuthenticationError,
+            404: InvalidResource,
+            502: APINotEnabled,
+        }
         if not response.ok:
-            error = _error_string(response)
-            if response.status_code == 400:
-                raise BadRequest(error)
-            elif response.status_code == 401:
-                raise AuthenticationError(error)
-            elif response.status_code == 404:
-                raise InvalidResource(error)
-            elif response.status_code == 502:
-                raise APINotEnabled(error)
-            else:
-                raise RuntimeError(error)
+            exception = exceptions.get(response.status_code, RuntimeError)
+            raise exception('\n'.join((self.answer, self.sent)))
 
     def __bool__(self):
         """Return the success of the last request in Python3.
@@ -322,15 +408,32 @@ class SConAPI(object):
         :returns: Information about this object.
         :rtype: str
         """
+        scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = ', '.join([
             "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(
-                self.scm_version if self.scm_version else 'unavailable'
-            ),
+            "scm version: '{0}'".format(scm_version),
             "api version: '{0}'".format(self.api_version),
             "package version: '{0}'".format(self.__version__),
         ])
         return '{0}({1})'.format(self.__class__.__name__, details)
+
+    def __str__(self):
+        """Return a string with information about this object instance.
+
+        :returns: Information about this object.
+        :rtype: str
+        """
+        scm_version = self.scm_version if self.scm_version else 'unavailable'
+        details = [
+            'SteelConnection:',
+            "controller: '{0}'".format(self.controller),
+            "scm version: '{0}'".format(scm_version),
+            "api version: '{0}'".format(self.api_version),
+            "package version: '{0}'".format(self.__version__),
+        ]
+        details.extend(self.sent.splitlines())
+        details.extend(self.answer.splitlines())
+        return '\n>> '.join(details)
 
 
 class SConWithoutExceptions(SConAPI):
@@ -379,30 +482,8 @@ class SConExitOnError(SConAPI):
         :rtype: None
         """
         if not response.ok:
-            error = _error_string(response)
-            print(error, file=sys.stderr)
+            print(
+                '\n'.join((self.answer, self.sent)),
+                file=sys.stderr
+            )
             sys.exit(1)
-
-
-def _error_string(response):
-    r"""Summarize error conditions and return as a string.
-
-    :param requests.response response: Response from HTTP request.
-    :returns: A multiline string summarizing the error.
-    :rtype: str
-    """
-    details = ''
-    if response.text:
-        try:
-            details = response.json()
-            details = details.get('error', {}).get('message', '')
-        except ValueError:
-            pass
-    error = '{0} - {1}{2}\nURL: {3}\nData Sent: {4}'.format(
-        response.status_code,
-        response.reason,
-        '\nDetails: ' + details if details else '',
-        response.url,
-        repr(response.request.body),
-    )
-    return error

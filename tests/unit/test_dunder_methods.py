@@ -1,73 +1,71 @@
 # coding: utf-8
 
 import pytest
-import requests
+import responses
 import steelconnection
-import fake_requests
+
+
+class NameSpace():
+    def __init__(self, ok):
+        self.ok = ok
 
 
 # Dunder Methods:
 
-def test_scon_returns_true(monkeypatch):
+def test_scon_returns_true():
     """Test object returns True when reponse is OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = True
+    sc.response = NameSpace(ok=True)
     assert bool(sc)
 
 
-def test_scon_returns_false(monkeypatch):
+def test_scon_returns_false():
     """Test object returns False when reponse is not OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = False
+    sc.response = NameSpace(ok=False)
     assert not bool(sc)
 
 
-def test_scon_bool_returns_true(monkeypatch):
+def test_scon_bool_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = True
+    sc.response = NameSpace(ok=True)
     assert sc.__bool__()
 
 
-def test_scon_bool_returns_false(monkeypatch):
+def test_scon_bool_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = False
+    sc.response = NameSpace(ok=False)
     assert not sc.__bool__()
 
 
-def test_scon_nonzero_returns_true(monkeypatch):
+def test_scon_nonzero_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = True
+    sc.response = NameSpace(ok=True)
     assert sc.__nonzero__()
 
 
-def test_scon_nonzero_returns_false(monkeypatch):
+def test_scon_nonzero_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm')
-    sc.get('orgs')
-    sc.response.ok = False
+    sc.response = NameSpace(ok=False)
     assert not sc.__nonzero__()
 
 
-def test_scon_repr(monkeypatch):
+@responses.activate
+def test_scon_repr():
     """Test __repr__ returns a proper string."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    realm = 'MYREALM'
-    scm_version = '.'.join(fake_requests.responses['status'].values())
-    api_version = 999
+    responses.add(
+        responses.GET,
+        'https://some.realm/api/scm.config/1.0/status',
+        json={'scm_version': '1.23.4', 'scm_build': '56'},
+        status=200,
+    )
+    realm = 'some.realm'
+    scm_version = '1.23.4.56'
+    api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = (
         "SConAPI(controller: '{0}', scm version: '{1}', "

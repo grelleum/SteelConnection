@@ -3,14 +3,15 @@
 
 import pytest
 import subprocess
+import sys
 import steelconnection
 
 
-def test_import_dumder_all():
+def test_import_dunder_all():
     expected = set((
         'SConAPI', 'SConWithoutExceptions', 'SConExitOnError',
-        'AuthenticationError', 'APINotEnabled', 
-        'BadRequest', 'InvalidResource', 
+        'AuthenticationError', 'APINotEnabled',
+        'BadRequest', 'InvalidResource',
         'get_input', 'get_username', 'get_password',
     ))
     set(steelconnection.__all__) == expected
@@ -19,9 +20,10 @@ def test_import_dumder_all():
 def test_import_on_command_line():
     output = subprocess.check_output('python -m steelconnection', shell=True)
     output = output.decode()
-    expected = u'SteelConnection version: {0}\nProject home: {1}\n'.format(
-        steelconnection.__version__,
-        steelconnection.__url__,
-    )
+    lines = [
+        'Python version: ' + '.'.join(str(x) for x in sys.version_info[:3]),
+        'SteelConnection version: ' + steelconnection.__version__,
+        'Project home: ' + steelconnection.__url__,
+    ]
+    expected = u'\n'.join(lines) + '\n'
     assert repr(output) == repr(expected)
-    

@@ -42,6 +42,9 @@ def main(argv):
     sites = sc.get('org/{}/sites'.format(org['id']))
     print(status('site', sites, "in '{0}'".format(organization)))
 
+    # Create a map of site id to site name.
+    site_names = {site['id']:site['name'] for site in sites}
+
     # Get list of all nodes in target organization.
     nodes = sc.get('org/{}/nodes'.format(org['id']))
     print(status('node', nodes, "in '{0}'".format(organization)))
@@ -55,36 +58,26 @@ def main(argv):
     print(status('node', nodes, 'with no specified location'))
 
     # Update location for the remaining nodes.
-    return update_nodes(nodes, sc, organization, org['id'], sites)
+    return update_nodes(nodes, sc, organization, org['id'], site_names)
 
 
-def update_nodes(nodes, sc, organization, org_id, sites):
+def update_nodes(nodes, sc, organization, org_id, site_names):
     """Loop through nodes and push location to SCM where applicable."""
     for node in nodes:
-        print('\n' + '=' * 79, '\n')
+        print('=' * 75)
         print('Node:', node['id'], node['serial'], node['model'])
         print('org:', node['org'], organization)
         print('site:', node['site'])
         print('location:', node['location'])
-        found_site = [site for site in sites if site['id'] == node['site']]
-        if not found_site:
-            print('Could not locate site id:', node['site'])
-            continue
-        site = found_site[0]
-        print("\nSetting location to '{0}'".format(site['name']))
-        payload = {
-            'id': node['id'],
-            'org': node['org'],
-            'site': node['site'],
-            'serial': node['serial'],
-            'model': node['model'],
-            'location': site['name'],
-        }
-        resource = 'node/' + node['id']
-        result = sc.put(resource, data=payload)
-        response = sc.response
-        print('Response:', response.status_code, response.reason, '\n')
-        print(result)
+
+        site_id = node['site']
+        site_name = site_names[site_id]
+        print("\nSetting location to '{0}'".format(site_name))
+        node['location'] = site_name
+        result = sc.put('node/' + node['id'], data=node)
+        print('updated location:', result['location'])
+        print('Response:', sc.response.status_code, sc.response.reason, '\n')
+        print()
 
 
 def status(category, values, suffix=''):

@@ -52,6 +52,7 @@ def get_text(data):
 class Fake_Request(object):
 
     def __init__(self, url, data):
+        self.method = 'FAKE'
         self.url = url
         self.body = get_text(data)
 

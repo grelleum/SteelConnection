@@ -1,60 +1,131 @@
 # coding: utf-8
 
-import requests
 import pytest
+import responses
 import steelconnection
-import fake_requests
 
 
-def test_lookup_lookup_success(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+db = {
+    'status': {
+        'fw_versions': {'yogi': '2.10.2.16-yogi'},
+        'scm_version': '1.23.4',
+        'scm_build': '56',
+    },
+    'orgs': {
+        'items': [
+            {
+                'id': 'org-12345',
+                'name': 'WineAndCheese',
+            }
+        ]
+    },
+    'sites': {
+        'items': [
+            {
+                'id': 'site-12345',
+                'org': 'org-12345',
+                'city': 'Uptown, US',
+                'name': 'UP',
+            },
+            {
+                'id': 'site-56789',
+                'org': 'org-56789',
+                'city': 'Downtown, US',
+                'name': 'DOWN',
+            },
+        ],
+    },
+    'nodes': {
+        'items': [
+             {
+                'id': 'node-12345',
+                'org': 'org-12345',
+                'site': 'site-12345',
+                'serial': 'XNABCD0123456789',
+                'model': 'yogi'
+             }
+        ],
+    }
+}
+
+
+get_nodes = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/nodes',
+    json=db['nodes'],
+    status=200,
+)
+
+get_sites_from_org = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/org/org-12345/sites',
+    json=db['sites'],
+    status=200,
+)
+
+get_orgs = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/orgs',
+    json=db['orgs'],
+    status=200,
+)
+
+
+@responses.activate
+def test_lookup_lookup_success():
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
-    item = sc.get('orgs')[0]
+    item = db['orgs']['items'][0]
     key = item['name']
     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
     assert result == item
 
 
-def test_lookup_lookup_fails(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+@responses.activate
+def test_lookup_lookup_fails():
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
     key = 'DNE'
     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
     assert result is None
-    
 
-def test_lookup_node(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+
+@responses.activate
+def test_lookup_node():
+    responses.add(get_nodes)
     sc = steelconnection.SConAPI('some.realm')
-    item = sc.get('nodes')[0]
+    item = db['nodes']['items'][0]
     key = item['serial']
     result = sc.lookup.node(key)
     assert result == item
 
 
-def test_lookup_org(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+@responses.activate
+def test_lookup_org():
+    responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
-    item = sc.get('orgs')[0]
+    item = db['orgs']['items'][0]
     key = item['name']
     result = sc.lookup.org(key)
     assert result == item
 
 
-def test_lookup_site(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+@responses.activate
+def test_lookup_site():
+    responses.add(get_orgs)
+    responses.add(get_sites_from_org)
     sc = steelconnection.SConAPI('some.realm')
-    item = sc.get('sites')[0]
+    item = db['sites']['items'][0]
     key = item['name']
     org_id = item['org']
     result = sc.lookup.site(key, orgid=org_id)
     assert result == item
 
 
-def test_lookup_site_without_org(monkeypatch):
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+@responses.activate
+def test_lookup_site_without_org():
     sc = steelconnection.SConAPI('some.realm')
-    item = sc.get('sites')[0]
+    item = db['sites']['items'][0]
     key = item['name']
     with pytest.raises(ValueError):
         sc.lookup.site(key)
