@@ -219,7 +219,8 @@ class SConAPI(object):
         :param str filename: The file path to download the image.
         """
         status = self._dl_check_status(nodeid, quiet)
-        save_as = self._dl_get_file_path(status, save_as, quiet)
+        source_file = status['image_file']
+        save_as = self._dl_get_file_path(source_file, save_as, quiet)
         if not quiet:
             print('\nDownloading file as', save_as, end=' ', flush=True)
         # Stream file content and save to disk.
@@ -254,9 +255,8 @@ class SConAPI(object):
             time.sleep(1)
         return status
 
-    def _dl_get_file_path(self, status, save_as, quiet):
+    def _dl_get_file_path(self, source_file, save_as, quiet):
         """Get file name and determine destination file path."""
-        source_file = status['image_file']
         if save_as is None:
             save_as = source_file
         if os.path.isdir(save_as):
