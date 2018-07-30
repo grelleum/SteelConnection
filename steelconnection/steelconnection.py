@@ -215,26 +215,11 @@ class SConAPI(object):
 
     def download_image(self, nodeid, save_as=None, quiet=False):
         r"""Download image and save to file.
-
         :param str nodeid: The node id of the appliance.
         :param str filename: The file path to download the image.
         """
-        # Check status every second until file is ready.
-        if not quiet:
-            print('Checking availability of image', end=' ', flush=True)
-        while True:
-            if not quiet:
-                print('.', end='', flush=True)
-            status = self.get('/node/{}/image_status'.format(nodeid))
-            if status.get('status', False):
-                break
-            time.sleep(1)
-        # Get file name and determine destination file path.
-        source_file = status['image_file']
-        if save_as is None:
-            save_as = source_file
-        if os.path.isdir(save_as):
-            save_as = os.path.join(save_as, source_file)
+        status = self._dl_check_status(nodeid, quiet)
+        save_as = self._dl_get_file_path(status, save_as, quiet)
         if not quiet:
             print('\nDownloading file as', save_as, end=' ', flush=True)
         # Stream file content and save to disk.
@@ -246,13 +231,37 @@ class SConAPI(object):
             stream=True,
         )
         with open(save_as, 'wb') as fd:
-            for index, chunk in enumerate(self.response.iter_content(chunk_size=65536)):
+            for index, chunk in enumerate(
+                    self.response.iter_content(chunk_size=65536)
+                ):
                 fd.write(chunk)
                 if not quiet and not index % 1000:
                     print('.', end='', flush=True)
         if not quiet:
             print('\nDownload complete.')
         return self.response
+
+    def _dl_check_status(self, nodeid, quiet):
+        """Check status every second until file is ready."""
+        if not quiet:
+            print('Checking availability of image', end=' ', flush=True)
+        while True:
+            if not quiet:
+                print('.', end='', flush=True)
+            status = self.get('/node/{}/image_status'.format(nodeid))
+            if status.get('status', False):
+                break
+            time.sleep(1)
+        return status
+
+    def _dl_get_file_path(self, status, save_as, quiet):
+        """Get file name and determine destination file path."""
+        source_file = status['image_file']
+        if save_as is None:
+            save_as = source_file
+        if os.path.isdir(save_as):
+            save_as = os.path.join(save_as, source_file)
+        return save_as
 
     @property
     def scm_version(self):
