@@ -226,7 +226,6 @@ class SConAPI(object):
 
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
         r"""Download image and save to file.
-        :param str sconnection: SteelConnection object.
         :param str nodeid: The node id of the appliance.
         :param str save_as: The file path to download the image.
         :param str build: Target hypervisor for image.
