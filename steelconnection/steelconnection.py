@@ -37,7 +37,7 @@ import warnings
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
-from .image import _download_image
+# from .image import _download_image
 from .lookup import _LookUp
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
@@ -90,7 +90,7 @@ class SConAPI(object):
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
-        self.download_image = _download_image
+        # self.download_image = _download_image
 
     @property
     def controller(self):
@@ -202,10 +202,10 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.sc.
+        self.response = self.requests.get(
             url=self.make_url('config', resource),
-            auth=self.sc.__auth,
-            headers=self.sc.headers,
+            auth=self.__auth,
+            headers=self.headers,
             params=params,
             stream=True,
         )
