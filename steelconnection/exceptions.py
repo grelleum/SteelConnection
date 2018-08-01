@@ -14,5 +14,8 @@ class AuthenticationError(RuntimeError):
 class InvalidResource(RuntimeError):
     """404 - Path or resource not found."""
 
+class ResourceGone(RuntimeError):
+    """410 - Gone. Resource no longer available."""
+
 class APINotEnabled(RuntimeError):
     """502 - REST API not enabled."""

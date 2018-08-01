@@ -36,7 +36,7 @@ import warnings
 
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
-from .exceptions import BadRequest, InvalidResource
+from .exceptions import BadRequest, ResourceGone, InvalidResource
 from .lookup import _LookUp
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
@@ -389,6 +389,7 @@ class SConAPI(object):
             400: BadRequest,
             401: AuthenticationError,
             404: InvalidResource,
+            410: ResourceGone,
             502: APINotEnabled,
         }
         if not response.ok:
