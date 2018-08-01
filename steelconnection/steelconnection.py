@@ -36,7 +36,8 @@ import warnings
 
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
-from .exceptions import BadRequest, InvalidResource
+from .exceptions import BadRequest, ResourceGone, InvalidResource
+from .image_download import _download_image
 from .lookup import _LookUp
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
@@ -192,6 +193,24 @@ class SConAPI(object):
             self._raise_exception(self.response)
         return self.result
 
+    def stream(self, resource, params=None):
+        r"""Send a GET request with streaming binary data.
+
+        :param str resource: api resource to get.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
+        self.response = self.requests.get(
+            url=self.make_url('config', resource),
+            auth=self.__auth,
+            headers=self.headers,
+            params=params,
+            stream=True,
+        )
+        for chunk in self.response.iter_content(chunk_size=65536):
+            yield chunk
+
     def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
@@ -205,6 +224,22 @@ class SConAPI(object):
             self.controller, api, self.api_version, resource,
         )
 
+    def download_image(self, nodeid, save_as=None, build=None, quiet=False):
+        r"""Download image and save to file.
+        :param str sconnection: SteelConnection object.
+        :param str nodeid: The node id of the appliance.
+        :param str save_as: The file path to download the image.
+        :param str build: Target hypervisor for image.
+        :param bool quiet: Disable update printing when true.
+        """
+        return _download_image(
+            sconnection=self,
+            nodeid=nodeid,
+            save_as=save_as,
+            build=build,
+            quiet=quiet,
+        )
+
     def savefile(self, filename):
         r"""Save binary return data to a file.
 
@@ -212,56 +247,6 @@ class SConAPI(object):
         """
         with open(filename, 'wb') as fd:
             fd.write(self.response.content)
-
-    def download_image(self, nodeid, save_as=None, quiet=False):
-        r"""Download image and save to file.
-        :param str nodeid: The node id of the appliance.
-        :param str filename: The file path to download the image.
-        """
-        status = self._dl_check_status(nodeid, quiet)
-        source_file = status['image_file']
-        save_as = self._dl_get_file_path(source_file, save_as, quiet)
-        if not quiet:
-            print('\nDownloading file as', save_as, end=' ', flush=True)
-        # Stream file content and save to disk.
-        self.response = self.requests.get(
-            url=self.make_url('config', '/node/{}/get_image'.format(nodeid)),
-            auth=self.__auth,
-            headers=self.headers,
-            params={'file': source_file},
-            stream=True,
-        )
-        with open(save_as, 'wb') as fd:
-            for index, chunk in enumerate(
-                    self.response.iter_content(chunk_size=65536)
-                ):
-                fd.write(chunk)
-                if not quiet and not index % 50:
-                    print('.', end='', flush=True)
-        if not quiet:
-            print('\nDownload complete.')
-        return self.response
-
-    def _dl_check_status(self, nodeid, quiet):
-        """Check status every second until file is ready."""
-        if not quiet:
-            print('Checking availability of image', end=' ', flush=True)
-        while True:
-            if not quiet:
-                print('.', end='', flush=True)
-            status = self.get('/node/{}/image_status'.format(nodeid))
-            if status.get('status', False):
-                break
-            time.sleep(1)
-        return status
-
-    def _dl_get_file_path(self, source_file, save_as, quiet):
-        """Get file name and determine destination file path."""
-        if save_as is None:
-            save_as = source_file
-        if os.path.isdir(save_as):
-            save_as = os.path.join(save_as, source_file)
-        return save_as
 
     @property
     def scm_version(self):
@@ -389,6 +374,7 @@ class SConAPI(object):
             400: BadRequest,
             401: AuthenticationError,
             404: InvalidResource,
+            410: ResourceGone,
             502: APINotEnabled,
         }
         if not response.ok:
