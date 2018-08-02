@@ -1,7 +1,6 @@
 # coding: utf-8
 
-import getpass
-import json
+# import getpass
 import sys
 import pytest
 import requests

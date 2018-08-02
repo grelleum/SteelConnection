@@ -12,11 +12,8 @@ from __future__ import print_function
 import locale
 import os
 import time
-import warnings
 
-from .__version__ import __version__
-from .exceptions import AuthenticationError, APINotEnabled
-from .exceptions import BadRequest, ResourceGone, InvalidResource
+from .exceptions import ResourceGone
 
 
 def silence(*args, **kwargs):

@@ -7,9 +7,6 @@ Convienience object for ID value lookups based on common criteria.
 Should be instantiated within a steelconnection object.
 """
 
-import sys
-import warnings
-
 
 class _LookUp(object):
     """Provide convienience tools to lookup objects."""

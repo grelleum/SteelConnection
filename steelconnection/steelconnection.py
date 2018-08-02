@@ -25,14 +25,9 @@ Usage:
 
 from __future__ import print_function
 
-import getpass
 import json
-import os
 import requests
 import sys
-import time
-import traceback
-import warnings
 
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
