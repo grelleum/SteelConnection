@@ -83,12 +83,14 @@ class SConAPI(object):
         self.__password = password
         self.api_version = api_version
         self.requests = requests.Session()
+        # TODO: add auth directly to session and remove from self.
         self.result = None
         self.response = None
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
+        # TODO: add headers to session.
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
