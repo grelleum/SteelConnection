@@ -14,9 +14,9 @@ import warnings
 class _LookUp(object):
     """Provide convienience tools to lookup objects."""
 
-    def __init__(self, sconnection):
+    def __init__(self, sconnect):
         """Obtain access to SteelConect Manager."""
-        self.sconnection = sconnection
+        self.sconnect = sconnect
 
     def _lookup(self, domain, value, key, return_value='id'):
         """
@@ -24,11 +24,11 @@ class _LookUp(object):
         Given a resource type (domain), a value to match, and a key to lookup,
         returns a tuple consisting of an object ID and the actual object.
         """
-        items = self.sconnection.get(domain)
+        items = self.sconnect.get(domain)
         for item in items:
             key_value = item.get(key, '')
             if key_value and value in key_value:
-                self.sconnection.result = item.get(return_value, '')
+                self.sconnect.result = item.get(return_value, '')
                 return item
         return None
 

@@ -23,10 +23,10 @@ def silence(*args, **kwargs):
     pass
 
 
-def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
+def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     r"""Download image and save to file.
 
-    :param str sconnection: SteelConnection object.
+    :param str sconnect: SteelConnection object.
     :param str nodeid: The node id of the appliance.
     :param str save_as: The file path to download the image.
     :param str build: Target hypervisor for image.
@@ -34,14 +34,14 @@ def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
     """
     qprint = silence if quiet else print
     if build:
-        _prepare_image(sconnection, nodeid, build, qprint)
-    status = _wait_for_ready(sconnection, nodeid, qprint)
+        _prepare_image(sconnect, nodeid, build, qprint)
+    status = _wait_for_ready(sconnect, nodeid, qprint)
     if status is None:
         raise ValueError("'build' not specified and no image available.")
     source_file = status['image_file']
     save_as = _get_file_path(source_file, save_as)
-    _stream_download(sconnection, nodeid, source_file, save_as, qprint)
-    if sconnection.response.ok:
+    _stream_download(sconnect, nodeid, source_file, save_as, qprint)
+    if sconnect.response.ok:
         locale.setlocale(locale.LC_ALL, '')
         filesize = locale.format('%d', os.stat(save_as).st_size, grouping=True)
         return {
@@ -50,27 +50,27 @@ def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
         }
 
 
-def _prepare_image(sconnection, nodeid, build, qprint):
+def _prepare_image(sconnect, nodeid, build, qprint):
     """Check status every second until file is ready."""
     qprint('Requesting image of type ' + build)
-    sconnection.post(
+    sconnect.post(
         '/node/{}/prepare_image'.format(nodeid),
         data={'type': build}
     )
 
 
-def _check_status(sconnection, nodeid, qprint):
+def _check_status(sconnect, nodeid, qprint):
     """Check status every second until file is ready."""
     qprint('Checking if image file is available')
 
 
-def _wait_for_ready(sconnection, nodeid, qprint):
+def _wait_for_ready(sconnect, nodeid, qprint):
     """Check status every second until file is ready."""
     qprint('Checking availability of image', end=' ', flush=True)
     while True:
         qprint('.', end='', flush=True)
         try:
-            status = sconnection.get('/node/{}/image_status'.format(nodeid))
+            status = sconnect.get('/node/{}/image_status'.format(nodeid))
         except ResourceGone:
             return None
         else:
@@ -88,10 +88,10 @@ def _get_file_path(source_file, save_as):
     return save_as
 
 
-def _stream_download(sconnection, nodeid, source_file, save_as, qprint):
+def _stream_download(sconnect, nodeid, source_file, save_as, qprint):
     qprint('\nDownloading file as', save_as, end=' ', flush=True)
     with open(save_as, 'wb') as fd:
-        chunks = sconnection.stream(
+        chunks = sconnect.stream(
             '/node/{}/get_image'.format(nodeid),
             params={'file': source_file},
         )
