@@ -19,13 +19,6 @@ from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
 
 
-def quiet_print(quiet):
-    if quiet:
-        return silence
-    else:
-        return print
-
-
 def silence(*args, **kwargs):
     pass
 
@@ -39,7 +32,7 @@ def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
     :param str build: Target hypervisor for image.
     :param bool quiet: Disable update printing when true.
     """
-    qprint = quiet_print(quiet)
+    qprint = silence if quiet else print
     if build:
         _prepare_image(sconnection, nodeid, build, qprint)
     status = _wait_for_ready(sconnection, nodeid, qprint)
