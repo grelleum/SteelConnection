@@ -240,7 +240,7 @@ class SConAPI(object):
         :param bool quiet: Disable update printing when true.
         """
         return _download_image(
-            sconnection=self,
+            sconnect=self,
             nodeid=nodeid,
             save_as=save_as,
             build=build,
