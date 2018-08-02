@@ -13,7 +13,7 @@ def test_raise_exception_no_exception():
     """_raise_exception should raise the correct exceptions based on status."""
     sc = steelconnection.SConAPI()
     sc.response = fake_requests.Fake_Response('', 201, {})
-    sc._raise_exception(sc.response) == None
+    sc._raise_exception(sc.response) is None
 
 
 def test_raise_exception_RuntimeError():
@@ -67,7 +67,7 @@ def test_raise_exception_without_exceptions():
     except:
         assert False
     else:
-        assert result == None
+        assert result is None
 
 
 def test_exit_when_raise_exception_with_exit_on_error(capsys):

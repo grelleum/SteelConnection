@@ -318,7 +318,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        data=json.dumps(data) if data and isinstance(data, dict) else data
+        data = json.dumps(data) if data and isinstance(data, dict) else data
         if self.__username and not self.__password:
             self._ask_for_auth()
         response = request_method(

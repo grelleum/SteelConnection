@@ -64,7 +64,7 @@ class Fake_Response(object):
         self.ok = True if status_code < 300 else False
         self.reason = 'successs' if status_code < 300 else 'Failed'
         self.status_code = status_code
-        self.headers= {'Content-Type': 'application/' + content}
+        self.headers = {'Content-Type': 'application/' + content}
         self.text = get_text(data)
         self.request = Fake_Request(url, data)
         self.auth = auth
