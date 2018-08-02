@@ -1,11 +1,5 @@
 # coding: utf-8
 
-#    ____ __             __ _____                            __   _
-#   / __// /_ ___  ___  / // ___/___   ___   ___  ___  ____ / /_ (_)___   ___
-#  _\ \ / __// -_)/ -_)/ // /__ / _ \ / _ \ / _ \/ -_)/ __// __// // _ \ / _ \
-# /___/ \__/ \__/ \__//_/ \___/ \___//_//_//_//_/\__/ \__/ \__//_/ \___//_//_/
-
-
 """SteelConnection
 
 Convienience objects for making REST API calls
@@ -48,6 +42,13 @@ from .lookup import _LookUp
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
 
+
+ASCII_ART = """
+   ____ __             __ _____                            __   _
+  / __// /_ ___  ___  / // ___/___   ___   ___  ___  ____ / /_ (_)___   ___
+ _\ \ / __// -_)/ -_)/ // /__ / _ \ / _ \ / _ \/ -_)/ __// __// // _ \ / _ \
+/___/ \__/ \__/ \__//_/ \___/ \___//_//_//_//_/\__/ \__/ \__//_/ \___//_//_/
+"""
 
 BINARY_DATA_MESSAGE = (
     "Binary data returned. "
@@ -96,6 +97,7 @@ class SConAPI(object):
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
+        self.ascii_art = ASCII_ART
 
     @property
     def controller(self):
