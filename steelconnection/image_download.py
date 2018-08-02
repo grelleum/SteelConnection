@@ -9,6 +9,7 @@ Not supported for direct use.
 
 from __future__ import print_function
 
+import locale
 import os
 import time
 import warnings
@@ -47,7 +48,13 @@ def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
     source_file = status['image_file']
     save_as = _get_file_path(source_file, save_as)
     _stream_download(sconnection, nodeid, source_file, save_as, qprint)
-    return sconnection.response.ok
+    if sconnection.response.ok:
+        locale.setlocale(locale.LC_ALL, '')
+        filesize = locale.format('%d', os.stat(save_as).st_size, grouping=True)
+        return {
+            'filename': save_as,
+            'filesize': '{} bytes'.format(filesize),
+        }
 
 
 def _prepare_image(sconnection, nodeid, build, qprint):
