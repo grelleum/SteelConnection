@@ -61,11 +61,6 @@ def _prepare_image(sconnect, nodeid, build, qprint):
     qprint('Done.')
 
 
-def _check_status(sconnect, nodeid, qprint):
-    """Check status every second until file is ready."""
-    qprint('Checking if image file is available')
-
-
 def _wait_for_ready(sconnect, nodeid, qprint):
     """Check status every second until file is ready."""
     qprint('Checking availability of image', end=' ', flush=True)
