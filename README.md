@@ -158,13 +158,13 @@ Next it will download the file to the location specifed by the `save_as=` parame
 Here are some examples:
 ```python
 # Build kvm image and specify the downloads folder and filename.
-`sc.download_image(node['id], save_as='Downloads/scon_vgw.zip', build='kvm')
+`sc.download_image(node['id'], save_as='Downloads/scon_vgw.zip', build='kvm')
 
 # Build a hyperv image and download to the current directory using the default file name.
-`sc.download_image(node['id], build='hyperv')
+`sc.download_image(node['id'], build='hyperv')
 
 # Download an existing image to /images/ directory and suppress status updates.
-`sc.download_image(node['id], save_as='/images/scon_vgw.zip', quiet=True)
+`sc.download_image(node['id'], save_as='/images/scon_vgw.zip', quiet=True)
 ```
 
 ##### Other Binary Data:
