@@ -7,9 +7,9 @@ Simplify access to the Riverbed SteelConnect REST API.
 usage:
 
 import steelconnection
-sconnect = steelconnection.SConAPI('REALM.riverbed.cc')
-org_id, org = sconnect.lookup.org('MyOrgName')
-nodes = sconnect.get('org/' + org_id + '/nodes')
+sc = steelconnection.SConAPI('REALM.riverbed.cc')
+org = sc.lookup.org('MyOrgName')
+nodes = sc.get('org/' + org_id + '/nodes')
 
 Full documentation available at https://pypi.org/project/steelconnection/
 
