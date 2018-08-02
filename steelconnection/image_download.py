@@ -104,6 +104,6 @@ def _stream_download(sconnection, nodeid, source_file, save_as, qprint):
         )
         for index, chunk in enumerate(chunks):
             fd.write(chunk)
-            if not index % 50:
+            if index % 50 == 0:
                 qprint('.', end='', flush=True)
     qprint('\nDownload complete.')
