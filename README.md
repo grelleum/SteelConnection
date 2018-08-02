@@ -1,3 +1,11 @@
+```
+   ______          _______                       __  _
+  / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+ _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+/___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+
+```
+
 # SteelConnection
 ##### version 0.9.33
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
