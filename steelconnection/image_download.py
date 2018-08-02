@@ -2,7 +2,7 @@
 
 """SteelConnection image.
 
-Convienience objects for virtual machin image downloads.
+Convienience functions for virtual machine image downloads.
 To be called from SteelConnection main object classes.
 Not supported for direct use.
 """
@@ -31,6 +31,7 @@ def silence(*args, **kwargs):
 
 def _download_image(sconnection, nodeid, save_as=None, build=None, quiet=False):
     r"""Download image and save to file.
+
     :param str sconnection: SteelConnection object.
     :param str nodeid: The node id of the appliance.
     :param str save_as: The file path to download the image.
@@ -90,12 +91,11 @@ def _get_file_path(source_file, save_as):
 def _stream_download(sconnection, nodeid, source_file, save_as, qprint):
     qprint('\nDownloading file as', save_as, end=' ', flush=True)
     with open(save_as, 'wb') as fd:
-        for index, chunk in enumerate(
-                sconnection.stream(
-                    '/node/{}/get_image'.format(nodeid),
-                    params={'file': source_file},
-                )
-            ):
+        chunks = sconnection.stream(
+            '/node/{}/get_image'.format(nodeid),
+            params={'file': source_file},
+        )
+        for index, chunk in enumerate(chunks):
             fd.write(chunk)
             if not index % 50:
                 qprint('.', end='', flush=True)
