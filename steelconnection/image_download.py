@@ -39,6 +39,7 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     if status is None:
         raise ValueError("'build' not specified and no image available.")
     source_file = status['image_file']
+    qprint("Image file '{}' available for download".format(source_file))
     save_as = _get_file_path(source_file, save_as)
     _stream_download(sconnect, nodeid, source_file, save_as, qprint)
     if sconnect.response.ok:
@@ -52,11 +53,12 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
 
 def _prepare_image(sconnect, nodeid, build, qprint):
     """Check status every second until file is ready."""
-    qprint('Requesting image of type ' + build)
+    qprint('Requesting image of type ' + build, end=':', flush=True)
     sconnect.post(
         '/node/{}/prepare_image'.format(nodeid),
         data={'type': build}
     )
+    qprint('Done.')
 
 
 def _check_status(sconnect, nodeid, qprint):
