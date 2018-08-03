@@ -73,3 +73,32 @@ def test_scon_repr():
     ).format(realm, scm_version, api_version, pkg_version)
     sc = steelconnection.SConAPI(realm, api_version=api_version)
     assert repr(sc) == expected
+
+
+@responses.activate
+def test_scon_str():
+    """Test __str__ returns expected string."""
+    responses.add(
+        responses.GET,
+        'https://some.realm/api/scm.config/1.0/status',
+        json={'scm_version': '1.23.4', 'scm_build': '56'},
+        status=200,
+    )
+    realm = 'some.realm'
+    scm_version = '1.23.4.56'
+    api_version = '1.0'
+    pkg_version = steelconnection.__version__
+    expected = '\n'.join((
+        'SteelConnection:',
+        ">> controller: '{}'",
+        ">> scm version: '{}'",
+        ">> api version: '{}'",
+        ">> package version: '{}'",
+        '>> GET: https://some.realm/api/scm.config/1.0/status',
+        '>> Data Sent: None',
+        '>> Status: 200 - OK',
+        '>> Error: None'
+    ))
+    expected = expected.format(realm, scm_version, api_version, pkg_version)
+    sc = steelconnection.SConAPI(realm, api_version=api_version)
+    assert str(sc) == expected
