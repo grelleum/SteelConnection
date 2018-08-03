@@ -1,6 +1,7 @@
 import steelconnection
 
-# Change the below values to match the realm and org as seen in the URL for your SteelConnect Manager.
+# Change the below values to match the realm and org
+# as seen in the URL for your SteelConnect Manager.
 # for example:  https://realm.riverbed.cc/admin/TestLab
 scm_name = 'realm.riverbed.cc'
 org_name = 'TestLab'
@@ -13,6 +14,7 @@ new_site = {
     'longname': 'New York test lab.',
     'timezone': 'America/New_York',
 }
+
 
 def main():
     # Initialize the steelconnection object.

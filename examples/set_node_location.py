@@ -43,7 +43,7 @@ def main(argv):
     print(status('site', sites, "in '{0}'".format(organization)))
 
     # Create a map of site id to site name.
-    site_names = {site['id']:site['name'] for site in sites}
+    site_names = {site['id']: site['name'] for site in sites}
 
     # Get list of all nodes in target organization.
     nodes = sc.get('org/{}/nodes'.format(org['id']))

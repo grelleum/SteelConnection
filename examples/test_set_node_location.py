@@ -44,6 +44,6 @@ def test_set_node_location():
 def test_populated_location_fields():
     sc = steelconnection.SConAPI(realm, username, password)
     org = sc.lookup.org(org_name)
-    nodes =  sc.get('org/' + org['id'] + '/nodes')
+    nodes = sc.get('org/' + org['id'] + '/nodes')
     for node in nodes:
         assert node['location'] is not None

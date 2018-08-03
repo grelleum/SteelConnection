@@ -1,5 +1,13 @@
+```
+   ______          _______                       __  _
+  / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+ _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+/___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+
+```
+
 # SteelConnection
-##### version 0.9.32
+##### version 0.9.33
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
@@ -150,10 +158,22 @@ Here are the rules to determine what gets returned by an API request:
 * If response.json() is False, return an empty python dictionary.
 
 ##### Virtual Appliance Image Download:
-There is a convenience method `.download_image` that can be used to download a virtual appliance image file.  You will need to first generate the image using the command:\
-`sc.post(f'/node/{node_id}/prepare_image', data={'type': 'kvm'})`\
-You should substitute your target hypervisor platform where I show `kvm`.
-After that, you can use `sc.download_image(node_id, save_as='filename.zip')` command to download the image to the filename specification on your local drive.  The `download_image` will print status messages while checking the status and downloading the file.  To disable status messages, use the `quiet=True` parameter after the filename.
+There is a convenience method `.download_image` that can be used to download a virtual appliance image file.
+This method will optionally request the 'build' of a virtual appliance image, when you set `build=` a vm type, such as `build=kvm` or `build=ova`.
+Then it will check the availability of the image file every one second until the file is found.
+Next it will download the file to the location specifed by the `save_as=` parameter.
+`download_image` will print status messages while checking the status and downloading the file.  To disable status messages, include the `quiet=True` parameter.
+Here are some examples:
+```python
+# Build kvm image and specify the downloads folder and filename.
+`sc.download_image(node['id'], save_as='Downloads/scon_vgw.zip', build='kvm')
+
+# Build a hyperv image and download to the current directory using the default file name.
+`sc.download_image(node['id'], build='hyperv')
+
+# Download an existing image to /images/ directory and suppress status updates.
+`sc.download_image(node['id'], save_as='/images/scon_vgw.zip', quiet=True)
+```
 
 ##### Other Binary Data:
 In the event another API call returns binary data, You can access it directly through the object's '.response.content' attribute, or by calling the '.savefile(filename)' method, which will save the binary data to a file.

@@ -1,7 +1,6 @@
 # coding: utf-8
 
-import getpass
-import json
+# import getpass
 import sys
 import pytest
 import requests
@@ -62,7 +61,10 @@ def test_ask_for_auth_when_not_provided(monkeypatch):
 
 
 def test_ask_for_auth_username_provided(monkeypatch):
-    """_ask_for_auth should prompt for password only when username is provided."""
+    """
+    _ask_for_auth should prompt for password
+    when only username is provided.
+    """
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
     sc = steelconnection.SConAPI('some.realm', username='A')
@@ -72,7 +74,10 @@ def test_ask_for_auth_username_provided(monkeypatch):
 
 
 def test_ask_for_auth_passwd_provided(monkeypatch):
-    """_ask_for_auth should prompt for username only when password is provided."""
+    """
+    _ask_for_auth should prompt for username
+    when only password is provided.
+    """
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'SteelConnect')
     else:

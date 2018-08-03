@@ -25,14 +25,9 @@ Usage:
 
 from __future__ import print_function
 
-import getpass
 import json
-import os
 import requests
 import sys
-import time
-import traceback
-import warnings
 
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
@@ -42,6 +37,13 @@ from .lookup import _LookUp
 from .input_tools import get_input, get_username
 from .input_tools import get_password, get_password_once
 
+
+ASCII_ART = """
+   ______          _______                       __  _
+  / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+ _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+/___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+"""
 
 BINARY_DATA_MESSAGE = (
     "Binary data returned. "
@@ -81,15 +83,18 @@ class SConAPI(object):
         self.__password = password
         self.api_version = api_version
         self.requests = requests.Session()
+        # TODO: add auth directly to session and remove from self.
         self.result = None
         self.response = None
         self.headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         }
+        # TODO: add headers to session.
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
+        self.ascii_art = ASCII_ART
 
     @property
     def controller(self):
@@ -226,14 +231,13 @@ class SConAPI(object):
 
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
         r"""Download image and save to file.
-        :param str sconnection: SteelConnection object.
         :param str nodeid: The node id of the appliance.
         :param str save_as: The file path to download the image.
         :param str build: Target hypervisor for image.
         :param bool quiet: Disable update printing when true.
         """
         return _download_image(
-            sconnection=self,
+            sconnect=self,
             nodeid=nodeid,
             save_as=save_as,
             build=build,
@@ -319,7 +323,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        data=json.dumps(data) if data and isinstance(data, dict) else data
+        data = json.dumps(data) if data and isinstance(data, dict) else data
         if self.__username and not self.__password:
             self._ask_for_auth()
         response = request_method(

@@ -112,6 +112,13 @@ get_status_404 = responses.Response(
     status=404,
 )
 
+get_stream = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/stream',
+    body='ABCDEFG',
+    status=200,
+)
+
 getstatus_node = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.reporting/1.0/node/node-12345',
@@ -270,9 +277,40 @@ def test_scon_put_exception():
         sc.put('nonesuch', data={})
 
 
+# Properties:
+
+def test_scon_controller_when_defined():
+    """Test SConAPI.controller property when pre-defined."""
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc.controller == 'some.realm'
+
+
+def test_scon_controller_when_not_defined(monkeypatch):
+    """Test SConAPI.controller property when not provided."""
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
+    sc = steelconnection.SConAPI()
+    assert sc.controller == 'some.realm'
+
+
+@responses.activate
+def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
+    """Test SConAPI.controller property when not provided."""
+    responses.add(get_status)
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
+    sc = steelconnection.SConAPI()
+    _ = sc.get('status')
+    assert sc.controller == 'some.realm'
+
+
 # Helper methods:
 
-def test_scon_url():
+def test_scon_make_url():
     """Test SConAPI.url method."""
     sc = steelconnection.SConAPI('NO.REALM', api_version='999')
     url = sc.make_url('FAKE', 'PATH')
@@ -294,6 +332,15 @@ def test_scm_version_invalid():
     responses.add(get_status_404)
     sc = steelconnection.SConAPI('old.school')
     assert sc.scm_version == 'unavailable'
+
+
+@responses.activate
+def test_stream():
+    """Test SConAPI.stream method."""
+    responses.add(get_stream)
+    sc = steelconnection.SConAPI('some.realm')
+    result = sc.stream('stream')
+    assert list(result) == [b'ABCDEFG']
 
 
 def test_savefile():
