@@ -53,7 +53,13 @@ db = {
                 'model': 'yogi'
              }
         ],
-    }
+    },
+    'image_status': {
+        'status': 'Success',
+        'image_file': 'node-12345-random.zip',
+        'image_type': 'kvm'
+    },
+    'image_download': 'abcdefghijklmnopqrstuvwxyz',
 }
 
 
@@ -116,6 +122,20 @@ get_stream = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.config/1.0/stream',
     body='ABCDEFG',
+    status=200,
+)
+
+get_image_status = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/image_status',
+    json=db['image_status'],
+    status=200,
+)
+
+get_image_download = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/get_image',
+    body=db['image_download'],
     status=200,
 )
 
@@ -279,6 +299,12 @@ def test_scon_put_exception():
 
 # Properties:
 
+def test_ascii_art():
+    """Test SConAPI.ascii_art returns a string."""
+    sc = steelconnection.SConAPI()
+    assert sc.ascii_art
+
+
 def test_scon_controller_when_defined():
     """Test SConAPI.controller property when pre-defined."""
     sc = steelconnection.SConAPI('some.realm')
@@ -341,6 +367,19 @@ def test_stream():
     sc = steelconnection.SConAPI('some.realm')
     result = sc.stream('stream')
     assert list(result) == [b'ABCDEFG']
+
+
+@responses.activate
+def test_download_image():
+    """Test SConAPI.stream method."""
+    responses.add(get_image_status)
+    responses.add(get_image_download)
+    filename = 'delete.me'
+    sc = steelconnection.SConAPI('some.realm')
+    result = sc.download_image('node-12345', save_as=filename)
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    assert contents == db['image_download'].encode()
 
 
 def test_savefile():
