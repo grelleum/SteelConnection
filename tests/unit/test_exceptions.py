@@ -1,8 +1,6 @@
 # coding: utf-8
 
-import sys
 import pytest
-import requests
 import steelconnection
 import fake_requests
 
@@ -64,7 +62,7 @@ def test_raise_exception_without_exceptions():
     sc.response = fake_requests.Fake_Response('', 502, {})
     try:
         result = sc._raise_exception(sc.response)
-    except:
+    except BaseException:
         assert False
     else:
         assert result is None
