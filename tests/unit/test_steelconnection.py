@@ -59,7 +59,7 @@ db = {
         'image_file': 'node-12345-random.zip',
         'image_type': 'kvm'
     },
-    'image_download': 'abcdefghijklmnopqrstuvwxyz',
+    'image_download': b'abcdefghijklmnopqrstuvwxyz',
     'invalid_status': {},
 }
 
@@ -89,6 +89,7 @@ get_nodes = responses.Response(
 get_nonesuch = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.config/1.0/nonesuch',
+    body=db['image_download'],
     status=404,
 )
 
@@ -129,7 +130,7 @@ get_status_404 = responses.Response(
 get_stream = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.config/1.0/stream',
-    body='ABCDEFG',
+    body=db['image_download'],
     status=200,
 )
 
@@ -313,6 +314,25 @@ def test_ascii_art():
     assert sc.ascii_art
 
 
+@responses.activate
+def test_answer_with_success():
+    """Test SConAPI.answer when response.ok."""
+    responses.add(get_status)
+    sc = steelconnection.SConAPI('some.realm')
+    _ = sc.get('status')
+    assert sc.answer == 'Status: 200 - OK\nError: None'
+
+
+@responses.activate
+def test_answer_not_ok_and_no_json():
+    """Test SConAPI.answer when response.text is not json formatted."""
+    responses.add(get_nonesuch)
+    sc = steelconnection.SConAPI('some.realm')
+    with pytest.raises(RuntimeError):
+        sc.get('nonesuch')
+    assert sc.answer == 'Status: 404 - Not Found\nError: None'
+
+
 def test_scon_controller_when_defined():
     """Test SConAPI.controller property when pre-defined."""
     sc = steelconnection.SConAPI('some.realm')
@@ -381,7 +401,7 @@ def test_stream():
     responses.add(get_stream)
     sc = steelconnection.SConAPI('some.realm')
     result = sc.stream('stream')
-    assert list(result) == [b'ABCDEFG']
+    assert list(result) == [db['image_download']]
 
 
 @responses.activate
@@ -394,7 +414,7 @@ def test_download_image():
     result = sc.download_image('node-12345', save_as=filename)
     with open(filename, 'rb') as f:
         contents = f.read()
-    assert contents == db['image_download'].encode()
+    assert contents == db['image_download']
 
 
 def test_savefile():
