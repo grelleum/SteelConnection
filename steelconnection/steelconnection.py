@@ -34,8 +34,7 @@ from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
 from .image_download import _download_image
 from .lookup import _LookUp
-from .input_tools import get_input, get_username
-from .input_tools import get_password, get_password_once
+from .input_tools import get_input, get_username, get_password_once
 
 
 ASCII_ART = """
