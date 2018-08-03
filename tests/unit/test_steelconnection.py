@@ -60,6 +60,7 @@ db = {
         'image_type': 'kvm'
     },
     'image_download': 'abcdefghijklmnopqrstuvwxyz',
+    'invalid_status': {},
 }
 
 
@@ -109,6 +110,13 @@ get_status = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.config/1.0/status',
     json=db['status'],
+    status=200,
+)
+
+get_invalid_status = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/status',
+    json=db['invalid_status'],
     status=200,
 )
 
@@ -347,13 +355,20 @@ def test_scon_make_url():
 def test_scm_version():
     """Test SConAPI.scm_version method."""
     responses.add(get_status)
-    scm_version = '1.23.4.56'
     sc = steelconnection.SConAPI('some.realm')
-    assert sc.scm_version == scm_version
+    assert sc.scm_version == '1.23.4.56'
 
 
 @responses.activate
 def test_scm_version_invalid():
+    """Test SConAPI.scm_version method when an invalid status is returned."""
+    responses.add(get_invalid_status)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc.scm_version == 'unavailable'
+
+
+@responses.activate
+def test_scm_version_unavailable():
     """Test SConAPI.scm_version method."""
     responses.add(get_status_404)
     sc = steelconnection.SConAPI('old.school')
