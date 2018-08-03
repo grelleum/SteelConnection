@@ -2,7 +2,6 @@
 
 # import getpass
 import sys
-import pytest
 import requests
 import steelconnection
 import fake_requests

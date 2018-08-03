@@ -4,7 +4,6 @@
 import getpass
 import os
 import sys
-import pytest
 import subprocess
 import steelconnection
 
