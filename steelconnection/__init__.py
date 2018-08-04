@@ -13,7 +13,7 @@ Simplify access to the Riverbed SteelConnect REST API.
 usage:
 
 import steelconnection
-sc = steelconnection.SConAPI('REALM.riverbed.cc')
+sc = steelconnection.SConnect('REALM.riverbed.cc')
 org = sc.lookup.org('MyOrgName')
 nodes = sc.get('org/' + org_id + '/nodes')
 
@@ -23,6 +23,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 :license: MIT, see LICENSE for more details.
 """
 
+from .steelconnection import SConnect
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
@@ -37,6 +38,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 __all__ = (
+    'SConnect',
     'SConAPI',
     'SConWithoutExceptions',
     'SConExitOnError',

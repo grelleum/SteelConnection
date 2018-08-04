@@ -19,7 +19,7 @@ from __future__ import print_function
 import steelconnection
 import os
 
-sc = steelconnection.SConAPI()
+sc = steelconnection.SConnect()
 sc.get('status')
 
 # steelconnection.get_input function is compatible with both Python 2 and 3.

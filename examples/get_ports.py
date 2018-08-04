@@ -10,7 +10,7 @@ appliance = steelconnection.get_input(
 )
 
 print("Note: SteelConnect Realm is usually in the form 'realm.riverbed.cc'")
-sc = steelconnection.SConAPI()
+sc = steelconnection.SConnect()
 node = sc.lookup.node(appliance)
 
 ports = sc.get('node/' + node['id'] + '/ports')

@@ -204,10 +204,10 @@ put_nonesuch = responses.Response(
 
 @responses.activate
 def test_scon_get():
-    """Test SConAPI.get method."""
+    """Test SConnect.get method."""
     responses.add(get_orgs)
     responses.add(get_node)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.get('orgs') == db['orgs']['items']
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
@@ -218,9 +218,9 @@ def test_scon_get():
 
 @responses.activate
 def test_scon_getstatus():
-    """Test SConAPI.getstatus method."""
+    """Test SConnect.getstatus method."""
     responses.add(getstatus_node)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.getstatus('/node/node-12345') == db['nodes']['items'][0]
     assert sc.response.ok
     assert '/api/scm.reporting/' in sc.response.url
@@ -228,9 +228,9 @@ def test_scon_getstatus():
 
 @responses.activate
 def test_scon_delete():
-    """Test SConAPI.delete method."""
+    """Test SConnect.delete method."""
     responses.add(delete_org)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.delete('org/org-12345') == {}
     assert sc.response.ok
     assert '/api/scm.config/' in sc.response.url
@@ -238,9 +238,9 @@ def test_scon_delete():
 
 @responses.activate
 def test_scon_post():
-    """Test SConAPI.post method."""
+    """Test SConnect.post method."""
     responses.add(post_nodes)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     data = db['nodes']['items'][0]
     assert sc.post('nodes', data=data) == data
     assert sc.response.ok
@@ -249,9 +249,9 @@ def test_scon_post():
 
 @responses.activate
 def test_scon_put():
-    """Test SConAPI.put method."""
+    """Test SConnect.put method."""
     responses.add(put_node)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     data = db['nodes']['items'][0]
     assert sc.put('node/node-12345', data=data) == data
     assert sc.response.ok
@@ -262,45 +262,45 @@ def test_scon_put():
 
 @responses.activate
 def test_scon_get_exception():
-    """Test SConAPI.get method."""
+    """Test SConnect.get method."""
     responses.add(get_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.get('nonesuch')
 
 
 @responses.activate
 def test_scon_getstatus_exception():
-    """Test SConAPI.getstatus method."""
+    """Test SConnect.getstatus method."""
     responses.add(getstatus_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.getstatus('nonesuch')
 
 
 @responses.activate
 def test_scon_delete_exception():
-    """Test SConAPI.delete method."""
+    """Test SConnect.delete method."""
     responses.add(delete_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.delete('nonesuch')
 
 
 @responses.activate
 def test_scon_post_exception():
-    """Test SConAPI.post method."""
+    """Test SConnect.post method."""
     responses.add(post_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.post('nonesuch', data={})
 
 
 @responses.activate
 def test_scon_put_exception():
-    """Test SConAPI.put method."""
+    """Test SConnect.put method."""
     responses.add(put_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.put('nonesuch', data={})
 
@@ -308,55 +308,55 @@ def test_scon_put_exception():
 # Properties:
 
 def test_ascii_art():
-    """Test SConAPI.ascii_art returns a string."""
-    sc = steelconnection.SConAPI()
+    """Test SConnect.ascii_art returns a string."""
+    sc = steelconnection.SConnect()
     assert sc.ascii_art
 
 
 @responses.activate
 def test_answer_with_success():
-    """Test SConAPI.answer when response.ok."""
+    """Test SConnect.answer when response.ok."""
     responses.add(get_status)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.get('status')
     assert sc.answer == 'Status: 200 - OK\nError: None'
 
 
 @responses.activate
 def test_answer_not_ok_and_no_json():
-    """Test SConAPI.answer when response.text is not json formatted."""
+    """Test SConnect.answer when response.text is not json formatted."""
     responses.add(get_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     with pytest.raises(RuntimeError):
         sc.get('nonesuch')
     assert sc.answer == 'Status: 404 - Not Found\nError: None'
 
 
 def test_scon_controller_when_defined():
-    """Test SConAPI.controller property when pre-defined."""
-    sc = steelconnection.SConAPI('some.realm')
+    """Test SConnect.controller property when pre-defined."""
+    sc = steelconnection.SConnect('some.realm')
     assert sc.controller == 'some.realm'
 
 
 def test_scon_controller_when_not_defined(monkeypatch):
-    """Test SConAPI.controller property when not provided."""
+    """Test SConnect.controller property when not provided."""
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
-    sc = steelconnection.SConAPI()
+    sc = steelconnection.SConnect()
     assert sc.controller == 'some.realm'
 
 
 @responses.activate
 def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
-    """Test SConAPI.controller property when not provided."""
+    """Test SConnect.controller property when not provided."""
     responses.add(get_status)
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
-    sc = steelconnection.SConAPI()
+    sc = steelconnection.SConnect()
     sc.get('status')
     assert sc.controller == 'some.realm'
 
@@ -364,71 +364,71 @@ def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
 # Helper methods:
 
 def test_scon_make_url():
-    """Test SConAPI.url method."""
-    sc = steelconnection.SConAPI('NO.REALM', api_version='999')
+    """Test SConnect.url method."""
+    sc = steelconnection.SConnect('NO.REALM', api_version='999')
     url = sc.make_url('FAKE', 'PATH')
     assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
 @responses.activate
 def test_connect_via_status():
-    """Test SConAPI.connect method when status works."""
+    """Test SConnect.connect method when status works."""
     responses.add(get_status)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.connect()
     assert sc.scm_version == '1.23.4.56'
 
 
 @responses.activate
 def test_connect_via_orgs():
-    """Test SConAPI.connect method when status fails."""
+    """Test SConnect.connect method when status fails."""
     responses.add(get_status_404)
     responses.add(get_orgs)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.connect()
     assert sc.scm_version == 'unavailable'
 
 
 @responses.activate
 def test_scm_version():
-    """Test SConAPI.scm_version method."""
+    """Test SConnect.scm_version method."""
     responses.add(get_status)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.scm_version == '1.23.4.56'
 
 
 @responses.activate
 def test_scm_version_invalid():
-    """Test SConAPI.scm_version method when an invalid status is returned."""
+    """Test SConnect.scm_version method when an invalid status is returned."""
     responses.add(get_invalid_status)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.scm_version == 'unavailable'
 
 
 @responses.activate
 def test_scm_version_unavailable():
-    """Test SConAPI.scm_version method."""
+    """Test SConnect.scm_version method."""
     responses.add(get_status_404)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     assert sc.scm_version == 'unavailable'
 
 
 @responses.activate
 def test_stream():
-    """Test SConAPI.stream method."""
+    """Test SConnect.stream method."""
     responses.add(get_stream)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     result = sc.stream('stream')
     assert list(result) == [db['image_download']]
 
 
 @responses.activate
 def test_download_image():
-    """Test SConAPI.stream method."""
+    """Test SConnect.stream method."""
     responses.add(get_image_status)
     responses.add(get_image_download)
     filename = 'delete.me'
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.download_image('node-12345', save_as=filename)
     with open(filename, 'rb') as f:
         contents = f.read()
@@ -436,9 +436,9 @@ def test_download_image():
 
 
 def test_savefile():
-    """Test SConAPI.savefile method."""
+    """Test SConnect.savefile method."""
     filename = 'delete.me'
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.response = NameSpace()
     sc.response.content = b'ABCDEFG1234567890'
     sc.savefile(filename)
@@ -451,9 +451,9 @@ def test_savefile():
 
 @responses.activate
 def test_scon_get_result_not_ok():
-    """Test SConAPI.__get_result method."""
+    """Test SConnect.__get_result method."""
     responses.add(get_nonesuch)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     try:
         sc.get('nonesuch')
     except RuntimeError:
@@ -463,18 +463,18 @@ def test_scon_get_result_not_ok():
 
 @responses.activate
 def test_scon_get_result_not_ok_with_body():
-    """Test SConAPI.__get_result method."""
+    """Test SConnect.__get_result method."""
     responses.add(get_queued)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.get('Queued')
     assert sc._get_result(sc.response) == json.loads(sc.response.text)
 
 
 @responses.activate
 def test_scon_get_result_octet_stream():
-    """Test SConAPI._get_result method."""
+    """Test SConnect._get_result method."""
     responses.add(get_image)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.get('image')
     assert sc._get_result(sc.response) == {'status': ' '.join((
         "Binary data returned.",
@@ -486,7 +486,7 @@ def test_scon_get_result_octet_stream():
 def test_scon_get_result_no_json():
     """_get_results should return an empty dict when .json returns False."""
     responses.add(delete_org)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.delete('org/org-12345')
     assert sc._get_result(sc.response) == {}
 
@@ -495,7 +495,7 @@ def test_scon_get_result_no_json():
 def test_scon_get_result_no_items():
     """_get_results should return a dict when 'items' is not in response."""
     responses.add(get_node)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.get('node/node-12345')
     assert isinstance(sc._get_result(sc.response), dict)
     assert sc._get_result(sc.response) == db['nodes']['items'][0]
@@ -505,7 +505,7 @@ def test_scon_get_result_no_items():
 def test_scon_get_result_with_items():
     """_get_results should return a list when 'items' is in response."""
     responses.add(get_nodes)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     sc.get('nodes')
     assert isinstance(sc._get_result(sc.response), list)
     assert sc._get_result(sc.response) == db['nodes']['items']

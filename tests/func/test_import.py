@@ -8,7 +8,7 @@ import steelconnection
 
 def test_import_dunder_all():
     expected = set((
-        'SConAPI', 'SConWithoutExceptions', 'SConExitOnError',
+        'SConnect', 'SConWithoutExceptions', 'SConExitOnError',
         'AuthenticationError', 'APINotEnabled',
         'BadRequest', 'InvalidResource',
         'get_input', 'get_username', 'get_password',

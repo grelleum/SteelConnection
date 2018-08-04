@@ -28,7 +28,7 @@ def main(argv):
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
 
-    sc = steelconnection.SConAPI(
+    sc = steelconnection.SConnect(
         scm,
         username=args.username,
         password=args.password,

@@ -74,7 +74,7 @@ get_orgs = responses.Response(
 @responses.activate
 def test_lookup_lookup_success():
     responses.add(get_orgs)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     item = db['orgs']['items'][0]
     key = item['name']
     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
@@ -84,7 +84,7 @@ def test_lookup_lookup_success():
 @responses.activate
 def test_lookup_lookup_fails():
     responses.add(get_orgs)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     key = 'DNE'
     result = sc.lookup._lookup(domain='orgs', value=key, key='name')
     assert result is None
@@ -93,7 +93,7 @@ def test_lookup_lookup_fails():
 @responses.activate
 def test_lookup_node():
     responses.add(get_nodes)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     item = db['nodes']['items'][0]
     key = item['serial']
     result = sc.lookup.node(key)
@@ -103,7 +103,7 @@ def test_lookup_node():
 @responses.activate
 def test_lookup_org():
     responses.add(get_orgs)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     item = db['orgs']['items'][0]
     key = item['name']
     result = sc.lookup.org(key)
@@ -114,7 +114,7 @@ def test_lookup_org():
 def test_lookup_site():
     responses.add(get_orgs)
     responses.add(get_sites_from_org)
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     item = db['sites']['items'][0]
     key = item['name']
     org_id = item['org']
@@ -124,7 +124,7 @@ def test_lookup_site():
 
 @responses.activate
 def test_lookup_site_without_org():
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm')
     item = db['sites']['items'][0]
     key = item['name']
     with pytest.raises(ValueError):

@@ -18,7 +18,7 @@ new_site = {
 
 def main():
     # Initialize the steelconnection object.
-    sc = steelconnection.SConAPI(scm_name)
+    sc = steelconnection.SConnect(scm_name)
 
     # Get the org ID for your organization.
     org = sc.lookup.org(org_name)

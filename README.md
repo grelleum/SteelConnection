@@ -44,7 +44,7 @@ https://github.com/grelleum/SteelConnection/tree/master/examples
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
-sc = steelconnection.SConAPI('REALM.riverbed.cc')
+sc = steelconnection.SConnect('REALM.riverbed.cc')
 ```
 
 #### Realms and Organizations:
@@ -62,7 +62,7 @@ SteelConnect REST API uses Basic Auth, meaning a username and password are requi
 If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
->>> sc = steelconnection.SConAPI('REALM.riverbed.cc')
+>>> sc = steelconnection.SConnect('REALM.riverbed.cc')
 Enter username: admin
 Enter password:
 >>>
@@ -85,7 +85,7 @@ import steelconnection
 username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 
-sc = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
+sc = steelconnection.SConnect('REALM.riverbed.cc', username=username, password=password)
 ```
 
 #### Understanding the API:

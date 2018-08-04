@@ -21,7 +21,7 @@ org_name = os.environ.get('SCONORG')
 
 
 def test_clear_location_fields():
-    sc = steelconnection.SConAPI(realm, username, password)
+    sc = steelconnection.SConnect(realm, username, password)
     org = sc.lookup.org(org_name)
     assert org['id']
     nodes = sc.get('org/' + org['id'] + '/nodes')
@@ -42,7 +42,7 @@ def test_set_node_location():
 
 
 def test_populated_location_fields():
-    sc = steelconnection.SConAPI(realm, username, password)
+    sc = steelconnection.SConnect(realm, username, password)
     org = sc.lookup.org(org_name)
     nodes = sc.get('org/' + org['id'] + '/nodes')
     for node in nodes:

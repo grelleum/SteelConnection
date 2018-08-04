@@ -6,7 +6,7 @@ Convienience objects for making REST API calls
 to Riverbed SteelConnect Manager.
 
 Usage:
-    sc = steelconnection.SConAPI(scm_name, username, password)
+    sc = steelconnection.SConnect(scm_name, username, password)
 
     Optional keyword api_version can be used to specify an API version number.
     Currently there is only one API version: '1.0'.
@@ -50,7 +50,7 @@ BINARY_DATA_MESSAGE = (
 )
 
 
-class SConAPI(object):
+class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
     :param str controller: hostname or IP address of SteelConnect Manager.
@@ -447,7 +447,22 @@ class SConAPI(object):
         return '\n>> '.join(details)
 
 
-class SConWithoutExceptions(SConAPI):
+class SConAPI(SConnect):
+    r"""Make REST API calls to Riverbed SteelConnect Manager.
+
+    This is provided for backward compatibility.
+
+    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str username: (optional) Admin account name.
+    :param str password: (optional) Admin account password.
+    :param str api_version: (optional) REST API version.
+    :returns: Dictionary or List of Dictionaries based on request.
+    :rtype: dict, or list
+    """
+    pass
+
+
+class SConWithoutExceptions(SConnect):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
     This version of the class does not raise exceptions
@@ -471,7 +486,7 @@ class SConWithoutExceptions(SConAPI):
         return None
 
 
-class SConExitOnError(SConAPI):
+class SConExitOnError(SConnect):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
     This version of the class will exit withou a traceback
