@@ -240,7 +240,7 @@ class SConnect(object):
         :rtype: str
         """
         resource = resource[1:] if resource.startswith('/') else resource
-        return 'https://{0}/api/scm.{1}/{2}/{3}'.format(
+        return 'https://{}/api/scm.{}/{}/{}'.format(
             self.controller, api, self.api_version, resource,
         )
 
@@ -424,12 +424,12 @@ class SConnect(object):
         """
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = ', '.join([
-            "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(scm_version),
-            "api version: '{0}'".format(self.api_version),
-            "package version: '{0}'".format(self.__version__),
+            "controller: '{}'".format(self.controller),
+            "scm version: '{}'".format(scm_version),
+            "api version: '{}'".format(self.api_version),
+            "package version: '{}'".format(self.__version__),
         ])
-        return '{0}({1})'.format(self.__class__.__name__, details)
+        return '{}({})'.format(self.__class__.__name__, details)
 
     def __str__(self):
         """Return a string with information about this object instance.
@@ -440,10 +440,10 @@ class SConnect(object):
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = [
             'SteelConnection:',
-            "controller: '{0}'".format(self.controller),
-            "scm version: '{0}'".format(scm_version),
-            "api version: '{0}'".format(self.api_version),
-            "package version: '{0}'".format(self.__version__),
+            "controller: '{}'".format(self.controller),
+            "scm version: '{}'".format(scm_version),
+            "api version: '{}'".format(self.api_version),
+            "package version: '{}'".format(self.__version__),
         ]
         details.extend(self.sent.splitlines())
         details.extend(self.answer.splitlines())

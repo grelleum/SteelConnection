@@ -40,14 +40,14 @@ def main(argv):
 
     # Get list of all sites in target organization.
     sites = sc.get('org/{}/sites'.format(org['id']))
-    print(status('site', sites, "in '{0}'".format(organization)))
+    print(status('site', sites, "in '{}'".format(organization)))
 
     # Create a map of site id to site name.
     site_names = {site['id']: site['name'] for site in sites}
 
     # Get list of all nodes in target organization.
     nodes = sc.get('org/{}/nodes'.format(org['id']))
-    print(status('node', nodes, "in '{0}'".format(organization)))
+    print(status('node', nodes, "in '{}'".format(organization)))
 
     # Reduce list of nodes to those assigned to a site.
     nodes = [node for node in nodes if node['site']]
@@ -72,7 +72,7 @@ def update_nodes(nodes, sc, organization, org_id, site_names):
 
         site_id = node['site']
         site_name = site_names[site_id]
-        print("\nSetting location to '{0}'".format(site_name))
+        print("\nSetting location to '{}'".format(site_name))
         node['location'] = site_name
         result = sc.put('node/' + node['id'], data=node)
         print('updated location:', result['location'])
@@ -84,7 +84,7 @@ def status(category, values, suffix=''):
     """Return status in human-readable format."""
     size = len(values)
     pluralization = '' if size == 1 else 's'
-    return '* Found {0} {1}{2} {3}.'.format(
+    return '* Found {} {}{} {}.'.format(
         size,
         category,
         pluralization,

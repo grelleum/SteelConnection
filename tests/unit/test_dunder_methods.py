@@ -67,8 +67,8 @@ def test_scon_repr():
     api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = (
-        "SConnect(controller: '{0}', scm version: '{1}', "
-        "api version: '{2}', package version: '{3}')"
+        "SConnect(controller: '{}', scm version: '{}', "
+        "api version: '{}', package version: '{}')"
     ).format(realm, scm_version, api_version, pkg_version)
     sc = steelconnection.SConnect(realm, api_version=api_version)
     assert repr(sc) == expected
