@@ -67,6 +67,7 @@ class SConnect(object):
         username=None,
         password=None,
         api_version='1.0',
+        proxies=None,
     ):
         r"""Create a new steelconnection object.
 
@@ -74,6 +75,7 @@ class SConnect(object):
         :param str username: (optional) Admin account name.
         :param str password: (optional) Admin account password.
         :param str api_version: (optional) REST API version.
+        :param dict proxies: (optional) Dictionary of proxy servers.
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
@@ -86,6 +88,7 @@ class SConnect(object):
         self.__version__ = __version__
         self.api_version = api_version
         self.session = requests.Session()
+        self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({
             'Accept': 'application/json',
             'Content-type': 'application/json',

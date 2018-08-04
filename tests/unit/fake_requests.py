@@ -76,6 +76,7 @@ class Fake_Response(object):
 class Fake_Session(object):
 
     def __init__(self):
+        self.proxies = {}
         self.headers = {
             'User-Agent': 'python-requests/2.19.1',
             'Accept-Encoding': 'gzip, deflate',
