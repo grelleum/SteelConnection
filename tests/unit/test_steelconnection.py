@@ -379,6 +379,7 @@ def test_connect_via_status():
     assert sc.scm_version == '1.23.4.56'
     assert xc == sc
 
+
 @responses.activate
 def test_connect_where_second_connect_returns_self():
     """Test SConnect.connect method when status works."""
@@ -387,6 +388,7 @@ def test_connect_where_second_connect_returns_self():
     xc = sc.connect
     xc = sc.connect
     assert xc == sc
+
 
 @responses.activate
 def test_connect_via_orgs():
@@ -397,6 +399,7 @@ def test_connect_via_orgs():
     xc = sc.connect
     assert sc.scm_version == 'unavailable'
     assert xc == sc
+
 
 @responses.activate
 def test_scm_version():
