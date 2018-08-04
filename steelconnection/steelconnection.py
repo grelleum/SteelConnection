@@ -78,6 +78,7 @@ class SConAPI(object):
         :rtype: dict, or list
         """
         # TODO: Add connection_attempts=3 to auth, use 0 to disable!
+        # problem is when credential supplied, we don't want to block on fail.
         self.__controller = controller
         self.__username = username
         self.__password = password
