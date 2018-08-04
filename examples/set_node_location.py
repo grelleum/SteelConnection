@@ -24,7 +24,7 @@ def main(argv):
     """Update nodes."""
     args = arguments(argv)
 
-    scm, organization = args.cloud_controller, args.organization
+    scm, organization = args.realm, args.organization
     if organization.endswith('.cc') and not scm.endswith('.cc'):
         scm, organization = organization, scm
 
@@ -101,7 +101,7 @@ def arguments(argv):
     )
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        'cloud_controller', type=str,
+        'realm', type=str,
         help='Domain name of SteelConnect Manager',
     )
     parser.add_argument(
