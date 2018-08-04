@@ -23,12 +23,12 @@ def main(argv):
     """Update nodes."""
     args = arguments(argv)
 
-    scm, organization = args.realm, args.organization
-    if organization.endswith('.cc') and not scm.endswith('.cc'):
-        scm, organization = organization, scm
+    realm, organization = args.realm, args.organization
+    if organization.endswith('.cc') and not realm.endswith('.cc'):
+        realm, organization = organization, realm
 
     sc = steelconnection.SConnect(
-        scm,
+        realm,
         username=args.username,
         password=args.password,
     )
