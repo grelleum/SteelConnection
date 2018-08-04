@@ -75,6 +75,14 @@ class Fake_Response(object):
 
 class Fake_Session(object):
 
+    def __init__(self):
+        self.headers = {
+            'User-Agent': 'python-requests/2.19.1',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept': '*/*',
+            'Connection': 'keep-alive'
+        }
+
     def get(self, url, auth=None, headers=None, params=None, data=None):
         if data is not None:
             raise ValueError('get data must be None.')
