@@ -85,8 +85,8 @@ class SConnect(object):
         self.__scm_version = None
         self.__version__ = __version__
         self.api_version = api_version
-        self.requests = requests.Session()
-        self.requests.headers.update({
+        self.session = requests.Session()
+        self.session.headers.update({
             'Accept': 'application/json',
             'Content-type': 'application/json',
         })
@@ -127,7 +127,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.requests.get,
+            request_method=self.session.get,
             url=self.make_url('config', resource),
             params=params,
         )
@@ -145,7 +145,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.requests.get,
+            request_method=self.session.get,
             url=self.make_url('reporting', resource),
             params=params,
         )
@@ -164,7 +164,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.requests.delete,
+            request_method=self.session.delete,
             url=self.make_url('config', resource),
             params=params,
             data=data,
@@ -183,7 +183,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.requests.post,
+            request_method=self.session.post,
             url=self.make_url('config', resource),
             data=data,
         )
@@ -202,7 +202,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self._request(
-            request_method=self.requests.put,
+            request_method=self.session.put,
             url=self.make_url('config', resource),
             params=params,
             data=data,
@@ -220,7 +220,7 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self.requests.get(
+        self.response = self.session.get(
             url=self.make_url('config', resource),
             auth=self.__auth,
             params=params,
