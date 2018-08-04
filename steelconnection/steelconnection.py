@@ -84,14 +84,13 @@ class SConnect(object):
         self.__password = password
         self.api_version = api_version
         self.requests = requests.Session()
+        self.requests.headers.update({
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+        })
         # TODO: add auth directly to session and remove from self.
         self.result = None
         self.response = None
-        self.headers = {
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-        }
-        # TODO: add headers to session.
         self.__version__ = __version__
         self.lookup = _LookUp(self)
         self.__scm_version = None
@@ -224,7 +223,6 @@ class SConnect(object):
         self.response = self.requests.get(
             url=self.make_url('config', resource),
             auth=self.__auth,
-            headers=self.headers,
             params=params,
             stream=True,
         )
@@ -342,14 +340,12 @@ class SConnect(object):
         if self.__username and not self.__password:
             self._ask_for_auth()
         response = request_method(
-            url=url, auth=self.__auth, headers=self.headers,
-            params=params, data=data,
+            url=url, auth=self.__auth, params=params, data=data,
         )
         if response.status_code == 401 and self.__auth is None:
             self._ask_for_auth()
             response = request_method(
-                url=url, auth=self.__auth, headers=self.headers,
-                params=params, data=data,
+                url=url, auth=self.__auth, params=params, data=data,
             )
         return response
 
