@@ -5,12 +5,11 @@
 by copying the site name to the location field
 for those nodes where the location is unset.
 
-Designed to work with both Python2 and Python3.
-Requires the Requests library to be installed.
+Works with both Python2 and Python3.
 
 USAGE:
-    set_node_location.py scm.riverbed.cc organization
-    set_node_location.py scm.riverbed.cc organization -u $USER -p $PASSWD
+    set_node_location.py REALM.riverbed.cc organization
+    set_node_location.py REALM.riverbed.cc organization -u $USER -p $PASSWD
 """
 
 
