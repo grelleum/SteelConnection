@@ -23,7 +23,7 @@ sc = steelconnection.SConAPI()
 sc.get('status')
 
 # steelconnection.get_input function is compatible with both Python 2 and 3.
-serial = steelconnection.get_input('Enter the serial number of the appliance: ')
+serial = steelconnection.get_input('Enter appliance serial number: ')
 node = sc.lookup.node(serial)
 
 hypervisor = steelconnection.get_input('Enter the hypervisor type: ')
