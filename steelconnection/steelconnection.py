@@ -68,6 +68,7 @@ class SConnect(object):
         password=None,
         api_version='1.0',
         proxies=None,
+        on_error='raise',
     ):
         r"""Create a new steelconnection object.
 
@@ -98,6 +99,12 @@ class SConnect(object):
         self.response = None
         self.lookup = _LookUp(self)
         self.ascii_art = ASCII_ART
+        if on_error == 'raise':
+            self._raise_exception = self._on_error_raise_exception
+        elif on_error == 'exit':
+            self._raise_exception = self._on_error_exit
+        else:
+            self._raise_exception = self._on_error_do_nothing
 
     @property
     def realm(self):
@@ -381,7 +388,7 @@ class SConnect(object):
         else:
             return response.json()
 
-    def _raise_exception(self, response):
+    def _on_error_raise_exception(self, response):
         r"""Return an appropriate exception if required.
 
         :param requests.response response: Response from HTTP request.
@@ -398,6 +405,29 @@ class SConnect(object):
         if not response.ok:
             exception = exceptions.get(response.status_code, RuntimeError)
             raise exception('\n'.join((self.answer, self.sent)))
+
+    def _on_error_do_nothing(self, response):
+        r"""Return None to short-circuit the exception process.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        return None
+
+    def _on_error_exit(self, response):
+        r"""Display error and exit.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        if not response.ok:
+            print(
+                '\n'.join((self.answer, self.sent)),
+                file=sys.stderr
+            )
+            sys.exit(1)
 
     def __bool__(self):
         """Return the success of the last request in Python3.
@@ -464,54 +494,9 @@ class SConAPI(SConnect):
     pass
 
 
-class SConWithoutExceptions(SConnect):
-    r"""Make REST API calls to Riverbed SteelConnect Manager.
-
-    This version of the class does not raise exceptions
-    when an HTTP response has a non-200 series status code.
-
-    :param str realm: hostname or IP address of SteelConnect Manager.
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :param str api_version: (optional) REST API version.
-    :returns: Dictionary or List of Dictionaries based on request.
-    :rtype: dict, or list
-    """
-
-    def _raise_exception(self, response):
-        r"""Return None to short-circuit the exception process.
-
-        :param requests.response response: Response from HTTP request.
-        :returns: None.
-        :rtype: None
-        """
-        return None
+def SConWithoutExceptions(*args, **kwargs):
+    return SConnect(*args, on_error=None, **kwargs)
 
 
-class SConExitOnError(SConnect):
-    r"""Make REST API calls to Riverbed SteelConnect Manager.
-
-    This version of the class will exit withou a traceback
-    when an HTTP response has a non-200 series status code.
-
-    :param str realm: hostname or IP address of SteelConnect Manager.
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :param str api_version: (optional) REST API version.
-    :returns: Dictionary or List of Dictionaries based on request.
-    :rtype: dict, or list
-    """
-
-    def _raise_exception(self, response):
-        r"""Display error and exit.
-
-        :param requests.response response: Response from HTTP request.
-        :returns: None.
-        :rtype: None
-        """
-        if not response.ok:
-            print(
-                '\n'.join((self.answer, self.sent)),
-                file=sys.stderr
-            )
-            sys.exit(1)
+def SConExitOnError(*args, **kwargs):
+    return SConnect(*args, on_error='exit', **kwargs)
