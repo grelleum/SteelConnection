@@ -105,18 +105,15 @@ class SConAPI(object):
             )
         return self.__controller
 
-    def connect(self, retries=3):
-        r"""Make a connection to SteelConnect.
-
-        :param int resouretriesrce: Number of times to retry.
-        """
-        resource = 'status'
+    def connect(self):
+        r"""Make a connection to SteelConnect."""
         # TODO: Add loop for connection attempts.
         #  Catch different exceptions and handle correctly.
         #  - bad realm - cannot connect.
         #  - auth failed.
-        #  - status "unavailable" - try get 'orgs'.
-        result = sc.get(resource)
+        result = self.scm_version
+        if result == 'unavailable':
+            result = self.get('orgs')
         return self.response.ok
 
     def get(self, resource, params=None):
