@@ -122,7 +122,7 @@ get_invalid_status = responses.Response(
 
 get_status_404 = responses.Response(
     method='GET',
-    url='https://old.school/api/scm.config/1.0/status',
+    url='https://some.realm/api/scm.config/1.0/status',
     status=404,
 )
 
@@ -371,6 +371,23 @@ def test_scon_make_url():
 
 
 @responses.activate
+def test_connect_via_status():
+    """Test SConAPI.connect method when status works."""
+    responses.add(get_status)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc.scm_version == '1.23.4.56'
+
+
+@responses.activate
+def test_connect_via_orgs():
+    """Test SConAPI.connect method when status fails."""
+    responses.add(get_status_404)
+    responses.add(get_orgs)
+    sc = steelconnection.SConAPI('some.realm')
+    assert sc.scm_version == 'unavailable'
+
+
+@responses.activate
 def test_scm_version():
     """Test SConAPI.scm_version method."""
     responses.add(get_status)
@@ -390,7 +407,7 @@ def test_scm_version_invalid():
 def test_scm_version_unavailable():
     """Test SConAPI.scm_version method."""
     responses.add(get_status_404)
-    sc = steelconnection.SConAPI('old.school')
+    sc = steelconnection.SConAPI('some.realm')
     assert sc.scm_version == 'unavailable'
 
 
