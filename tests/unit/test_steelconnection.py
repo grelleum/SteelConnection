@@ -375,6 +375,7 @@ def test_connect_via_status():
     """Test SConAPI.connect method when status works."""
     responses.add(get_status)
     sc = steelconnection.SConAPI('some.realm')
+    sc.connect()
     assert sc.scm_version == '1.23.4.56'
 
 
@@ -384,6 +385,7 @@ def test_connect_via_orgs():
     responses.add(get_status_404)
     responses.add(get_orgs)
     sc = steelconnection.SConAPI('some.realm')
+    sc.connect()
     assert sc.scm_version == 'unavailable'
 
 
