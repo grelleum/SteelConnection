@@ -53,7 +53,7 @@ BINARY_DATA_MESSAGE = (
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
-    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str realm: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
@@ -63,14 +63,14 @@ class SConnect(object):
 
     def __init__(
         self,
-        controller=None,
+        realm=None,
         username=None,
         password=None,
         api_version='1.0',
     ):
         r"""Create a new steelconnection object.
 
-        :param str controller: hostname or IP address of SteelConnect Manager.
+        :param str realm: hostname or IP address of SteelConnect Manager.
         :param str username: (optional) Admin account name.
         :param str password: (optional) Admin account password.
         :param str api_version: (optional) REST API version.
@@ -79,7 +79,7 @@ class SConnect(object):
         """
         # TODO: Add connection_attempts=3 to auth, use 0 to disable!
         # problem is when credential supplied, we don't want to block on fail.
-        self.__controller = controller
+        self.__realm = realm
         self.__username = username
         self.__password = password
         self.api_version = api_version
@@ -98,12 +98,12 @@ class SConnect(object):
         self.ascii_art = ASCII_ART
 
     @property
-    def controller(self):
-        while not self.__controller:
-            self.__controller = get_input(
+    def realm(self):
+        while not self.__realm:
+            self.__realm = get_input(
                 'Enter SteelConnect Manager fully qualified domain name: '
             )
-        return self.__controller
+        return self.__realm
 
     @property
     def connect(self):
@@ -241,7 +241,7 @@ class SConnect(object):
         """
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{}/api/scm.{}/{}/{}'.format(
-            self.controller, api, self.api_version, resource,
+            self.realm, api, self.api_version, resource,
         )
 
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
@@ -417,14 +417,14 @@ class SConnect(object):
         return self.__bool__()
 
     def __repr__(self):
-        """Return a string consisting of class name, controller, and api.
+        """Return a string consisting of class name, realm, and api.
 
         :returns: Information about this object.
         :rtype: str
         """
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = ', '.join([
-            "controller: '{}'".format(self.controller),
+            "realm: '{}'".format(self.realm),
             "scm version: '{}'".format(scm_version),
             "api version: '{}'".format(self.api_version),
             "package version: '{}'".format(self.__version__),
@@ -440,7 +440,7 @@ class SConnect(object):
         scm_version = self.scm_version if self.scm_version else 'unavailable'
         details = [
             'SteelConnection:',
-            "controller: '{}'".format(self.controller),
+            "realm: '{}'".format(self.realm),
             "scm version: '{}'".format(scm_version),
             "api version: '{}'".format(self.api_version),
             "package version: '{}'".format(self.__version__),
@@ -455,7 +455,7 @@ class SConAPI(SConnect):
 
     This is provided for backward compatibility.
 
-    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str realm: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
@@ -471,7 +471,7 @@ class SConWithoutExceptions(SConnect):
     This version of the class does not raise exceptions
     when an HTTP response has a non-200 series status code.
 
-    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str realm: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
@@ -495,7 +495,7 @@ class SConExitOnError(SConnect):
     This version of the class will exit withou a traceback
     when an HTTP response has a non-200 series status code.
 
-    :param str controller: hostname or IP address of SteelConnect Manager.
+    :param str realm: hostname or IP address of SteelConnect Manager.
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.

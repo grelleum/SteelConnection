@@ -332,25 +332,25 @@ def test_answer_not_ok_and_no_json():
     assert sc.answer == 'Status: 404 - Not Found\nError: None'
 
 
-def test_scon_controller_when_defined():
-    """Test SConnect.controller property when pre-defined."""
+def test_scon_realm_when_defined():
+    """Test SConnect.realm property when pre-defined."""
     sc = steelconnection.SConnect('some.realm')
-    assert sc.controller == 'some.realm'
+    assert sc.realm == 'some.realm'
 
 
-def test_scon_controller_when_not_defined(monkeypatch):
-    """Test SConnect.controller property when not provided."""
+def test_scon_realm_when_not_defined(monkeypatch):
+    """Test SConnect.realm property when not provided."""
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
     sc = steelconnection.SConnect()
-    assert sc.controller == 'some.realm'
+    assert sc.realm == 'some.realm'
 
 
 @responses.activate
-def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
-    """Test SConnect.controller property when not provided."""
+def test_scon_realm_when_called_from_request_and_not_defined(monkeypatch):
+    """Test SConnect.realm property when not provided."""
     responses.add(get_status)
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
@@ -358,7 +358,7 @@ def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
     sc = steelconnection.SConnect()
     sc.get('status')
-    assert sc.controller == 'some.realm'
+    assert sc.realm == 'some.realm'
 
 
 # Helper methods:

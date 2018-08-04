@@ -67,7 +67,7 @@ def test_scon_repr():
     api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = (
-        "SConnect(controller: '{}', scm version: '{}', "
+        "SConnect(realm: '{}', scm version: '{}', "
         "api version: '{}', package version: '{}')"
     ).format(realm, scm_version, api_version, pkg_version)
     sc = steelconnection.SConnect(realm, api_version=api_version)
@@ -89,7 +89,7 @@ def test_scon_str():
     pkg_version = steelconnection.__version__
     expected = '\n'.join((
         'SteelConnection:',
-        ">> controller: '{}'",
+        ">> realm: '{}'",
         ">> scm version: '{}'",
         ">> api version: '{}'",
         ">> package version: '{}'",
