@@ -318,7 +318,7 @@ def test_answer_with_success():
     """Test SConAPI.answer when response.ok."""
     responses.add(get_status)
     sc = steelconnection.SConAPI('some.realm')
-    _ = sc.get('status')
+    sc.get('status')
     assert sc.answer == 'Status: 200 - OK\nError: None'
 
 
@@ -357,7 +357,7 @@ def test_scon_controller_when_called_from_request_and_not_defined(monkeypatch):
     else:
         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
     sc = steelconnection.SConAPI()
-    _ = sc.get('status')
+    sc.get('status')
     assert sc.controller == 'some.realm'
 
 
@@ -410,7 +410,7 @@ def test_download_image():
     responses.add(get_image_download)
     filename = 'delete.me'
     sc = steelconnection.SConAPI('some.realm')
-    result = sc.download_image('node-12345', save_as=filename)
+    sc.download_image('node-12345', save_as=filename)
     with open(filename, 'rb') as f:
         contents = f.read()
     assert contents == db['image_download']
