@@ -105,16 +105,19 @@ class SConnect(object):
             )
         return self.__controller
 
+    @property
     def connect(self):
         r"""Make a connection to SteelConnect."""
         # TODO: Add loop for connection attempts.
         #  Catch different exceptions and handle correctly.
         #  - bad realm - cannot connect.
         #  - auth failed.
+        if self.response and self.response.ok:
+            return self
         result = self.scm_version
         if result == 'unavailable':
             result = self.get('orgs')
-        return self.response.ok
+        return self if self.response.ok else None
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
