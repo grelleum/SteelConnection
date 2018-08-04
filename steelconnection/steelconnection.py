@@ -77,6 +77,7 @@ class SConAPI(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
+        # TODO: Add connection_attempts=3 to auth, use 0 to disable!
         self.__controller = controller
         self.__username = username
         self.__password = password
@@ -102,6 +103,20 @@ class SConAPI(object):
                 'Enter SteelConnect Manager fully qualified domain name: '
             )
         return self.__controller
+
+    def connect(self, retries=3):
+        r"""Make a connection to SteelConnect.
+
+        :param int resouretriesrce: Number of times to retry.
+        """
+        resource = 'status'
+        # TODO: Add loop for connection attempts.
+        #  Catch different exceptions and handle correctly.
+        #  - bad realm - cannot connect.
+        #  - auth failed.
+        #  - status "unavailable" - try get 'orgs'.
+        result = sc.get(resource)
+        return self.response.ok
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
