@@ -26,8 +26,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
-from .input_tools import get_input, get_username
-from .input_tools import get_password, get_password_once
+from .input_tools import get_input, get_username, get_password
 from .__version__ import __author__, __author_email__
 from .__version__ import __copyright__, __description__
 from .__version__ import __license__, __title__
