@@ -7,7 +7,7 @@
 ```
 
 # SteelConnection
-##### version 0.9.35
+##### version 0.10.0
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
