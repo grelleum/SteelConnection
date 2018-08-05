@@ -103,7 +103,7 @@ class SConnect(object):
             'exit': self._on_error_exit,
         }.get(on_error, self._on_error_do_nothing)
         if not all([realm and username and password]):
-            self.connect(connection_attempts)
+            self._login(connection_attempts)
 
     @property
     def realm(self):
@@ -113,7 +113,7 @@ class SConnect(object):
             )
         return self.__realm
 
-    def connect(self, retries=3):
+    def _login(self, retries=3):
         r"""Make a connection to SteelConnect."""
         if self.response and self.response.ok:
             return self
