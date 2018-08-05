@@ -54,11 +54,11 @@ def test_raise_exception_APINotEnabled():
         sc._raise_exception(sc.response)
 
 
-# Alternate Classes:
+# Alternate Behavior:
 
 def test_raise_exception_without_exceptions():
     """_raise_exception should raise the correct exceptions based on status."""
-    sc = steelconnection.SConWithoutExceptions(connection_attempts=0)
+    sc = steelconnection.SConnect(connection_attempts=0, on_error=False)
     sc.response = fake_requests.Fake_Response('', 502, {})
     try:
         result = sc._raise_exception(sc.response)
@@ -69,7 +69,7 @@ def test_raise_exception_without_exceptions():
 
 
 def test_exit_when_raise_exception_with_exit_on_error(capsys):
-    sc = steelconnection.SConExitOnError(connection_attempts=0)
+    sc = steelconnection.SConnect(connection_attempts=0, on_error='exit')
     sc.response = fake_requests.Fake_Response('', 502, {})
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         sc._raise_exception(sc.response)
