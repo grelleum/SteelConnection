@@ -66,7 +66,7 @@ If you do not specify a realm, username, or password, and a .netrc file is not c
 ```python
 >>> import steelconnection
 >>> sc = steelconnection.SConnect()
-Enter SteelConnect Manager fully qualified domain name: granny.riverbed.cc
+Enter SteelConnect Manager fully qualified domain name: REALM.riverbed.cc
 Enter username: admin
 Enter password:
 >>>
