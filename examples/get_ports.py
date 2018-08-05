@@ -13,6 +13,7 @@
 # https://pypi.org/project/steelconnection
 # https://github.com/grelleum/SteelConnection
 
+
 """List port information for a SteelConnect appliance."""
 
 from __future__ import print_function
