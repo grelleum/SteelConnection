@@ -115,7 +115,6 @@ class SConnect(object):
             )
         return self.__realm
 
-    @property
     def connect(self):
         r"""Make a connection to SteelConnect."""
         # TODO: Add loop for connection attempts.
