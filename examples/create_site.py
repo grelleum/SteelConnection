@@ -1,3 +1,6 @@
+from __future__ import print_function
+from pprint import pprint
+
 import steelconnection
 
 # Change the below values to match the realm and org
@@ -22,7 +25,7 @@ def main():
 
     # Get the org ID for your organization.
     org = sc.lookup.org(org_name)
-    print('Org name: {},  Org id: {}'.format(org['name'], org['id']))
+    print('Org name: {},  Org id: {}'.format(org['longname'], org['id']))
 
     # API resource for posting.
     resource = '/org/{}/sites'.format(org['id'])
@@ -32,7 +35,7 @@ def main():
 
     # Display response.
     print('Response:', sc.response.status_code, sc.response.reason)
-    print(result)
+    pprint(result)
 
 
 if __name__ == '__main__':
