@@ -98,6 +98,7 @@ class SConnect(object):
         self.result = None
         self.response = None
         self.lookup = _LookUp(self)
+        self.timeout = (5, 60)
         self.ascii_art = ASCII_ART
         if on_error == 'raise':
             self._raise_exception = self._on_error_raise_exception
@@ -350,12 +351,14 @@ class SConnect(object):
         if self.__username and not self.__password:
             self._ask_for_auth()
         response = request_method(
-            url=url, auth=self.__auth, params=params, data=data,
+            url=url, auth=self.__auth, params=params,
+            data=data, timeout=self.timeout,
         )
         if response.status_code == 401 and self.__auth is None:
             self._ask_for_auth()
             response = request_method(
-                url=url, auth=self.__auth, params=params, data=data,
+                url=url, auth=self.__auth, params=params,
+                data=data, timeout=self.timeout,
             )
         return response
 
