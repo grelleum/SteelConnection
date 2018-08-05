@@ -89,16 +89,16 @@ class SConnect(object):
         self.__scm_version = None
         self.__version__ = __version__
         self.api_version = api_version
+        self.ascii_art = ASCII_ART
+        self.timeout = timeout
+        self.result = None
+        self.response = None
+        self.lookup = _LookUp(self)
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
         # TODO: add auth directly to session and remove from self.
-        self.result = None
-        self.response = None
-        self.lookup = _LookUp(self)
-        self.timeout = timeout
-        self.ascii_art = ASCII_ART
         self._raise_exception = {
             'raise': self._on_error_raise_exception,
             'exit': self._on_error_exit,
