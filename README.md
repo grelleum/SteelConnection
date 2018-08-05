@@ -71,6 +71,7 @@ Enter username: admin
 Enter password:
 >>>
 ```
+Three connection attempts are made by default and can be configured with the `connections_attempts=N` parameter, where N is replaced with an interger.
 
 ##### Using a .netrc file (Optional):
 A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  This file would be stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
