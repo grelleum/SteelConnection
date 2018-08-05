@@ -98,12 +98,10 @@ class SConnect(object):
         self.lookup = _LookUp(self)
         self.timeout = timeout
         self.ascii_art = ASCII_ART
-        if on_error == 'raise':
-            self._raise_exception = self._on_error_raise_exception
-        elif on_error == 'exit':
-            self._raise_exception = self._on_error_exit
-        else:
-            self._raise_exception = self._on_error_do_nothing
+        self._raise_exception = {
+            'raise': self._on_error_raise_exception,
+            'exit': self._on_error_exit,
+        }.get(on_error, self._on_error_do_nothing)
 
     @property
     def realm(self):
