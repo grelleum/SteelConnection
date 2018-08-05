@@ -370,24 +370,24 @@ def test_scon_make_url():
     assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
-@responses.activate
-def test_connect_via_status():
-    """Test SConnect.connect method when status works."""
-    responses.add(get_status)
-    sc = steelconnection.SConnect('some.realm')
-    xc = sc.connect()
-    assert sc.scm_version == '1.23.4.56'
-    assert xc == sc
+# @responses.activate
+# def test_connect_via_status():
+#     """Test SConnect.connect method when status works."""
+#     responses.add(get_status)
+#     sc = steelconnection.SConnect('some.realm')
+#     xc = sc.connect()
+#     assert sc.scm_version == '1.23.4.56'
+#     assert xc == sc
 
 
-@responses.activate
-def test_connect_where_second_connect_returns_self():
-    """Test SConnect.connect method when status works."""
-    responses.add(get_status)
-    sc = steelconnection.SConnect('some.realm')
-    xc = sc.connect()
-    xc = sc.connect()
-    assert xc == sc
+# @responses.activate
+# def test_connect_where_second_connect_returns_self():
+#     """Test SConnect.connect method when status works."""
+#     responses.add(get_status)
+#     sc = steelconnection.SConnect('some.realm')
+#     xc = sc.connect()
+#     xc = sc.connect()
+#     assert xc == sc
 
 
 @responses.activate
