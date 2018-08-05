@@ -375,7 +375,7 @@ def test_scon_make_url():
 #     """Test SConnect.connect method when status works."""
 #     responses.add(get_status)
 #     sc = steelconnection.SConnect('some.realm')
-#     xc = sc.connect()
+#     xc = sc._login()
 #     assert sc.scm_version == '1.23.4.56'
 #     assert xc == sc
 
@@ -385,8 +385,8 @@ def test_scon_make_url():
 #     """Test SConnect.connect method when status works."""
 #     responses.add(get_status)
 #     sc = steelconnection.SConnect('some.realm')
-#     xc = sc.connect()
-#     xc = sc.connect()
+#     xc = sc._login()
+#     xc = sc.conn_loginect()
 #     assert xc == sc
 
 
@@ -396,7 +396,7 @@ def test_connect_via_orgs():
     responses.add(get_status_404)
     responses.add(get_orgs)
     sc = steelconnection.SConnect('some.realm')
-    xc = sc.connect()
+    xc = sc._login()
     assert sc.scm_version == 'unavailable'
     assert xc == sc
 
