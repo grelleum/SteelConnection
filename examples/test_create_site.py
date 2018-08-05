@@ -19,7 +19,7 @@ org_name = os.environ.get('SCONORG')
 appliance = os.environ.get('SCONAPPLIANCE')
 
 
-def test_create_site(capsys, monkeypatch):
+def test_create_site(monkeypatch):
     if sys.version_info.major < 3:
         monkeypatch.setattr('__builtin__.raw_input', lambda x: username)
     else:
