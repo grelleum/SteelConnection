@@ -69,6 +69,7 @@ class SConnect(object):
         api_version='1.0',
         proxies=None,
         on_error='raise',
+        timeout = (5, 60),
     ):
         r"""Create a new steelconnection object.
 
@@ -98,7 +99,7 @@ class SConnect(object):
         self.result = None
         self.response = None
         self.lookup = _LookUp(self)
-        self.timeout = (5, 60)
+        self.timeout = timeout
         self.ascii_art = ASCII_ART
         if on_error == 'raise':
             self._raise_exception = self._on_error_raise_exception
