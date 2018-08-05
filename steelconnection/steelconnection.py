@@ -69,7 +69,8 @@ class SConnect(object):
         api_version='1.0',
         proxies=None,
         on_error='raise',
-        timeout = (5, 60),
+        timeout=(5, 60),
+        connection_attempts=3,
     ):
         r"""Create a new steelconnection object.
 
