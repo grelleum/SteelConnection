@@ -91,7 +91,7 @@ def _get_file_path(source_file, save_as):
 
 
 def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
-    verbose('Downloading file as', save_as, end=' ')
+    verbose("Downloading file as '{}'".format(save_as), end=' ')
     with open(save_as, 'wb') as fd:
         chunks = sconnect.stream(
             '/node/{}/get_image'.format(nodeid),
