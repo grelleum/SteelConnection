@@ -1,3 +1,19 @@
+
+# coding: utf-8
+
+#    ______          _______                       __  _
+#   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+#  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+# /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+#
+#
+# SteelConnection
+# Simplify access to the Riverbed SteelConnect REST API.
+#
+# https://pypi.org/project/steelconnection
+# https://github.com/grelleum/SteelConnection
+
+
 from __future__ import print_function
 from pprint import pprint
 
