@@ -102,6 +102,8 @@ class SConnect(object):
             'raise': self._on_error_raise_exception,
             'exit': self._on_error_exit,
         }.get(on_error, self._on_error_do_nothing)
+        if not all([realm and username and password]):
+            self.connect(connection_attempts)
 
     @property
     def realm(self):
@@ -115,16 +117,27 @@ class SConnect(object):
         r"""Make a connection to SteelConnect."""
         if self.response and self.response.ok:
             return self
-        for attempts in range(retries):
+        for _ in range(retries):
             try:
-                result = self.get('orgs')
-            except (requests.ConnectionError, InvalidResource):
+                if self.scm_version == 'unavailable':
+                    self.get('orgs')
+            except IOError as e:
+                print('Error:', e)
                 print('Cannot connect to realm: ', self.realm)
-                self.__realm = None
+                self.__realm = self.__scm_version = None
+                self.realm
+            except (IOError, InvalidResource) as e:
+                print(e)
+                print(
+                    "'{}'".format(self.realm),
+                    "does not appear to be a SteelConnect Manager."
+                )
+                self.__realm = self.__scm_version = None
                 self.realm
             except AuthenticationError:
                 print('Authentication Failed')
-                self.__username = None
+                self.__username = self.__password = None
+                # self.__username, self.__password = None, None
             else:
                 return self if self.response.ok else None
 
