@@ -4,7 +4,7 @@ import re
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
-version = '0.9.34'
+version = '0.90.0'
 copyright = 'Copyright 2018 Greg Mueller'
 
 info = {
@@ -40,7 +40,7 @@ def create_version_file(info):
         'title', 'description', 'version', 'author',
         'author_email', 'copyright', 'license', 'url',
     ]
-    text = "__{0}__ = '{1}'\n"
+    text = "__{}__ = '{}'\n"
     with open(name + '/__version__.py', 'wt') as f:
         for key in keys:
             f.write(text.format(key, export_info[key]))

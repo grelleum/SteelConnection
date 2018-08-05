@@ -13,42 +13,42 @@ class NameSpace():
 
 def test_scon_returns_true():
     """Test object returns True when reponse is OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert bool(sc)
 
 
 def test_scon_returns_false():
     """Test object returns False when reponse is not OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not bool(sc)
 
 
 def test_scon_bool_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert sc.__bool__()
 
 
 def test_scon_bool_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not sc.__bool__()
 
 
 def test_scon_nonzero_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert sc.__nonzero__()
 
 
 def test_scon_nonzero_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    sc = steelconnection.SConAPI('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not sc.__nonzero__()
 
@@ -67,10 +67,10 @@ def test_scon_repr():
     api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = (
-        "SConAPI(controller: '{0}', scm version: '{1}', "
-        "api version: '{2}', package version: '{3}')"
+        "SConnect(realm: '{}', scm version: '{}', "
+        "api version: '{}', package version: '{}')"
     ).format(realm, scm_version, api_version, pkg_version)
-    sc = steelconnection.SConAPI(realm, api_version=api_version)
+    sc = steelconnection.SConnect(realm, api_version=api_version)
     assert repr(sc) == expected
 
 
@@ -89,7 +89,7 @@ def test_scon_str():
     pkg_version = steelconnection.__version__
     expected = '\n'.join((
         'SteelConnection:',
-        ">> controller: '{}'",
+        ">> realm: '{}'",
         ">> scm version: '{}'",
         ">> api version: '{}'",
         ">> package version: '{}'",
@@ -99,5 +99,5 @@ def test_scon_str():
         '>> Error: None'
     ))
     expected = expected.format(realm, scm_version, api_version, pkg_version)
-    sc = steelconnection.SConAPI(realm, api_version=api_version)
+    sc = steelconnection.SConnect(realm, api_version=api_version)
     assert str(sc) == expected

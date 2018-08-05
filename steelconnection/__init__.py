@@ -13,7 +13,7 @@ Simplify access to the Riverbed SteelConnect REST API.
 usage:
 
 import steelconnection
-sc = steelconnection.SConAPI('REALM.riverbed.cc')
+sc = steelconnection.SConnect('REALM.riverbed.cc')
 org = sc.lookup.org('MyOrgName')
 nodes = sc.get('org/' + org_id + '/nodes')
 
@@ -23,11 +23,12 @@ Full documentation available at https://pypi.org/project/steelconnection/
 :license: MIT, see LICENSE for more details.
 """
 
+from requests import ConnectionError, RequestException
+from .steelconnection import SConnect
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
-from .exceptions import BadRequest, InvalidResource
-from .input_tools import get_input, get_username
-from .input_tools import get_password, get_password_once
+from .exceptions import BadRequest, InvalidResource, ResourceGone
+from .input_tools import get_input, get_username, get_password
 from .__version__ import __author__, __author_email__
 from .__version__ import __copyright__, __description__
 from .__version__ import __license__, __title__
@@ -38,14 +39,25 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 __all__ = (
+    'SConnect',
     'SConAPI',
     'SConWithoutExceptions',
     'SConExitOnError',
+    'ConnectionError',
+    'RequestException',
     'AuthenticationError',
     'APINotEnabled',
     'BadRequest',
     'InvalidResource',
+    'ResourceGone',
     'get_input',
     'get_username',
     'get_password',
 )
+
+
+def about():
+    return '\n'.join((
+        __author__, __author_email__, __copyright__, __description__,
+        __license__, __title__, __url__, __version__,
+    ))

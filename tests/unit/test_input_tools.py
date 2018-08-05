@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import getpass
 import sys
 from steelconnection import input_tools
 

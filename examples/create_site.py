@@ -1,3 +1,22 @@
+
+# coding: utf-8
+
+#    ______          _______                       __  _
+#   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+#  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+# /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+#
+#
+# SteelConnection
+# Simplify access to the Riverbed SteelConnect REST API.
+#
+# https://pypi.org/project/steelconnection
+# https://github.com/grelleum/SteelConnection
+
+
+from __future__ import print_function
+from pprint import pprint
+
 import steelconnection
 
 # Change the below values to match the realm and org
@@ -18,11 +37,11 @@ new_site = {
 
 def main():
     # Initialize the steelconnection object.
-    sc = steelconnection.SConAPI(scm_name)
+    sc = steelconnection.SConnect(scm_name)
 
     # Get the org ID for your organization.
     org = sc.lookup.org(org_name)
-    print('Org name: {},  Org id: {}'.format(org['name'], org['id']))
+    print('Org name: {},  Org id: {}'.format(org['longname'], org['id']))
 
     # API resource for posting.
     resource = '/org/{}/sites'.format(org['id'])
@@ -32,7 +51,7 @@ def main():
 
     # Display response.
     print('Response:', sc.response.status_code, sc.response.reason)
-    print(result)
+    pprint(result)
 
 
 if __name__ == '__main__':

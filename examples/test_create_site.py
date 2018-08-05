@@ -37,7 +37,7 @@ def test_create_site(capsys, monkeypatch):
         'country': 'US',
         'timezone': 'America/New_York',
     }
-    sc = steelconnection.SConAPI(realm, username, password)
+    sc = steelconnection.SConnect(realm, username, password)
     org = sc.lookup.org(org_name)
     site = sc.lookup.site(create_site.new_site['name'], org['id'])
     if site:

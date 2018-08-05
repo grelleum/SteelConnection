@@ -1,10 +1,7 @@
 # coding: utf-8
 
-
-import getpass
 import os
 import sys
-import subprocess
 import steelconnection
 
 
@@ -18,11 +15,11 @@ ALT_REALM = os.environ.get('SCONALTREALM')
 
 
 def test_create_object():
-    sc = steelconnection.SConAPI(REALM, REALM_ADMIN, PASSWORD)
+    sc = steelconnection.SConnect(REALM, REALM_ADMIN, PASSWORD)
     orgs = sc.get('orgs')
     assert orgs
     assert isinstance(orgs, list)
-    assert isinstance(sc, steelconnection.SConAPI)
+    assert isinstance(sc, steelconnection.SConnect)
     assert orgs[0]['id']
 
 
@@ -33,6 +30,6 @@ def test_auth_attempt_netrc_fails(monkeypatch):
     else:
         monkeypatch.setattr('builtins.input', lambda x: REALM_ADMIN)
     monkeypatch.setattr('getpass.getpass', lambda x: PASSWORD)
-    sc = steelconnection.SConAPI(ALT_REALM)
+    sc = steelconnection.SConnect(ALT_REALM)
     sc.get('orgs')
     assert sc

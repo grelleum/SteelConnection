@@ -7,7 +7,7 @@
 ```
 
 # SteelConnection
-##### version 0.9.34
+##### version 0.90.0
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
@@ -27,6 +27,9 @@ Requests
 ## HOWTO:
 #### To install or upgrade your copy to the latest version:
 ```bash
+# Default Python
+python -m pip install --upgrade steelconnection
+
 # Python 3
 python3 -m pip install --upgrade steelconnection
 
@@ -44,7 +47,7 @@ https://github.com/grelleum/SteelConnection/tree/master/examples
 * Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
 ```python
 import steelconnection
-sc = steelconnection.SConAPI('REALM.riverbed.cc')
+sc = steelconnection.SConnect('REALM.riverbed.cc')
 ```
 
 #### Realms and Organizations:
@@ -59,14 +62,16 @@ The Organization is case-sensistive and is also known as the organization short 
 SteelConnect REST API uses Basic Auth, meaning a username and password are required for authentication for every request made.  The steelconnection object can store the username and pssword for you, or you can use a .netrc file as detailed below.  Choose one of the following methods:
 
 ##### Interactive login (Optional):
-If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
+If you do not specify a realm, username, or password, and a .netrc file is not configured, steelconnection will interactively prompt you for your the missing information.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
->>> sc = steelconnection.SConAPI('REALM.riverbed.cc')
+>>> sc = steelconnection.SConnect()
+Enter SteelConnect Manager fully qualified domain name: REALM.riverbed.cc
 Enter username: admin
 Enter password:
 >>>
 ```
+Three connection attempts are made by default and can be configured with the `connections_attempts=N` parameter, where N is replaced with an interger.
 
 ##### Using a .netrc file (Optional):
 A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  This file would be stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
@@ -85,7 +90,7 @@ import steelconnection
 username = os.environ.get('SCONUSER')
 password = os.environ.get('SCONPASSWD')
 
-sc = steelconnection.SConAPI('REALM.riverbed.cc', username=username, password=password)
+sc = steelconnection.SConnect('REALM.riverbed.cc', username=username, password=password)
 ```
 
 #### Understanding the API:
@@ -196,14 +201,14 @@ More specific exceptions that might be generated (all inherit from `RuntimeError
 * `steelconnection.exceptions.BadRequest`: 400 - Possibly tried creating a resource that already exists.
 * `steelconnection.exceptions.InvalidResource`: 404 - Path or resource not found.
 
-If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmeds, you can instead use the child class `SConExitOnError` to create your object.  The `SConExitOnError` class replaces the exception handling method with a method that prints the error detail and exists with an error status of 1.
+If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmers, you can set `on_error='exit'` when you create your SConnect object.
 ```python
-sc = SConExitOnError('REALM.riverbed.cc')
+sc = SConnect('REALM.riverbed.cc', on_error='exit')
 ```
 
-If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConWithoutExceptions` to create your object.  The `SConWithoutExceptions` class replaces the exception handling method with a method that does nothing.  The  steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `.response.ok`.
+If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can set `on_error=None` when you create your SConnect object.  The steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `SConnect.response.ok`.
 ```python
-sc = SConWithoutExceptions('REALM.riverbed.cc')
+sc = SConnect('REALM.riverbed.cc', on_error=None)
 ```
 
 #### Convenience functions:

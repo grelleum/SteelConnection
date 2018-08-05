@@ -19,19 +19,25 @@ from __future__ import print_function
 import steelconnection
 import os
 
-sc = steelconnection.SConAPI()
-sc.get('status')
 
-# steelconnection.get_input function is compatible with both Python 2 and 3.
-serial = steelconnection.get_input('Enter the serial number of the appliance: ')
-node = sc.lookup.node(serial)
+def main():
+    sc = steelconnection.SConnect()
+    sc.get('status')
 
-hypervisor = steelconnection.get_input('Enter the hypervisor type: ')
-filename = 'scon_vgw_{}_{}.zip'.format(serial, hypervisor)
+    # steelconnection.get_input is compatible with both Python 2 and 3.
+    serial = steelconnection.get_input('Enter appliance serial number: ')
+    node = sc.lookup.node(serial)
 
-# Put filename into the HOME/Downloads folder.
-home = os.path.expanduser('~')
-filepath = os.path.join(home, 'Downloads', filename)
+    hypervisor = steelconnection.get_input('Enter the hypervisor type: ')
+    filename = 'scon_vgw_{}_{}.zip'.format(serial, hypervisor)
 
-success = sc.download_image(node['id'], save_as=filename, build=hypervisor)
-print(success)
+    # Put filename into the HOME/Downloads folder.
+    home = os.path.expanduser('~')
+    filepath = os.path.join(home, 'Downloads', filename)
+
+    success = sc.download_image(node['id'], save_as=filepath, build=hypervisor)
+    print(success)
+
+
+if __name__ == '__main__':
+    main()

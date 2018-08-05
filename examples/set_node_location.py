@@ -1,16 +1,29 @@
 #!/usr/bin/env python
 
+# coding: utf-8
+
+#    ______          _______                       __  _
+#   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
+#  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+# /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+#
+#
+# SteelConnection
+# Simplify access to the Riverbed SteelConnect REST API.
+#
+# https://pypi.org/project/steelconnection
+# https://github.com/grelleum/SteelConnection
+
 
 """Update SteelConnect nodes within a specified Org
 by copying the site name to the location field
 for those nodes where the location is unset.
 
-Designed to work with both Python2 and Python3.
-Requires the Requests library to be installed.
+Works with both Python2 and Python3.
 
 USAGE:
-    set_node_location.py scm.riverbed.cc organization
-    set_node_location.py scm.riverbed.cc organization -u $USER -p $PASSWD
+    set_node_location.py REALM.riverbed.cc organization
+    set_node_location.py REALM.riverbed.cc organization -u $USER -p $PASSWD
 """
 
 
@@ -24,12 +37,12 @@ def main(argv):
     """Update nodes."""
     args = arguments(argv)
 
-    scm, organization = args.cloud_controller, args.organization
-    if organization.endswith('.cc') and not scm.endswith('.cc'):
-        scm, organization = organization, scm
+    realm, organization = args.realm, args.organization
+    if organization.endswith('.cc') and not realm.endswith('.cc'):
+        realm, organization = organization, realm
 
-    sc = steelconnection.SConAPI(
-        scm,
+    sc = steelconnection.SConnect(
+        realm,
         username=args.username,
         password=args.password,
     )
@@ -40,14 +53,14 @@ def main(argv):
 
     # Get list of all sites in target organization.
     sites = sc.get('org/{}/sites'.format(org['id']))
-    print(status('site', sites, "in '{0}'".format(organization)))
+    print(status('site', sites, "in '{}'".format(organization)))
 
     # Create a map of site id to site name.
     site_names = {site['id']: site['name'] for site in sites}
 
     # Get list of all nodes in target organization.
     nodes = sc.get('org/{}/nodes'.format(org['id']))
-    print(status('node', nodes, "in '{0}'".format(organization)))
+    print(status('node', nodes, "in '{}'".format(organization)))
 
     # Reduce list of nodes to those assigned to a site.
     nodes = [node for node in nodes if node['site']]
@@ -72,7 +85,7 @@ def update_nodes(nodes, sc, organization, org_id, site_names):
 
         site_id = node['site']
         site_name = site_names[site_id]
-        print("\nSetting location to '{0}'".format(site_name))
+        print("\nSetting location to '{}'".format(site_name))
         node['location'] = site_name
         result = sc.put('node/' + node['id'], data=node)
         print('updated location:', result['location'])
@@ -84,7 +97,7 @@ def status(category, values, suffix=''):
     """Return status in human-readable format."""
     size = len(values)
     pluralization = '' if size == 1 else 's'
-    return '* Found {0} {1}{2} {3}.'.format(
+    return '* Found {} {}{} {}.'.format(
         size,
         category,
         pluralization,
@@ -101,7 +114,7 @@ def arguments(argv):
     )
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        'cloud_controller', type=str,
+        'realm', type=str,
         help='Domain name of SteelConnect Manager',
     )
     parser.add_argument(
