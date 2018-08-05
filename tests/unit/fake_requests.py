@@ -87,7 +87,7 @@ class Fake_Session(object):
     def get(
             self, url, auth=None, headers=None,
             params=None, data=None, timeout=None,
-        ):
+    ):
         if data is not None:
             raise ValueError('get data must be None.')
         if url == 'https://old.school/api/scm.config/1.0/status':
@@ -102,7 +102,7 @@ class Fake_Session(object):
     def getstatus(
             self, url, auth=None, headers=None,
             params=None, data=None, timeout=None,
-        ):
+    ):
         if data is not None:
             raise ValueError('getstatus data must be None.')
         resource = url.split('/')[-1]
@@ -113,7 +113,7 @@ class Fake_Session(object):
     def delete(
             self, url, auth=None, headers=None,
             params=None, data=None, timeout=None,
-        ):
+    ):
         resource = url.split('/')[-1]
         data = responses.get(resource, {}) if not data else data
         status_code = codes.get(resource, 200)
@@ -122,7 +122,7 @@ class Fake_Session(object):
     def post(
             self, url, auth=None, headers=None,
             params=None, data=None, timeout=None,
-        ):
+    ):
         if params is not None:
             raise ValueError('post params must be None.')
         if data is None:
@@ -134,7 +134,7 @@ class Fake_Session(object):
     def put(
             self, url, auth=None, headers=None,
             params=None, data=None, timeout=None,
-        ):
+    ):
         if data is None:
             raise ValueError('put method must have data')
         resource = url.split('/')[-1]
