@@ -82,8 +82,6 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        # TODO: Add connection_attempts=3 to auth, use 0 to disable!
-        # problem is when credential supplied, we don't want to block on fail.
         self.__realm = realm
         self.__username = username
         self.__password = password
@@ -92,10 +90,8 @@ class SConnect(object):
         self.api_version = api_version
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
-        self.session.headers.update({
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-        })
+        self.session.headers.update({'Accept': 'application/json'})
+        self.session.headers.update({'Content-type': 'application/json'})
         # TODO: add auth directly to session and remove from self.
         self.result = None
         self.response = None
