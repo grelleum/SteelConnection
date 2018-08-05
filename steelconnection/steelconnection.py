@@ -38,7 +38,7 @@ from .lookup import _LookUp
 from .input_tools import get_input, get_username, get_password_once
 
 
-ASCII_ART = """
+ASCII_ART = r"""
    ______          _______                       __  _
   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \

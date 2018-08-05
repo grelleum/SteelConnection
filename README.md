@@ -7,7 +7,7 @@
 ```
 
 # SteelConnection
-##### version 0.90.0
+##### version 0.90.1
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
@@ -44,10 +44,10 @@ https://github.com/grelleum/SteelConnection/tree/master/examples
 #### Getting Started:
 * Make sure the REST API is enabled on your SteelConnect realm before trying to access the REST API.
 * Use pip to install steelconnection as shown above.
-* Import steelconnection and create a new object by providing the Fully qualified DNS name of your realm.  This would typically be `REALM_NAME.riverbed.cc`, where `REALM_NAME` is specific to your realm.
+* Import steelconnection and create a new object.
 ```python
 import steelconnection
-sc = steelconnection.SConnect('REALM.riverbed.cc')
+sc = steelconnection.SConnect()
 ```
 
 #### Realms and Organizations:
