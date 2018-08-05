@@ -23,7 +23,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 :license: MIT, see LICENSE for more details.
 """
 
-from requests import ConnectionError
+from requests import ConnectionError, RequestException
 from .steelconnection import SConnect
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
@@ -44,6 +44,7 @@ __all__ = (
     'SConWithoutExceptions',
     'SConExitOnError',
     'ConnectionError',
+    'RequestException',
     'AuthenticationError',
     'APINotEnabled',
     'BadRequest',
