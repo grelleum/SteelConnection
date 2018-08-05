@@ -28,6 +28,7 @@ from __future__ import print_function
 import json
 import requests
 import sys
+import warnings
 
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
@@ -494,24 +495,37 @@ class SConnect(object):
         return '\n>> '.join(details)
 
 
-class SConAPI(SConnect):
-    r"""Make REST API calls to Riverbed SteelConnect Manager.
-
-    This is provided for backward compatibility.
-
-    :param str realm: hostname or IP address of SteelConnect Manager.
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :param str api_version: (optional) REST API version.
-    :returns: Dictionary or List of Dictionaries based on request.
-    :rtype: dict, or list
-    """
-    pass
+def SConAPI(*args, **kwargs):
+    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.warn(
+        "'SConAPI' is deprecated, "
+        "use steelconnection.SConnect() instead",
+        category=DeprecationWarning,
+        stacklevel=2
+    )
+    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
+    return SConnect(*args, on_error=None, **kwargs)
 
 
 def SConWithoutExceptions(*args, **kwargs):
+    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.warn(
+        "'SConWithoutExceptions' is deprecated, "
+        "use steelconnection.SConnect(on_error=None) instead",
+        category=DeprecationWarning,
+        stacklevel=2
+    )
+    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
     return SConnect(*args, on_error=None, **kwargs)
 
 
 def SConExitOnError(*args, **kwargs):
+    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.warn(
+        "'SConExitOnError' is deprecated, "
+        "use steelconnection.SConnect(on_error=None) instead",
+        category=DeprecationWarning,
+        stacklevel=2
+    )
+    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
     return SConnect(*args, on_error='exit', **kwargs)
