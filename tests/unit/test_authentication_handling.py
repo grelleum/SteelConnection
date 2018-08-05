@@ -20,7 +20,7 @@ import fake_requests
 #         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
 #     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
 #     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm')
+#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
 #     assert sc.username == 'SteelConnect'
 #     assert sc.password == 'mypassword'
 
@@ -28,7 +28,7 @@ import fake_requests
 def test_ask_for_auth_with_netrc(monkeypatch):
     """_ask_for_auth should not prompt when netrc file exists."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     assert sc.get('netrc') == fake_requests.netrc
 
 
@@ -40,7 +40,7 @@ def test_ask_for_auth_with_netrc(monkeypatch):
 #         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
 #     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
 #     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm')
+#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
 #     assert sc.get('netrc401') == fake_requests.netrc
 #     assert sc.username, sc.password == ('SteelConnect', 'mypassword')
 
@@ -53,7 +53,7 @@ def test_ask_for_auth_when_not_provided(monkeypatch):
         monkeypatch.setattr('builtins.input', lambda x: 'SteelConnect')
     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc._ask_for_auth()
     sc.get('status')
     assert sc.response.auth == ('SteelConnect', 'mypassword')

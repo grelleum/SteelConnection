@@ -13,42 +13,42 @@ class NameSpace():
 
 def test_scon_returns_true():
     """Test object returns True when reponse is OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert bool(sc)
 
 
 def test_scon_returns_false():
     """Test object returns False when reponse is not OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not bool(sc)
 
 
 def test_scon_bool_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert sc.__bool__()
 
 
 def test_scon_bool_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not sc.__bool__()
 
 
 def test_scon_nonzero_returns_true():
     """Test __bool__ returns True when reponse is OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=True)
     assert sc.__nonzero__()
 
 
 def test_scon_nonzero_returns_false():
     """Test __bool__ returns False when reponse is not OK."""
-    sc = steelconnection.SConnect('some.realm')
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.response = NameSpace(ok=False)
     assert not sc.__nonzero__()
 
