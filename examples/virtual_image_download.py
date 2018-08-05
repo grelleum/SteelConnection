@@ -19,11 +19,12 @@ from __future__ import print_function
 import steelconnection
 import os
 
+
 def main():
     sc = steelconnection.SConnect()
     sc.get('status')
 
-    # steelconnection.get_input function is compatible with both Python 2 and 3.
+    # steelconnection.get_input is compatible with both Python 2 and 3.
     serial = steelconnection.get_input('Enter appliance serial number: ')
     node = sc.lookup.node(serial)
 
@@ -34,7 +35,7 @@ def main():
     home = os.path.expanduser('~')
     filepath = os.path.join(home, 'Downloads', filename)
 
-    success = sc.download_image(node['id'], save_as=filename, build=hypervisor)
+    success = sc.download_image(node['id'], save_as=filepath, build=hypervisor)
     print(success)
 
 
