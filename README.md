@@ -27,6 +27,9 @@ Requests
 ## HOWTO:
 #### To install or upgrade your copy to the latest version:
 ```bash
+# Default Python
+python -m pip install --upgrade steelconnection
+
 # Python 3
 python3 -m pip install --upgrade steelconnection
 
@@ -59,10 +62,11 @@ The Organization is case-sensistive and is also known as the organization short 
 SteelConnect REST API uses Basic Auth, meaning a username and password are required for authentication for every request made.  The steelconnection object can store the username and pssword for you, or you can use a .netrc file as detailed below.  Choose one of the following methods:
 
 ##### Interactive login (Optional):
-If you do not specify a username and password, and a .netrc file is not configured, steelconnection will interactively prompt you for your username and password.  Steelconnection will validate the login by making a 'status' call against the REST API.
+If you do not specify a realm, username, or password, and a .netrc file is not configured, steelconnection will interactively prompt you for your the missing information.  Steelconnection will validate the login by making a 'status' call against the REST API.
 ```python
 >>> import steelconnection
->>> sc = steelconnection.SConnect('REALM.riverbed.cc')
+>>> sc = steelconnection.SConnect()
+Enter SteelConnect Manager fully qualified domain name: granny.riverbed.cc
 Enter username: admin
 Enter password:
 >>>
@@ -196,14 +200,14 @@ More specific exceptions that might be generated (all inherit from `RuntimeError
 * `steelconnection.exceptions.BadRequest`: 400 - Possibly tried creating a resource that already exists.
 * `steelconnection.exceptions.InvalidResource`: 404 - Path or resource not found.
 
-If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmeds, you can instead use the child class `SConExitOnError` to create your object.  The `SConExitOnError` class replaces the exception handling method with a method that prints the error detail and exists with an error status of 1.
+If you prefer to have your script exit with a simple error message and no traceback, which can be confusing to users who are not programmers, you can set `on_error='exit'` when you create your SConnect object.
 ```python
-sc = SConExitOnError('REALM.riverbed.cc')
+sc = SConnect('REALM.riverbed.cc', on_error='exit')
 ```
 
-If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can instead use the child class `SConWithoutExceptions` to create your object.  The `SConWithoutExceptions` class replaces the exception handling method with a method that does nothing.  The  steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `.response.ok`.
+If you prefer to handle errors manually and do not want steelconnection to generate exceptions based on HTTP response code, you can set `on_error=None` when you create your SConnect object.  The steelconnection object will evaluate as `True` after a successful request and `False` otherwise.  This reflects the status of the obect attribute `SConnect.response.ok`.
 ```python
-sc = SConWithoutExceptions('REALM.riverbed.cc')
+sc = SConnect('REALM.riverbed.cc', on_error=None)
 ```
 
 #### Convenience functions:
