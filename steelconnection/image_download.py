@@ -63,6 +63,11 @@ def _prepare_image(sconnect, nodeid, build, verbose):
         '/node/{}/prepare_image'.format(nodeid),
         data={'type': build}
     )
+    # In case there is no config for the appliance, the build will fail.
+    # Checking the status when build fails will result in error 500.
+    # Checking immediately, the explanation will have no error reason.
+    # By delaying after the build, we can get correct error on check.
+    time.sleep(0.5)
     verbose('Done.')
 
 
