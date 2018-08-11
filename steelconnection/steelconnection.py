@@ -312,6 +312,8 @@ class SConnect(object):
             repr(error_message),
         )
 
+    # Authentication related methods.
+
     def _login(self, connection_attempts=3):
         r"""Make a connection to SteelConnect."""
 
