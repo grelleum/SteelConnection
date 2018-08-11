@@ -417,6 +417,8 @@ class SConnect(object):
         else:
             return response.json()
 
+    # Error handling and Exception generation.
+
     def _exception_handling(self, on_error):
         choices = {
             'raise': self._on_error_raise_exception,
@@ -464,6 +466,8 @@ class SConnect(object):
         :rtype: None
         """
         return None
+
+    # Gratuitous __dunder__ methods.
 
     def __bool__(self):
         """Return the success of the last request in Python3.
@@ -514,6 +518,8 @@ class SConnect(object):
         details.extend(self.answer.splitlines())
         return '\n>> '.join(details)
 
+
+# Deprecated classes.
 
 def SConAPI(*args, **kwargs):
     warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
