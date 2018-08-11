@@ -216,6 +216,8 @@ class SConnect(object):
         for chunk in self.response.iter_content(chunk_size=65536):
             yield chunk
 
+    # These do the heavy lifting.
+
     def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
@@ -275,6 +277,8 @@ class SConnect(object):
             return response.json()['items']
         else:
             return response.json()
+
+    # These handle binary content.
 
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
         r"""Download image and save to file.
