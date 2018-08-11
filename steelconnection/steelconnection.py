@@ -99,10 +99,7 @@ class SConnect(object):
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
         # TODO: add auth directly to session and remove from self.
-        self._raise_exception = {
-            'raise': self._on_error_raise_exception,
-            'exit': self._on_error_exit,
-        }.get(on_error, self._on_error_do_nothing)
+        self._raise_exception = self._exception_handling(on_error)
         if not all([realm and username and password]):
             self._login(connection_attempts)
 
@@ -404,6 +401,13 @@ class SConnect(object):
         else:
             return response.json()
 
+    def _exception_handling(self, on_error):
+        choices = {
+            'raise': self._on_error_raise_exception,
+            'exit': self._on_error_exit,
+        }
+        return choices.get(on_error, self._on_error_do_nothing)
+
     def _on_error_raise_exception(self, response):
         r"""Return an appropriate exception if required.
 
@@ -422,15 +426,6 @@ class SConnect(object):
             exception = exceptions.get(response.status_code, RuntimeError)
             raise exception('\n'.join((self.answer, self.sent)))
 
-    def _on_error_do_nothing(self, response):
-        r"""Return None to short-circuit the exception process.
-
-        :param requests.response response: Response from HTTP request.
-        :returns: None.
-        :rtype: None
-        """
-        return None
-
     def _on_error_exit(self, response):
         r"""Display error and exit.
 
@@ -444,6 +439,15 @@ class SConnect(object):
                 file=sys.stderr
             )
             sys.exit(1)
+
+    def _on_error_do_nothing(self, response):
+        r"""Return None to short-circuit the exception process.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        return None
 
     def __bool__(self):
         """Return the success of the last request in Python3.
