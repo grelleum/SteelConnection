@@ -227,6 +227,28 @@ class SConnect(object):
             self.realm, api, self.api_version, resource,
         )
 
+    def _get_result(self, response):
+        r"""Return response data as native Python datatype.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: Dictionary or List of Dictionaries based on response.
+        :rtype: dict, list, or None
+        """
+        if not response.ok:
+            if response.text and 'Queued' in response.text:
+                # work-around for get:'/node/{node_id}/image_status'
+                return response.json()
+            else:
+                return None
+        if response.headers['Content-Type'] == 'application/octet-stream':
+            return {'status': BINARY_DATA_MESSAGE}
+        if not response.json():
+            return {}
+        elif 'items' in response.json():
+            return response.json()['items']
+        else:
+            return response.json()
+
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
         r"""Download image and save to file.
         :param str nodeid: The node id of the appliance.
@@ -396,28 +418,6 @@ class SConnect(object):
             self.__username = get_username()
         if self.__password is None:
             self.__password = get_password_once()
-
-    def _get_result(self, response):
-        r"""Return response data as native Python datatype.
-
-        :param requests.response response: Response from HTTP request.
-        :returns: Dictionary or List of Dictionaries based on response.
-        :rtype: dict, list, or None
-        """
-        if not response.ok:
-            if response.text and 'Queued' in response.text:
-                # work-around for get:'/node/{node_id}/image_status'
-                return response.json()
-            else:
-                return None
-        if response.headers['Content-Type'] == 'application/octet-stream':
-            return {'status': BINARY_DATA_MESSAGE}
-        if not response.json():
-            return {}
-        elif 'items' in response.json():
-            return response.json()['items']
-        else:
-            return response.json()
 
     # Error handling and Exception generation.
 
