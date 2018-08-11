@@ -103,58 +103,6 @@ class SConnect(object):
         if not all([realm and username and password]):
             self._login(connection_attempts)
 
-    @property
-    def realm(self):
-        while not self.__realm:
-            self.__realm = get_input(
-                'Enter SteelConnect Manager fully qualified domain name: '
-            )
-        return self.__realm
-
-    def _login(self, connection_attempts=3):
-        r"""Make a connection to SteelConnect."""
-
-        # The connection attempts here rely on some mechanisms
-        # defined elsewhere.
-
-        # First we check self.response to see if we have already connected.
-
-        # The rest of the logic is retired based on connection_attempts.
-        # We check the scm_version.
-        # If it is set to None, is will generate a GET request for '/status'.
-        # The GET request attempts to access realm.
-        # realm, username, and password will then be requested if needed.
-        # If the connection attempt fails, we reset either the realm,
-        # or the username/password, depending on the error.
-
-        if self.response and self.response.ok:
-            return self
-        for _ in range(connection_attempts):
-            try:
-                if self.scm_version == 'unavailable':
-                    # SCM < 2.9 will fail with 404, try '/orgs' instead.
-                    self.get('orgs')
-            except IOError as e:
-                # Could not connect.
-                print('Error:', e)
-                print('Cannot connect to realm: ', self.realm)
-                self.__realm = self.__scm_version = None
-                self.realm
-            except InvalidResource as e:
-                # Connected to a webserver, but not SteelConnect.
-                print(e)
-                print(
-                    "'{}'".format(self.realm),
-                    "does not appear to be a SteelConnect Manager."
-                )
-                self.__realm = self.__scm_version = None
-                self.realm
-            except AuthenticationError:
-                print('Authentication Failed')
-                self.__username = self.__password = None
-            else:
-                return self if self.response.ok else None
-
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
 
@@ -303,6 +251,14 @@ class SConnect(object):
             fd.write(self.response.content)
 
     @property
+    def realm(self):
+        while not self.__realm:
+            self.__realm = get_input(
+                'Enter SteelConnect Manager fully qualified domain name: '
+            )
+        return self.__realm
+
+    @property
     def scm_version(self):
         """Return version and build number of SteelConnect Manager.
 
@@ -355,6 +311,50 @@ class SConnect(object):
             self.response.reason,
             repr(error_message),
         )
+
+    def _login(self, connection_attempts=3):
+        r"""Make a connection to SteelConnect."""
+
+        # The connection attempts here rely on some mechanisms
+        # defined elsewhere.
+
+        # First we check self.response to see if we have already connected.
+
+        # The rest of the logic is retired based on connection_attempts.
+        # We check the scm_version.
+        # If it is set to None, is will generate a GET request for '/status'.
+        # The GET request attempts to access realm.
+        # realm, username, and password will then be requested if needed.
+        # If the connection attempt fails, we reset either the realm,
+        # or the username/password, depending on the error.
+
+        if self.response and self.response.ok:
+            return self
+        for _ in range(connection_attempts):
+            try:
+                if self.scm_version == 'unavailable':
+                    # SCM < 2.9 will fail with 404, try '/orgs' instead.
+                    self.get('orgs')
+            except IOError as e:
+                # Could not connect.
+                print('Error:', e)
+                print('Cannot connect to realm: ', self.realm)
+                self.__realm = self.__scm_version = None
+                self.realm
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(
+                    "'{}'".format(self.realm),
+                    "does not appear to be a SteelConnect Manager."
+                )
+                self.__realm = self.__scm_version = None
+                self.realm
+            except AuthenticationError:
+                print('Authentication Failed')
+                self.__username = self.__password = None
+            else:
+                return self if self.response.ok else None
 
     @property
     def __auth(self):
