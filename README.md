@@ -221,6 +221,7 @@ Currently these are the available lookup functions:
 * `lookup.org(org_short_name)`
 * `lookup.node(serial)`
 * `lookup.site(site_name, org_id=org['id'])`
+* `lookup.model(model)`
 
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
 
@@ -246,6 +247,15 @@ The site id can be found in a similar way, but since the same site name could ex
 >>> site = sc.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
 >>> site['id']
 'site-Skypad-884b9071141e4bc0'
+>>>
+```
+###### Lookup Model:
+The `lookup.model()` method is simply a translation service to map model code names to standard model names.  It can also be used to make the opposite translations:
+```python
+>>> sc.lookup.model('panda')
+'SDI-130'
+>>> sc.lookup.model('SDI-1030')
+'grizzly'
 >>>
 ```
 
