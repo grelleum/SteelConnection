@@ -229,6 +229,31 @@ class SConnect(object):
             self.realm, api, self.api_version, resource,
         )
 
+    def _request(self, request_method, url, data=None, params=None):
+        r"""Send a request using the specified method.
+
+        :param request_method: requests.session verb.
+        :param str url: complete url and path.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
+        data = json.dumps(data) if data and isinstance(data, dict) else data
+        if self.__username and not self.__password:
+            self._ask_for_auth()
+        response = request_method(
+            url=url, auth=self.__auth, params=params,
+            data=data, timeout=self.timeout,
+        )
+        if response.status_code == 401 and self.__auth is None:
+            self._ask_for_auth()
+            response = request_method(
+                url=url, auth=self.__auth, params=params,
+                data=data, timeout=self.timeout,
+            )
+        return response
+
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
 
@@ -390,31 +415,6 @@ class SConnect(object):
             return (self.__username, self.__password)
         else:
             return None
-
-    def _request(self, request_method, url, data=None, params=None):
-        r"""Send a request using the specified method.
-
-        :param request_method: requests.session verb.
-        :param str url: complete url and path.
-        :param dict data: (optional) Dictionary of 'body' data to be sent.
-        :param dict params: (optional) Dictionary of query parameters.
-        :returns: Dictionary or List of Dictionaries based on request.
-        :rtype: dict, or list
-        """
-        data = json.dumps(data) if data and isinstance(data, dict) else data
-        if self.__username and not self.__password:
-            self._ask_for_auth()
-        response = request_method(
-            url=url, auth=self.__auth, params=params,
-            data=data, timeout=self.timeout,
-        )
-        if response.status_code == 401 and self.__auth is None:
-            self._ask_for_auth()
-            response = request_method(
-                url=url, auth=self.__auth, params=params,
-                data=data, timeout=self.timeout,
-            )
-        return response
 
     def _ask_for_auth(self):
         """Prompt for username and password if not provided."""
