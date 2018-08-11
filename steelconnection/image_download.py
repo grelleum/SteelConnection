@@ -63,6 +63,11 @@ def _prepare_image(sconnect, nodeid, build, verbose):
         '/node/{}/prepare_image'.format(nodeid),
         data={'type': build}
     )
+    # In case there is no config for the appliance, the build will fail.
+    # Checking the status when build fails will result in error 500.
+    # Checking immediately, the explanation will have no error reason.
+    # By delaying after the build, we can get correct error on check.
+    time.sleep(0.5)
     verbose('Done.')
 
 
@@ -91,7 +96,7 @@ def _get_file_path(source_file, save_as):
 
 
 def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
-    verbose('Downloading file as', save_as, end=' ')
+    verbose("Downloading file as '{}'".format(save_as), end=' ')
     with open(save_as, 'wb') as fd:
         chunks = sconnect.stream(
             '/node/{}/get_image'.format(nodeid),

@@ -7,7 +7,7 @@
 ```
 
 # SteelConnection
-##### version 0.90.1
+##### version 0.90.2
 SteelConnection provides a wrapper object to simplify access to the Riverbed SteelConnect REST API.
 
 * Create an object once and it remembers the URL and authentication.
@@ -74,7 +74,8 @@ Enter password:
 Three connection attempts are made by default and can be configured with the `connections_attempts=N` parameter, where N is replaced with an interger.
 
 ##### Using a .netrc file (Optional):
-A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  This file would be stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
+A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  .netrc is a standard way of storing login credentials for many network based servers.  It works like a hosts file, in that you specify servers and the credetials needed to access each server.  The .netrc file is stored in the root of your home directory.  When using a .netrc file, steelconnection will never have your password, rather the underlying requests library will be responsible for accessing the .netrc file.  When using .netrc file, you will still need to tell steelconnection the realm you want to access, and that hostname will be passed to requests without credentials.  Requests will then attempt to located your realm within the ,netrc file.\
+Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
 ```bash
 echo "machine REALM.riverbed.cc login USERNAME password PASSWORD" >> ~/.netrc
 chmod 600 ~/.netrc
@@ -220,6 +221,7 @@ Currently these are the available lookup functions:
 * `lookup.org(org_short_name)`
 * `lookup.node(serial)`
 * `lookup.site(site_name, org_id=org['id'])`
+* `lookup.model(model)`
 
 These functions are accessed directly from the object you created and are specific to the SteelConnect API.
 
@@ -245,6 +247,15 @@ The site id can be found in a similar way, but since the same site name could ex
 >>> site = sc.lookup.site('Skypad', orgid='org-Spacely-0a501e7f27b2c03e')
 >>> site['id']
 'site-Skypad-884b9071141e4bc0'
+>>>
+```
+###### Lookup Model:
+The `lookup.model()` method is simply a translation service to map model code names to standard model names.  It can also be used to make the opposite translations:
+```python
+>>> sc.lookup.model('panda')
+'SDI-130'
+>>> sc.lookup.model('SDI-1030')
+'grizzly'
 >>>
 ```
 
