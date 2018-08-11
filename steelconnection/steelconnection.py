@@ -545,7 +545,7 @@ def SConAPI(*args, **kwargs):
         stacklevel=2
     )
     warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
-    return SConnect(*args, on_error=None, **kwargs)
+    return SConnect(*args, **kwargs)
 
 
 def SConWithoutExceptions(*args, **kwargs):
