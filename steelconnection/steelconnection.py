@@ -103,6 +103,8 @@ class SConnect(object):
         if not all([realm and username and password]):
             self._login(connection_attempts)
 
+    # Primary methods:
+
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
 
@@ -271,6 +273,8 @@ class SConnect(object):
         """
         with open(filename, 'wb') as fd:
             fd.write(self.response.content)
+
+    # Property methods that appear like dynamic attributes.
 
     @property
     def realm(self):
