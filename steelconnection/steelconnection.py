@@ -245,14 +245,14 @@ class SConnect(object):
         if self.__username and not self.__password:
             self._ask_for_auth()
         # If self.__auth is None, try request anyway.
-        # This way, if user has a .netrc file configured with the realm,
+        # If user has a .netrc file configured with the realm,
         # requests will find and use it.
         response = request_method(
             url=url, auth=self.__auth, params=params,
             data=data, timeout=self.timeout,
         )
         if response.status_code == 401 and self.__auth is None:
-            # Authentication failed and we did not provide auth.
+            # We did not provide auth and authentication failed.
             # This means requests did not find realm in a .netrc file.
             self._ask_for_auth()
             response = request_method(
