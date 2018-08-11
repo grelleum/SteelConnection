@@ -127,7 +127,7 @@ class SConnect(object):
                 print('Cannot connect to realm: ', self.realm)
                 self.__realm = self.__scm_version = None
                 self.realm
-            except (IOError, InvalidResource) as e:
+            except InvalidResource as e:
                 print(e)
                 print(
                     "'{}'".format(self.realm),
