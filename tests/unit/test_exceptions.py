@@ -79,3 +79,42 @@ def test_exit_when_raise_exception_with_exit_on_error(capsys):
     )
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
+
+
+# Deprecated Classes:
+
+def test_DEPRECATED_SConAPI():
+    """_raise_exception should raise the correct exceptions based on status."""
+    with pytest.warns(DeprecationWarning):
+        sc = steelconnection.SConAPI(connection_attempts=0)
+    sc.response = fake_requests.Fake_Response('', 502, {})
+    with pytest.raises(steelconnection.exceptions.APINotEnabled):
+        sc._raise_exception(sc.response)
+
+
+def test_DEPRECATED_SConWithoutExceptions():
+    """_raise_exception should raise the correct exceptions based on status."""
+    with pytest.warns(DeprecationWarning):
+        sc = steelconnection.SConWithoutExceptions(connection_attempts=0)
+    sc.response = fake_requests.Fake_Response('', 502, {})
+    try:
+        result = sc._raise_exception(sc.response)
+    except BaseException:
+        assert False
+    else:
+        assert result is None
+
+
+def test_DEPRECATED_SConExitOnError(capsys):
+    """_raise_exception should exit with error message."""
+    with pytest.warns(DeprecationWarning):
+        sc = steelconnection.SConExitOnError(connection_attempts=0)
+    sc.response = fake_requests.Fake_Response('', 502, {})
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        sc._raise_exception(sc.response)
+    captured = capsys.readouterr()
+    assert captured.err == (
+        "Status: 502 - Failed\nError: None\nFAKE: \nData Sent: '{}'\n"
+    )
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1

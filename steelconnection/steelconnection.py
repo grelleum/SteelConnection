@@ -99,48 +99,11 @@ class SConnect(object):
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
         # TODO: add auth directly to session and remove from self.
-        self._raise_exception = {
-            'raise': self._on_error_raise_exception,
-            'exit': self._on_error_exit,
-        }.get(on_error, self._on_error_do_nothing)
+        self._raise_exception = self._exception_handling(on_error)
         if not all([realm and username and password]):
             self._login(connection_attempts)
 
-    @property
-    def realm(self):
-        while not self.__realm:
-            self.__realm = get_input(
-                'Enter SteelConnect Manager fully qualified domain name: '
-            )
-        return self.__realm
-
-    def _login(self, retries=3):
-        r"""Make a connection to SteelConnect."""
-        if self.response and self.response.ok:
-            return self
-        for _ in range(retries):
-            try:
-                if self.scm_version == 'unavailable':
-                    self.get('orgs')
-            except IOError as e:
-                print('Error:', e)
-                print('Cannot connect to realm: ', self.realm)
-                self.__realm = self.__scm_version = None
-                self.realm
-            except (IOError, InvalidResource) as e:
-                print(e)
-                print(
-                    "'{}'".format(self.realm),
-                    "does not appear to be a SteelConnect Manager."
-                )
-                self.__realm = self.__scm_version = None
-                self.realm
-            except AuthenticationError:
-                print('Authentication Failed')
-                self.__username = self.__password = None
-                # self.__username, self.__password = None, None
-            else:
-                return self if self.response.ok else None
+    # Primary methods:
 
     def get(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Config API.
@@ -253,6 +216,8 @@ class SConnect(object):
         for chunk in self.response.iter_content(chunk_size=65536):
             yield chunk
 
+    # These do the heavy lifting.
+
     def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
@@ -265,6 +230,60 @@ class SConnect(object):
         return 'https://{}/api/scm.{}/{}/{}'.format(
             self.realm, api, self.api_version, resource,
         )
+
+    def _request(self, request_method, url, data=None, params=None):
+        r"""Send a request using the specified method.
+
+        :param request_method: requests.session verb.
+        :param str url: complete url and path.
+        :param dict data: (optional) Dictionary of 'body' data to be sent.
+        :param dict params: (optional) Dictionary of query parameters.
+        :returns: Dictionary or List of Dictionaries based on request.
+        :rtype: dict, or list
+        """
+        data = json.dumps(data) if data and isinstance(data, dict) else data
+        if self.__username and not self.__password:
+            self._ask_for_auth()
+        # If self.__auth is None, try request anyway.
+        # If user has a .netrc file configured with the realm,
+        # requests will find and use it.
+        response = request_method(
+            url=url, auth=self.__auth, params=params,
+            data=data, timeout=self.timeout,
+        )
+        if response.status_code == 401 and self.__auth is None:
+            # We did not provide auth and authentication failed.
+            # This means requests did not find realm in a .netrc file.
+            self._ask_for_auth()
+            response = request_method(
+                url=url, auth=self.__auth, params=params,
+                data=data, timeout=self.timeout,
+            )
+        return response
+
+    def _get_result(self, response):
+        r"""Return response data as native Python datatype.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: Dictionary or List of Dictionaries based on response.
+        :rtype: dict, list, or None
+        """
+        if not response.ok:
+            if response.text and 'Queued' in response.text:
+                # work-around for get:'/node/{node_id}/image_status'
+                return response.json()
+            else:
+                return None
+        if response.headers['Content-Type'] == 'application/octet-stream':
+            return {'status': BINARY_DATA_MESSAGE}
+        if not response.json():
+            return {}
+        elif 'items' in response.json():
+            return response.json()['items']
+        else:
+            return response.json()
+
+    # These handle binary content.
 
     def download_image(self, nodeid, save_as=None, build=None, quiet=False):
         r"""Download image and save to file.
@@ -288,6 +307,16 @@ class SConnect(object):
         """
         with open(filename, 'wb') as fd:
             fd.write(self.response.content)
+
+    # Property methods that appear like dynamic attributes.
+
+    @property
+    def realm(self):
+        while not self.__realm:
+            self.__realm = get_input(
+                'Enter SteelConnect Manager fully qualified domain name: '
+            )
+        return self.__realm
 
     @property
     def scm_version(self):
@@ -343,37 +372,58 @@ class SConnect(object):
             repr(error_message),
         )
 
+    # Authentication related methods.
+
+    def _login(self, connection_attempts=3):
+        r"""Make a connection to SteelConnect."""
+
+        # The connection attempts here rely on some mechanisms
+        # defined elsewhere.
+
+        # First we check self.response to see if we have already connected.
+
+        # The rest of the logic is retired based on connection_attempts.
+        # We check the scm_version.
+        # If it is set to None, is will generate a GET request for '/status'.
+        # The GET request attempts to access realm.
+        # realm, username, and password will then be requested if needed.
+        # If the connection attempt fails, we reset either the realm,
+        # or the username/password, depending on the error.
+
+        if self.response and self.response.ok:
+            return self
+        for _ in range(connection_attempts):
+            try:
+                if self.scm_version == 'unavailable':
+                    # SCM < 2.9 will fail with 404, try '/orgs' instead.
+                    self.get('orgs')
+            except IOError as e:
+                # Could not connect.
+                print('Error:', e)
+                print('Cannot connect to realm: ', self.realm)
+                self.__realm = self.__scm_version = None
+                self.realm
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(
+                    "'{}'".format(self.realm),
+                    "does not appear to be a SteelConnect Manager."
+                )
+                self.__realm = self.__scm_version = None
+                self.realm
+            except AuthenticationError:
+                print('Authentication Failed')
+                self.__username = self.__password = None
+            else:
+                return self if self.response.ok else None
+
     @property
     def __auth(self):
         if self.__username and self.__password:
             return (self.__username, self.__password)
         else:
             return None
-
-    def _request(self, request_method, url, data=None, params=None):
-        r"""Send a request using the specified method.
-
-        :param request_method: requests.session verb.
-        :param str url: complete url and path.
-        :param dict data: (optional) Dictionary of 'body' data to be sent.
-        :param dict params: (optional) Dictionary of query parameters.
-        :returns: Dictionary or List of Dictionaries based on request.
-        :rtype: dict, or list
-        """
-        data = json.dumps(data) if data and isinstance(data, dict) else data
-        if self.__username and not self.__password:
-            self._ask_for_auth()
-        response = request_method(
-            url=url, auth=self.__auth, params=params,
-            data=data, timeout=self.timeout,
-        )
-        if response.status_code == 401 and self.__auth is None:
-            self._ask_for_auth()
-            response = request_method(
-                url=url, auth=self.__auth, params=params,
-                data=data, timeout=self.timeout,
-            )
-        return response
 
     def _ask_for_auth(self):
         """Prompt for username and password if not provided."""
@@ -382,27 +432,14 @@ class SConnect(object):
         if self.__password is None:
             self.__password = get_password_once()
 
-    def _get_result(self, response):
-        r"""Return response data as native Python datatype.
+    # Error handling and Exception generation.
 
-        :param requests.response response: Response from HTTP request.
-        :returns: Dictionary or List of Dictionaries based on response.
-        :rtype: dict, list, or None
-        """
-        if not response.ok:
-            if response.text and 'Queued' in response.text:
-                # work-around for get:'/node/{node_id}/image_status'
-                return response.json()
-            else:
-                return None
-        if response.headers['Content-Type'] == 'application/octet-stream':
-            return {'status': BINARY_DATA_MESSAGE}
-        if not response.json():
-            return {}
-        elif 'items' in response.json():
-            return response.json()['items']
-        else:
-            return response.json()
+    def _exception_handling(self, on_error):
+        choices = {
+            'raise': self._on_error_raise_exception,
+            'exit': self._on_error_exit,
+        }
+        return choices.get(on_error, self._on_error_do_nothing)
 
     def _on_error_raise_exception(self, response):
         r"""Return an appropriate exception if required.
@@ -422,15 +459,6 @@ class SConnect(object):
             exception = exceptions.get(response.status_code, RuntimeError)
             raise exception('\n'.join((self.answer, self.sent)))
 
-    def _on_error_do_nothing(self, response):
-        r"""Return None to short-circuit the exception process.
-
-        :param requests.response response: Response from HTTP request.
-        :returns: None.
-        :rtype: None
-        """
-        return None
-
     def _on_error_exit(self, response):
         r"""Display error and exit.
 
@@ -444,6 +472,17 @@ class SConnect(object):
                 file=sys.stderr
             )
             sys.exit(1)
+
+    def _on_error_do_nothing(self, response):
+        r"""Return None to short-circuit the exception process.
+
+        :param requests.response response: Response from HTTP request.
+        :returns: None.
+        :rtype: None
+        """
+        return None
+
+    # Gratuitous __dunder__ methods.
 
     def __bool__(self):
         """Return the success of the last request in Python3.
@@ -495,6 +534,8 @@ class SConnect(object):
         return '\n>> '.join(details)
 
 
+# Deprecated classes.
+
 def SConAPI(*args, **kwargs):
     warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
     warnings.warn(
@@ -504,7 +545,7 @@ def SConAPI(*args, **kwargs):
         stacklevel=2
     )
     warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
-    return SConnect(*args, on_error=None, **kwargs)
+    return SConnect(*args, **kwargs)
 
 
 def SConWithoutExceptions(*args, **kwargs):

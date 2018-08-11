@@ -129,3 +129,9 @@ def test_lookup_site_without_org():
     key = item['name']
     with pytest.raises(ValueError):
         sc.lookup.site(key)
+
+
+def test_lookup_model():
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    assert sc.lookup.model('panda') == 'SDI-130'
+    assert sc.lookup.model('SDI-1030') == 'grizzly'
