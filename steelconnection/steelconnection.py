@@ -138,7 +138,6 @@ class SConnect(object):
             except AuthenticationError:
                 print('Authentication Failed')
                 self.__username = self.__password = None
-                # self.__username, self.__password = None, None
             else:
                 return self if self.response.ok else None
 
