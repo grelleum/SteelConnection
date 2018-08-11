@@ -114,10 +114,13 @@ class SConnect(object):
     def _login(self, retries=3):
         r"""Make a connection to SteelConnect."""
         if self.response and self.response.ok:
+            # We have already successfully connected to SCM.
             return self
         for _ in range(retries):
             try:
+                # This will generate a GET request for '/status'.
                 if self.scm_version == 'unavailable':
+                    # SCM < 2.9 will fail with 404, try '/orgs' instead.
                     self.get('orgs')
             except IOError as e:
                 print('Error:', e)
