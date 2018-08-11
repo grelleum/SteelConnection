@@ -9,7 +9,6 @@ import fake_requests
 
 # Authentication Methods:
 
-
 # Challenge here is to make first FAKE request fail, due to lack of auth.
 
 # def test_authenticate_without_providing_auth(monkeypatch):
@@ -105,3 +104,17 @@ def test_request_prompts_password_when_username_provided(monkeypatch):
     assert sc._request(sc.session.get, 'url')
     sc.get('status')
     assert sc.response.auth == ('A', 'mypassword')
+
+
+# _login method tests
+
+def test_login_response_ok(capsys):
+    """_ask_for_auth should return user/pass when both are provided."""
+    # monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    # sc = steelconnection.SConnect('some.realm', username='A', password='B')
+    sc = steelconnection.SConnect(connection_attempts=0)
+    sc.response = fake_requests.Fake_Response('', 200, {})
+    result = sc._login()
+    assert result == sc
+    captured = capsys.readouterr()
+    assert captured.out == ''
