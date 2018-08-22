@@ -372,38 +372,6 @@ def test_scon_make_url():
     assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
 
 
-# @responses.activate
-# def test_connect_via_status():
-#     """Test SConnect.connect method when status works."""
-#     responses.add(get_status)
-#     sc = steelconnection.SConnect('some.realm')
-#     xc = sc._login()
-#     assert sc.scm_version == '1.23.4.56'
-#     assert xc == sc
-
-
-# @responses.activate
-# def test_connect_where_second_connect_returns_self():
-#     """Test SConnect.connect method when status works."""
-#     responses.add(get_status)
-#     sc = steelconnection.SConnect('some.realm')
-#     xc = sc._login()
-#     xc = sc.conn_loginect()
-#     assert xc == sc
-
-
-# TODO: broken after auth changes - is this still relevant?
-# @responses.activate
-# def test_connect_via_orgs():
-#     """Test SConnect.connect method when status fails."""
-#     responses.add(get_status_404)
-#     responses.add(get_orgs)
-#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-#     xc = sc._login()
-#     assert sc.scm_version == 'unavailable'
-#     assert xc == sc
-
-
 @responses.activate
 def test_scm_version():
     """Test SConnect.scm_version method."""
