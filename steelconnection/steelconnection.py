@@ -84,8 +84,6 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        # TODO: remove self.__realm_provided, it's a temp hack.
-        # self.__realm_provided = False if realm is None else True
         self.realm = self._get_realm(realm)
         self.__scm_version = None
         self.__version__ = __version__
