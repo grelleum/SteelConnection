@@ -85,7 +85,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         # TODO: remove self.__realm_provided, it's a temp hack.
-        self.__realm_provided = False if realm is None else True
+        # self.__realm_provided = False if realm is None else True
         self.realm = self._get_realm(realm)
         self.__scm_version = None
         self.__version__ = __version__
@@ -102,7 +102,7 @@ class SConnect(object):
         self.session.headers.update({'Content-type': 'application/json'})
         self.session.auth = self._set_session_auth(username, password)
         if not self.session.auth:
-            self._login(username, password, connection_attempts)
+            self._interactive_login(username, password, connection_attempts)
 
     # Authentication related methods.
 
@@ -130,10 +130,10 @@ class SConnect(object):
         if not username and not password:
             return get_netrc_auth('https://' + self.realm)
 
-    def _login(self, username, password, connection_attempts):
+    def _interactive_login(self, username, password, connection_attempts):
         r"""Make a connection to SteelConnect."""
 
-        if not self.session.auth:
+        if self.session.auth:
             return
         username_supplied = username
         for attempt in range(connection_attempts):
