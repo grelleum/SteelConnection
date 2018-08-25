@@ -24,6 +24,7 @@ def test_import_on_command_line():
     output = subprocess.check_output('python -m steelconnection', shell=True)
     output = output.decode()
     lines = [
+        steelconnection.ASCII_ART,
         'Python version: ' + '.'.join(str(x) for x in sys.version_info[:3]),
         'SteelConnection version: ' + steelconnection.__version__,
         'Project home: ' + steelconnection.__url__,

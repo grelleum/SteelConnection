@@ -24,7 +24,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 """
 
 from requests import ConnectionError, RequestException
-from .steelconnection import SConnect
+from .steelconnection import SConnect, ASCII_ART
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
@@ -53,6 +53,7 @@ __all__ = (
     'get_input',
     'get_username',
     'get_password',
+    'ASCII_ART',
 )
 
 

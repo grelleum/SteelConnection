@@ -309,7 +309,7 @@ def test_scon_put_exception():
 
 def test_ascii_art():
     """Test SConnect.ascii_art returns a string."""
-    sc = steelconnection.SConnect(connection_attempts=0)
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     assert sc.ascii_art
 
 
@@ -370,37 +370,6 @@ def test_scon_make_url():
     )
     url = sc.make_url('FAKE', 'PATH')
     assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
-
-
-# @responses.activate
-# def test_connect_via_status():
-#     """Test SConnect.connect method when status works."""
-#     responses.add(get_status)
-#     sc = steelconnection.SConnect('some.realm')
-#     xc = sc._login()
-#     assert sc.scm_version == '1.23.4.56'
-#     assert xc == sc
-
-
-# @responses.activate
-# def test_connect_where_second_connect_returns_self():
-#     """Test SConnect.connect method when status works."""
-#     responses.add(get_status)
-#     sc = steelconnection.SConnect('some.realm')
-#     xc = sc._login()
-#     xc = sc.conn_loginect()
-#     assert xc == sc
-
-
-@responses.activate
-def test_connect_via_orgs():
-    """Test SConnect.connect method when status fails."""
-    responses.add(get_status_404)
-    responses.add(get_orgs)
-    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    xc = sc._login()
-    assert sc.scm_version == 'unavailable'
-    assert xc == sc
 
 
 @responses.activate

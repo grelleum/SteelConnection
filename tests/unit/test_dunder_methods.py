@@ -70,7 +70,7 @@ def test_scon_repr():
         "SConnect(realm: '{}', scm version: '{}', "
         "api version: '{}', package version: '{}')"
     ).format(realm, scm_version, api_version, pkg_version)
-    sc = steelconnection.SConnect(realm, api_version=api_version)
+    sc = steelconnection.SConnect(realm, 'u', 'p', api_version=api_version)
     assert repr(sc) == expected
 
 
@@ -99,5 +99,5 @@ def test_scon_str():
         '>> Error: None'
     ))
     expected = expected.format(realm, scm_version, api_version, pkg_version)
-    sc = steelconnection.SConnect(realm, api_version=api_version)
+    sc = steelconnection.SConnect(realm, 'u', 'p', api_version=api_version)
     assert str(sc) == expected
