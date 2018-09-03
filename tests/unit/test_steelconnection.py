@@ -186,6 +186,13 @@ post_nonesuch = responses.Response(
     status=404,
 )
 
+post_prepare_image = responses.Response(
+    method='POST',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/prepare_image',
+    json={},
+    status=200,
+)
+
 put_node = responses.Response(
     method='PUT',
     url='https://some.realm/api/scm.config/1.0/node/node-12345',
@@ -416,6 +423,37 @@ def test_download_image():
     with open(filename, 'rb') as f:
         contents = f.read()
     assert contents == db['image_download']
+
+
+@responses.activate
+def test_download_image_quiet(capsys):
+    """Test SConnect.stream method."""
+    responses.add(get_image_status)
+    responses.add(get_image_download)
+    filename = 'delete.me'
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    sc.download_image('node-12345', save_as=filename, quiet=True)
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    assert contents == db['image_download']
+    captured = capsys.readouterr()
+    assert captured.out == ''
+
+
+@responses.activate
+def test_build_and_download_image(capsys):
+    """Test SConnect.stream method."""
+    responses.add(post_prepare_image)
+    responses.add(get_image_status)
+    responses.add(get_image_download)
+    filename = 'delete.me'
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    sc.download_image('node-12345', save_as=filename, build='kvm')
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    assert contents == db['image_download']
+    captured = capsys.readouterr()
+    assert 'Requesting image of type kvm' in captured.out
 
 
 def test_savefile():
