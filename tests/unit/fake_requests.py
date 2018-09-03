@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import json
-
+from steelconnection import InvalidResource, AuthenticationError
 
 codes = {
     'netrc401': 401,
@@ -94,6 +94,10 @@ class Fake_Session(object):
             return Fake_Response(url, 404, data, auth)
         if url.startswith('https://timeout'):
             raise IOError('timed out :(')
+        if url.startswith('https://InvalidResource'):
+            raise InvalidResource('InvalidResource :(')
+        if url.startswith('https://AuthenticationError'):
+            raise AuthenticationError('AuthenticationError :(')
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         if resource == 'netrc401' and auth:
