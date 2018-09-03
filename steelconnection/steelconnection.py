@@ -162,7 +162,7 @@ class SConnect(object):
                 username = username_supplied
                 password = None
             else:
-                return self if self.response.ok else None
+                return self.response.ok
 
     # Primary methods:
 
