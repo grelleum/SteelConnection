@@ -314,22 +314,22 @@ def test_ascii_art():
 
 
 @responses.activate
-def test_answer_with_success():
-    """Test SConnect.answer when response.ok."""
+def test_received_with_success():
+    """Test SConnect.received when response.ok."""
     responses.add(get_status)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.get('status')
-    assert sc.answer == 'Status: 200 - OK\nError: None'
+    assert sc.received == 'Status: 200 - OK\nError: None'
 
 
 @responses.activate
-def test_answer_not_ok_and_no_json():
-    """Test SConnect.answer when response.text is not json formatted."""
+def test_received_not_ok_and_no_json():
+    """Test SConnect.received when response.text is not json formatted."""
     responses.add(get_nonesuch)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     with pytest.raises(RuntimeError):
         sc.get('nonesuch')
-    assert sc.answer == 'Status: 404 - Not Found\nError: None'
+    assert sc.received == 'Status: 404 - Not Found\nError: None'
 
 
 def test_scon_realm_when_defined():

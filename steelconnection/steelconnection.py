@@ -391,7 +391,7 @@ class SConnect(object):
         )
 
     @property
-    def answer(self):
+    def received(self):
         """Return summary of the previous API response.
 
         :returns: Details regarding previous API request.
@@ -435,7 +435,7 @@ class SConnect(object):
         }
         if not response.ok:
             exception = exceptions.get(response.status_code, RuntimeError)
-            raise exception('\n'.join((self.answer, self.sent)))
+            raise exception('\n'.join((self.received, self.sent)))
 
     def _on_error_exit(self, response):
         r"""Display error and exit.
@@ -446,7 +446,7 @@ class SConnect(object):
         """
         if not response.ok:
             print(
-                '\n'.join((self.answer, self.sent)),
+                '\n'.join((self.received, self.sent)),
                 file=sys.stderr
             )
             sys.exit(1)
@@ -508,7 +508,7 @@ class SConnect(object):
             "package version: '{}'".format(self.__version__),
         ]
         details.extend(self.sent.splitlines())
-        details.extend(self.answer.splitlines())
+        details.extend(self.received.splitlines())
         return '\n>> '.join(details)
 
 
