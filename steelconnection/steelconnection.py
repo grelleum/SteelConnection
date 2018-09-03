@@ -132,7 +132,7 @@ class SConnect(object):
         r"""Make a connection to SteelConnect."""
 
         if self.session.auth:
-            return
+            return 'defined'
         username_supplied = username
         for attempt in range(connection_attempts):
             if not username:
