@@ -71,10 +71,10 @@ def _prepare_image(sconnect, nodeid, build, verbose):
     verbose('Done.')
 
 
-def _wait_for_ready(sconnect, nodeid, verbose):
+def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
     """Check status every second until file is ready."""
     verbose('Checking availability of image', end=' ')
-    while True:
+    for _ in range(retries):
         verbose('.', end='')
         try:
             status = sconnect.get('/node/{}/image_status'.format(nodeid))
@@ -83,7 +83,9 @@ def _wait_for_ready(sconnect, nodeid, verbose):
         else:
             if status.get('status', False):
                 return status
-        time.sleep(1)
+        time.sleep(sleep_time)
+    else:
+        raise RuntimeError('Timed out waiting for image ready.')
 
 
 def _get_file_path(source_file, save_as):
