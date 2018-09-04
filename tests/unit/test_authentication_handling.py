@@ -1,6 +1,5 @@
 # coding: utf-8
 
-# import getpass
 import sys
 import requests
 import steelconnection
@@ -9,21 +8,6 @@ import fake_requests
 
 # Authentication Methods:
 
-# Challenge here is to make first FAKE request fail, due to lack of auth.
-
-# def test_authenticate_without_providing_auth(monkeypatch):
-#     """_authenticate should prompt for user and password when netrc fails."""
-#     if sys.version_info.major < 3:
-#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
-#     else:
-#         monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
-#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-#     assert sc.username == 'xXyYzZ'
-#     assert sc.password == 'mypassword'
-
-
 def test_ask_for_auth_with_netrc(monkeypatch):
     """_ask_for_auth should not prompt when netrc file exists."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
@@ -31,95 +15,47 @@ def test_ask_for_auth_with_netrc(monkeypatch):
     assert sc.get('netrc') == fake_requests.netrc
 
 
-# def test_get_auth_without_netrc(monkeypatch):
-#     """_get_auth should prompt for both user and password."""
-#     if sys.version_info.major < 3:
-#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
-#     else:
-#         monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
-#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-#     assert sc.get('netrc401') == fake_requests.netrc
-#     assert sc.username, sc.password == ('xXyYzZ', 'mypassword')
+def test_interactive_login_session_auth_defined():
+    """Verify _interactive_login returns if session.auth is defined."""
+    sc = steelconnection.SConnect('some.realm', 'USER', 'PW')
+    assert sc._interactive_login('A', 'B', 0) == 'defined'
 
 
-# NO LONGER EXISTS
-# def test_ask_for_auth_when_not_provided(monkeypatch):
-#     """_ask_for_auth should prompt for both user and password."""
-#     if sys.version_info.major < 3:
-#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
-#     else:
-#         monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
-#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-#     sc._ask_for_auth()
-#     sc.get('status')
-#     assert sc.response.auth == ('xXyYzZ', 'mypassword')
+def test_interactive_login_IOError(capsys, monkeypatch):
+    """Verify _interactive_login returns if session.auth is defined."""
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConnect('timeout', connection_attempts=1)
+    captured = capsys.readouterr()
+    assert 'Cannot connect to realm:' in captured.out
+    assert sc.realm == 'xXyYzZ'
 
 
-# NO LONGER EXISTS
-# def test_ask_for_auth_username_provided(monkeypatch):
-#     """
-#     _ask_for_auth should prompt for password
-#     when only username is provided.
-#     """
-#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', username='A')
-#     sc._ask_for_auth()
-#     sc.get('status')
-#     assert sc.response.auth == ('A', 'mypassword')
+def test_interactive_login_InvalidResource(capsys, monkeypatch):
+    """Verify _interactive_login returns if session.auth is defined."""
+    if sys.version_info.major < 3:
+        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
+    else:
+        monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConnect('InvalidResource', connection_attempts=1)
+    captured = capsys.readouterr()
+    assert 'does not appear to be a SteelConnect Manager.' in captured.out
+    assert sc.realm == 'xXyYzZ'
 
 
-# NO LONGER EXISTS
-# def test_ask_for_auth_passwd_provided(monkeypatch):
-#     """
-#     _ask_for_auth should prompt for username
-#     when only password is provided.
-#     """
-#     if sys.version_info.major < 3:
-#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'xXyYzZ')
-#     else:
-#         monkeypatch.setattr('builtins.input', lambda x: 'xXyYzZ')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', password='B')
-#     sc._ask_for_auth()
-#     sc.get('status')
-#     assert sc.response.auth == ('xXyYzZ', 'B')
-
-
-# NO LONGER EXISTS
-# def test_ask_for_auth_both_provided(monkeypatch):
-#     """_ask_for_auth should return user/pass when both are provided."""
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', username='A', password='B')
-#     sc._ask_for_auth()
-#     sc.get('status')
-#     assert sc.response.auth == ('A', 'B')
-
-
-# NO LONGER A VALID TEST - AUTH REMOVED FROM _request
-# def test_request_prompts_password_when_username_provided(monkeypatch):
-#     """_request should prompt for password only when username is provided."""
-#     monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
-#     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     sc = steelconnection.SConnect('some.realm', username='A')
-#     assert sc._request(sc.session.get, 'url')
-#     sc.get('status')
-#     assert sc.response.auth == ('A', 'mypassword')
-
-
-# _login method tests
-
-# def test_login_response_ok(capsys):
-#     """_ask_for_auth should return user/pass when both are provided."""
-#     # monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-#     # sc = steelconnection.SConnect('some.realm', username='A', password='B')
-#     sc = steelconnection.SConnect(connection_attempts=0)
-#     sc.response = fake_requests.Fake_Response('', 200, {})
-#     result = sc._login()
-#     assert result == sc
-#     captured = capsys.readouterr()
-#     assert captured.out == ''
+def test_interactive_login_AuthenticationError(capsys, monkeypatch):
+    """Verify _interactive_login returns if session.auth is defined."""
+    monkeypatch.setattr('getpass.getpass', lambda x: 'mypassword')
+    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
+    sc = steelconnection.SConnect(
+        'AuthenticationError', 'USER', connection_attempts=1
+    )
+    captured = capsys.readouterr()
+    assert captured.out == 'Authentication Failed\n'
+    assert sc.session.auth == ('USER', 'mypassword')
