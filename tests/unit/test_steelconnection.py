@@ -186,6 +186,13 @@ post_nonesuch = responses.Response(
     status=404,
 )
 
+post_prepare_image = responses.Response(
+    method='POST',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/prepare_image',
+    json={},
+    status=200,
+)
+
 put_node = responses.Response(
     method='PUT',
     url='https://some.realm/api/scm.config/1.0/node/node-12345',
@@ -405,9 +412,11 @@ def test_stream():
     assert list(result) == [db['image_download']]
 
 
+# Download image:
+
 @responses.activate
 def test_download_image():
-    """Test SConnect.stream method."""
+    """Test SConnect.download_image method."""
     responses.add(get_image_status)
     responses.add(get_image_download)
     filename = 'delete.me'
