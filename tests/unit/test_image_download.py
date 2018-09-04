@@ -1,16 +1,9 @@
 # coding: utf-8
 
-# import json
 import os
-# import sys
-# import pytest
+import pytest
 import responses
 import steelconnection
-
-
-# class NameSpace():
-#     def __init__(self):
-#         pass
 
 
 db = {
@@ -63,82 +56,26 @@ db = {
     'invalid_status': {},
 }
 
-
-# get_image = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/image',
-#     headers={'Content-Type': 'application/octet-stream'},
-#     body=b'B',
-#     status=200,
-# )
-
-# get_node = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/node/node-12345',
-#     json=db['nodes']['items'][0],
-#     status=200,
-# )
-
-# get_nodes = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/nodes',
-#     json=db['nodes'],
-#     status=200,
-# )
-
-# get_nonesuch = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/nonesuch',
-#     body=db['image_download'],
-#     status=404,
-# )
-
-# get_orgs = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/orgs',
-#     json=db['orgs'],
-#     status=200,
-# )
-
-# get_queued = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/Queued',
-#     body='{"error":{"message":"Queued","code":404}}',
-#     status=404,
-# )
-
-# get_status = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/status',
-#     json=db['status'],
-#     status=200,
-# )
-
-# get_invalid_status = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/status',
-#     json=db['invalid_status'],
-#     status=200,
-# )
-
-# get_status_404 = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/status',
-#     status=404,
-# )
-
-# get_stream = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.config/1.0/stream',
-#     body=db['image_download'],
-#     status=200,
-# )
-
 get_image_status = responses.Response(
     method='GET',
     url='https://some.realm/api/scm.config/1.0/node/node-12345/image_status',
     json=db['image_status'],
     status=200,
+)
+
+get_image_status_queued = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/image_status',
+    # url='https://some.realm/api/scm.config/1.0/Queued',
+    body='{"error":{"message":"Queued","code":404}}',
+    status=404,
+)
+
+get_image_status_ResourceGone = responses.Response(
+    method='GET',
+    url='https://some.realm/api/scm.config/1.0/node/node-12345/image_status',
+    json=db['invalid_status'],
+    status=410,
 )
 
 get_image_download = responses.Response(
@@ -148,64 +85,12 @@ get_image_download = responses.Response(
     status=200,
 )
 
-# getstatus_node = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.reporting/1.0/node/node-12345',
-#     json=db['nodes']['items'][0],
-#     status=200,
-# )
-
-# getstatus_nonesuch = responses.Response(
-#     method='GET',
-#     url='https://some.realm/api/scm.reporting/1.0/nonesuch',
-#     status=404,
-# )
-
-# delete_nonesuch = responses.Response(
-#     method='DELETE',
-#     url='https://some.realm/api/scm.config/1.0/nonesuch',
-#     status=404,
-# )
-
-# delete_org = responses.Response(
-#     method='DELETE',
-#     url='https://some.realm/api/scm.config/1.0/org/org-12345',
-#     json={},
-#     status=200,
-# )
-
-# post_nodes = responses.Response(
-#     method='POST',
-#     url='https://some.realm/api/scm.config/1.0/nodes',
-#     json=db['nodes']['items'][0],
-#     status=200,
-# )
-
-# post_nonesuch = responses.Response(
-#     method='POST',
-#     url='https://some.realm/api/scm.config/1.0/nonesuch',
-#     status=404,
-# )
-
 post_prepare_image = responses.Response(
     method='POST',
     url='https://some.realm/api/scm.config/1.0/node/node-12345/prepare_image',
     json={},
     status=200,
 )
-
-# put_node = responses.Response(
-#     method='PUT',
-#     url='https://some.realm/api/scm.config/1.0/node/node-12345',
-#     json=db['nodes']['items'][0],
-#     status=200,
-# )
-
-# put_nonesuch = responses.Response(
-#     method='PUT',
-#     url='https://some.realm/api/scm.config/1.0/nonesuch',
-#     status=404,
-# )
 
 
 def test_no_op():
@@ -269,3 +154,38 @@ def test_build_and_download_image(capsys):
     assert contents == db['image_download']
     captured = capsys.readouterr()
     assert 'Requesting image of type kvm' in captured.out
+
+
+@responses.activate
+def test_download_image_not_available():
+    """Test SConnect.download_image method."""
+    responses.add(get_image_status_ResourceGone)
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    with pytest.raises(ValueError):
+        steelconnection.image_download._download_image(sc, 'node-12345')
+
+
+@responses.activate
+def test_wait_for_ready_timeout():
+    """Test _wait_for_ready will timeout when image is never ready."""
+    responses.add(get_image_status_queued)
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    with pytest.raises(RuntimeError):
+        steelconnection.image_download._wait_for_ready(
+            sc,
+            'node-12345',
+            steelconnection.image_download.no_op,
+            retries=1,
+            sleep_time=0.1,
+        )
+
+
+@responses.activate
+def test_wait_for_ready_resource_gone():
+    """Test _wait_for_ready returns None when image not available."""
+    responses.add(get_image_status_ResourceGone)
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    result = steelconnection.image_download._wait_for_ready(
+        sc, 'node-12345', steelconnection.image_download.no_op
+    )
+    assert result is None
