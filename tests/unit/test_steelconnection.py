@@ -412,6 +412,21 @@ def test_stream():
     assert list(result) == [db['image_download']]
 
 
+def test_savefile():
+    """Test SConnect.savefile method."""
+    filename = 'delete.me'
+    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
+    sc.response = NameSpace()
+    sc.response.content = b'ABCDEFG1234567890'
+    sc.savefile(filename)
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    assert contents == sc.response.content
+
+
+# Download image:
+# TODO: Move to separate tests file.
+
 @responses.activate
 def test_download_image():
     """Test SConnect.stream method."""
@@ -454,18 +469,6 @@ def test_build_and_download_image(capsys):
     assert contents == db['image_download']
     captured = capsys.readouterr()
     assert 'Requesting image of type kvm' in captured.out
-
-
-def test_savefile():
-    """Test SConnect.savefile method."""
-    filename = 'delete.me'
-    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    sc.response = NameSpace()
-    sc.response.content = b'ABCDEFG1234567890'
-    sc.savefile(filename)
-    with open(filename, 'rb') as f:
-        contents = f.read()
-    assert contents == sc.response.content
 
 
 # Get Results:
