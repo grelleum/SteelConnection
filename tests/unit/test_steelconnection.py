@@ -412,18 +412,6 @@ def test_stream():
     assert list(result) == [db['image_download']]
 
 
-def test_savefile():
-    """Test SConnect.savefile method."""
-    filename = 'delete.me'
-    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    sc.response = NameSpace()
-    sc.response.content = b'ABCDEFG1234567890'
-    sc.savefile(filename)
-    with open(filename, 'rb') as f:
-        contents = f.read()
-    assert contents == sc.response.content
-
-
 # Download image:
 
 @responses.activate
@@ -439,35 +427,16 @@ def test_download_image():
     assert contents == db['image_download']
 
 
-@responses.activate
-def test_download_image_quiet(capsys):
-    """Test SConnect.download_image method in quiet mode."""
-    responses.add(get_image_status)
-    responses.add(get_image_download)
+def test_savefile():
+    """Test SConnect.savefile method."""
     filename = 'delete.me'
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    sc.download_image('node-12345', save_as=filename, quiet=True)
+    sc.response = NameSpace()
+    sc.response.content = b'ABCDEFG1234567890'
+    sc.savefile(filename)
     with open(filename, 'rb') as f:
         contents = f.read()
-    assert contents == db['image_download']
-    captured = capsys.readouterr()
-    assert captured.out == ''
-
-
-@responses.activate
-def test_build_and_download_image(capsys):
-    """Test SConnect.download_image method."""
-    responses.add(post_prepare_image)
-    responses.add(get_image_status)
-    responses.add(get_image_download)
-    filename = 'delete.me'
-    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    sc.download_image('node-12345', save_as=filename, build='kvm')
-    with open(filename, 'rb') as f:
-        contents = f.read()
-    assert contents == db['image_download']
-    captured = capsys.readouterr()
-    assert 'Requesting image of type kvm' in captured.out
+    assert contents == sc.response.content
 
 
 # Get Results:
