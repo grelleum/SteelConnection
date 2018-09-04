@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import json
-import os
 import sys
 import pytest
 import responses
@@ -469,26 +468,6 @@ def test_build_and_download_image(capsys):
     assert contents == db['image_download']
     captured = capsys.readouterr()
     assert 'Requesting image of type kvm' in captured.out
-
-
-def test_get_file_path():
-    """Test SConnect.image_download._get_file_path method."""
-    filename = steelconnection.image_download._get_file_path('A', 'Z')
-    assert filename == 'Z'
-
-
-def test_get_file_path_source_only():
-    """Test SConnect.image_download._get_file_path method."""
-    filename = steelconnection.image_download._get_file_path('A', None)
-    assert filename == 'A'
-
-
-def test_get_file_path_with_dir():
-    """Test SConnect.image_download._get_file_path method."""
-    cwd = os.getcwd()
-    src = 'xYz'
-    filename = steelconnection.image_download._get_file_path(src, cwd)
-    assert filename == os.path.join(cwd, src)
 
 
 # Get Results:
