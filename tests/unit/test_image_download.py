@@ -93,6 +93,8 @@ post_prepare_image = responses.Response(
 )
 
 
+# no_op
+
 def test_no_op():
     """Verify no_op always returns None."""
     assert steelconnection.image_download.no_op() is None
@@ -100,6 +102,8 @@ def test_no_op():
     assert steelconnection.image_download.no_op(1, ['x', 'y'], 'A') is None
     assert steelconnection.image_download.no_op(hello='goodbye') is None
 
+
+# _get_file_path
 
 def test_get_file_path():
     """Test SConnect.image_download._get_file_path method."""
@@ -120,6 +124,8 @@ def test_get_file_path_with_dir():
     filename = steelconnection.image_download._get_file_path(src, cwd)
     assert filename == os.path.join(cwd, src)
 
+
+# _download_image
 
 @responses.activate
 def test_download_image_quiet(capsys):
@@ -165,6 +171,8 @@ def test_download_image_not_available():
         steelconnection.image_download._download_image(sc, 'node-12345')
 
 
+# _wait_for_ready
+
 @responses.activate
 def test_wait_for_ready_timeout():
     """Test _wait_for_ready will timeout when image is never ready."""
@@ -189,3 +197,10 @@ def test_wait_for_ready_resource_gone():
         sc, 'node-12345', steelconnection.image_download.no_op
     )
     assert result is None
+
+
+# def print_flush(*args, **kwargs):
+
+# def _prepare_image(sconnect, nodeid, build, verbose):
+
+# def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
