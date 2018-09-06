@@ -166,7 +166,7 @@ class SConnect(object):
 
     # Primary methods:
 
-    def get(self, resource, params=None):
+    def get(self, resource, params=None, api='scm.config'):
         r"""Send a GET request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -176,7 +176,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.get,
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -194,7 +194,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.get,
-            url=self.make_url('reporting', resource),
+            url=self.make_url('scm.reporting', resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -213,7 +213,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.delete,
-            url=self.make_url('config', resource),
+            url=self.make_url('scm.config', resource),
             params=params,
             data=data,
         )
@@ -232,7 +232,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.post,
-            url=self.make_url('config', resource),
+            url=self.make_url('scm.config', resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -251,7 +251,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.put,
-            url=self.make_url('config', resource),
+            url=self.make_url('scm.config', resource),
             params=params,
             data=data,
         )
@@ -269,7 +269,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self.session.get(
-            url=self.make_url('config', resource),
+            url=self.make_url('scm.config', resource),
             params=params,
             stream=True,
         )
@@ -281,13 +281,13 @@ class SConnect(object):
     def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
-        :param str api: api route, usually 'config' or 'reporting'.
+        :param str api: api route, usually 'scm.config' or 'scm.reporting'.
         :param str resource: resource path.
         :returns: Complete URL path to access resource.
         :rtype: str
         """
         resource = resource[1:] if resource.startswith('/') else resource
-        return 'https://{}/api/scm.{}/{}/{}'.format(
+        return 'https://{}/api/{}/{}/{}'.format(
             self.realm, api, self.api_version, resource,
         )
 
