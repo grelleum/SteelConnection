@@ -184,7 +184,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def getstatus(self, resource, params=None, api='scm.reporting'):
+    def getstatus(self, resource, params=None):
         r"""Send a GET request to the SteelConnect.Reporting API.
 
         :param str resource: api resource to get.
@@ -192,15 +192,7 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.get,
-            url=self.make_url(api, resource),
-            params=params,
-        )
-        self.result = self._get_result(self.response)
-        if self.result is None:
-            self._raise_exception(self.response)
-        return self.result
+        return self.get(resource, params, api='scm.reporting')
 
     def delete(self, resource, data=None, params=None, api='scm.config'):
         r"""Send a DELETE request to the SteelConnect.Config API.
