@@ -58,12 +58,12 @@ def test_scon_repr():
     """Test __repr__ returns a proper string."""
     responses.add(
         responses.GET,
-        'https://some.realm/api/scm.config/1.0/status',
-        json={'scm_version': '1.23.4', 'scm_build': '56'},
+        'https://some.realm/api/common/1.0/info',
+        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC',},
         status=200,
     )
     realm = 'some.realm'
-    scm_version = '1.23.4.56'
+    scm_version = '1.23.4_56'
     api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = (
@@ -79,12 +79,12 @@ def test_scon_str():
     """Test __str__ returns expected string."""
     responses.add(
         responses.GET,
-        'https://some.realm/api/scm.config/1.0/status',
-        json={'scm_version': '1.23.4', 'scm_build': '56'},
+        'https://some.realm/api/common/1.0/info',
+        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC',},
         status=200,
     )
     realm = 'some.realm'
-    scm_version = '1.23.4.56'
+    scm_version = '1.23.4_56'
     api_version = '1.0'
     pkg_version = steelconnection.__version__
     expected = '\n'.join((
@@ -93,7 +93,7 @@ def test_scon_str():
         ">> scm version: '{}'",
         ">> api version: '{}'",
         ">> package version: '{}'",
-        '>> GET: https://some.realm/api/scm.config/1.0/status',
+        '>> GET: https://some.realm/api/common/1.0/info',
         '>> Data Sent: None',
         '>> Status: 200 - OK',
         '>> Error: None'
