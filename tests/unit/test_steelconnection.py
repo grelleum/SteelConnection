@@ -18,6 +18,11 @@ db = {
         'scm_version': '1.23.4',
         'scm_build': '56',
     },
+    'info': {
+        'sw_version': '1.23.4',
+        'sw_build': '56',
+        'scm_id': 'ABC',
+    },
     'orgs': {
         'items': [
             {
@@ -113,16 +118,36 @@ get_status = responses.Response(
     status=200,
 )
 
-get_invalid_status = responses.Response(
+get_info = responses.Response(
     method='GET',
-    url='https://some.realm/api/scm.config/1.0/status',
+    url='https://some.realm/api/common/1.0/info',
+    json=db['info'],
+    status=200,
+)
+
+# get_invalid_status = responses.Response(
+#     method='GET',
+#     url='https://some.realm/api/scm.config/1.0/status',
+#     json=db['invalid_status'],
+#     status=200,
+# )
+
+get_invalid_info = responses.Response(
+    method='GET',
+    url='https://some.realm/api/common/1.0/info',
     json=db['invalid_status'],
     status=200,
 )
 
-get_status_404 = responses.Response(
+# get_status_404 = responses.Response(
+#     method='GET',
+#     url='https://some.realm/api/scm.config/1.0/status',
+#     status=404,
+# )
+
+get_info_404 = responses.Response(
     method='GET',
-    url='https://some.realm/api/scm.config/1.0/status',
+    url='https://some.realm/api/common/1.0/info',
     status=404,
 )
 
@@ -382,23 +407,24 @@ def test_scon_make_url():
 @responses.activate
 def test_scm_version():
     """Test SConnect.scm_version method."""
-    responses.add(get_status)
+    responses.add(get_info)
+    # responses.add(get_status)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    assert sc.scm_version == '1.23.4.56'
+    assert sc.scm_version == '1.23.4_56'
 
 
 @responses.activate
 def test_scm_version_invalid():
     """Test SConnect.scm_version method when an invalid status is returned."""
-    responses.add(get_invalid_status)
+    responses.add(get_invalid_info)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    assert sc.scm_version == 'unavailable'
+    assert sc.scm_version == 'Not a SteelConnect Manager'
 
 
 @responses.activate
 def test_scm_version_unavailable():
     """Test SConnect.scm_version method."""
-    responses.add(get_status_404)
+    responses.add(get_info_404)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     assert sc.scm_version == 'unavailable'
 
