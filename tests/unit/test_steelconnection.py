@@ -376,7 +376,7 @@ def test_scon_make_url():
         'NO.REALM', api_version='999', connection_attempts=0
     )
     url = sc.make_url('FAKE', 'PATH')
-    assert url == 'https://NO.REALM/api/scm.FAKE/999/PATH'
+    assert url == 'https://NO.REALM/api/FAKE/999/PATH'
 
 
 @responses.activate
