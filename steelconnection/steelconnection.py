@@ -365,17 +365,41 @@ class SConnect(object):
         """
         if self.__scm_version is None:
             try:
-                status = self.get('status')
+                info = self.get('info', api='common')
             except InvalidResource:
                 self.__scm_version = 'unavailable'
             else:
-                version = status.get('scm_version')
-                build = status.get('scm_build')
-                if version and build:
-                    self.__scm_version = '.'.join((version, build))
+                if info.get('scm_id'):
+                    try:
+                        self.__scm_version = '_'.join(
+                            (info.get('sw_version'), info.get('sw_build'))
+                        )
+                    except TypeError:
+                        self.__scm_version = 'unavailable'
                 else:
-                    self.__scm_version = 'unavailable'
+                    self.__scm_version = 'Not a SteelConnect Manager'
         return self.__scm_version
+
+    # @property
+    # def scm_version(self):
+    #     """Return version and build number of SteelConnect Manager.
+
+    #     :returns: SteelConnect Manager version and build number.
+    #     :rtype: str
+    #     """
+    #     if self.__scm_version is None:
+    #         try:
+    #             status = self.get('status')
+    #         except InvalidResource:
+    #             self.__scm_version = 'unavailable'
+    #         else:
+    #             version = status.get('scm_version')
+    #             build = status.get('scm_build')
+    #             if version and build:
+    #                 self.__scm_version = '.'.join((version, build))
+    #             else:
+    #                 self.__scm_version = 'unavailable'
+    #     return self.__scm_version
 
     @property
     def sent(self):
