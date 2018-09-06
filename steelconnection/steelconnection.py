@@ -184,7 +184,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def getstatus(self, resource, params=None):
+    def getstatus(self, resource, params=None, api='scm.reporting'):
         r"""Send a GET request to the SteelConnect.Reporting API.
 
         :param str resource: api resource to get.
@@ -194,7 +194,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.get,
-            url=self.make_url('scm.reporting', resource),
+            url=self.make_url(api, resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -202,7 +202,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def delete(self, resource, data=None, params=None):
+    def delete(self, resource, data=None, params=None, api='scm.config'):
         r"""Send a DELETE request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -213,7 +213,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.delete,
-            url=self.make_url('scm.config', resource),
+            url=self.make_url(api, resource),
             params=params,
             data=data,
         )
@@ -222,7 +222,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def post(self, resource, data=None):
+    def post(self, resource, data=None, api='scm.config'):
         r"""Send a POST request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -232,7 +232,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.post,
-            url=self.make_url('scm.config', resource),
+            url=self.make_url(api, resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -240,7 +240,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def put(self, resource, data=None, params=None):
+    def put(self, resource, data=None, params=None, api='scm.config'):
         r"""Send a PUT request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -251,7 +251,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.put,
-            url=self.make_url('scm.config', resource),
+            url=self.make_url(api, resource),
             params=params,
             data=data,
         )
@@ -260,7 +260,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def stream(self, resource, params=None):
+    def stream(self, resource, params=None, api='scm.config'):
         r"""Send a GET request with streaming binary data.
 
         :param str resource: api resource to get.
@@ -269,7 +269,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self.session.get(
-            url=self.make_url('scm.config', resource),
+            url=self.make_url(api, resource),
             params=params,
             stream=True,
         )
