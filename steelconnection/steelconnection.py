@@ -110,10 +110,9 @@ class SConnect(object):
         :param str realm: hostname or IP address of SteelConnect Manager.
         :rtype: str
         """
+        message = 'Enter SteelConnect Manager fully qualified domain name: '
         while not realm:
-            realm = get_input(
-                'Enter SteelConnect Manager fully qualified domain name: '
-            )
+            realm = get_input(message)
         return realm
 
     def _set_session_auth(self, username, password):
