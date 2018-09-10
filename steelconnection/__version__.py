@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+"""Provide version and author details."""
+
+
 __title__ = 'steelconnection'
 __description__ = 'Simplify access to the Riverbed SteelConnect REST API.'
 __version__ = '0.93.0'
