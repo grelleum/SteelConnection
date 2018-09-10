@@ -82,8 +82,8 @@ class SConnect(object):
         :param str api_version: (optional) REST API version.
         :param dict proxies: (optional) Dictionary of proxy servers.
         :param str on_error: (optional) Define behavior for failed requests.
-        :param timeout: (optional) How many seconds to wait for the server 
-            to send data before giving up, as a float, 
+        :param timeout: (optional) How many seconds to wait for the server
+            to send data before giving up, as a float,
             or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
         :type timeout: float or tuple
         :param int connection_attempts: (optional) Number of login attemps.
@@ -164,7 +164,7 @@ class SConnect(object):
                 self.__scm_version = None
             except InvalidResource as e:
                 # Connected to a webserver, but not SteelConnect.
-                message = "'{}' does not appear to be a SteelConnect Manager." 
+                message = "'{}' does not appear to be a SteelConnect Manager."
                 print(e)
                 print(message.format(self.realm))
                 self.realm = self._get_realm(None)
