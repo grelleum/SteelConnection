@@ -68,6 +68,7 @@ class SConnect(object):
         realm=None,
         username=None,
         password=None,
+        use_netrc=False,
         api_version='1.0',
         proxies=None,
         on_error='raise',
@@ -76,14 +77,25 @@ class SConnect(object):
     ):
         r"""Create a new steelconnection object.
 
-        :param str realm: hostname or IP address of SteelConnect Manager.
+        :param str realm: (optional) FQDN of SteelConnect Manager.
         :param str username: (optional) Admin account name.
         :param str password: (optional) Admin account password.
+        :param bool use_netrc: (optional) Get credentials from .netrc file.
         :param str api_version: (optional) REST API version.
         :param dict proxies: (optional) Dictionary of proxy servers.
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
+        if use_netrc:
+            if not realm:
+                raise ValueError('Must supply realm when using .netrc.')
+            if username or password:
+                raise ValueError(
+                    'Do not supply username or password when using .netrc.'
+                )
+            username, password = get_netrc_auth('https://' + self.realm)
+            if not username and password:
+                raise RuntimeError('Could not get credentials from .netrc.')
         self.realm = self._get_realm(realm)
         self.__scm_version = None
         self.__version__ = __version__
