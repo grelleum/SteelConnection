@@ -43,7 +43,10 @@ __all__ = (
 )
 
 
+import logging
+
 from requests import ConnectionError, RequestException
+
 from .steelconnection import SConnect, ASCII_ART
 from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
@@ -54,12 +57,12 @@ from .__version__ import __copyright__, __description__
 from .__version__ import __license__, __title__
 from .__version__ import __url__, __version__
 
-import logging
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
 
 def about():
     return '\n'.join((
         __author__, __author_email__, __copyright__, __description__,
         __license__, __title__, __url__, __version__,
     ))
+
+
+logging.getLogger(__name__).addHandler(logging.NullHandler())
