@@ -1,6 +1,7 @@
 # coding: utf-8
 
-"""SteelConnection image.
+"""
+Provide functions to sinplify virtual image build and download.
 
 Convienience functions for virtual machine image downloads.
 To be called from SteelConnection main object classes.
@@ -18,12 +19,15 @@ from .exceptions import ResourceGone
 
 
 def no_op(*args, **kwargs):
-    """No operations."""
+    """No operation."""
     return None
 
 
 def print_flush(*args, **kwargs):
-    """Python 2 or 3 print with flush.
+    """
+    Print with flush.
+    
+    Works with Python 2 or 3.
 
     :param \*args: Optional arguments that ``print`` accepts.
     :param \*\*kwargs: Optional arguments that ``print`` accepts.
@@ -34,7 +38,8 @@ def print_flush(*args, **kwargs):
 
 
 def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
-    r"""Download image and save to file.
+    r"""
+    Download image and save to file.
 
     :param str sconnect: SteelConnection object.
     :param str nodeid: The node id of the appliance.
