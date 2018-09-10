@@ -23,20 +23,6 @@ Full documentation available at https://pypi.org/project/steelconnection/
 :license: MIT, see LICENSE for more details.
 """
 
-from requests import ConnectionError, RequestException
-from .steelconnection import SConnect, ASCII_ART
-from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
-from .exceptions import AuthenticationError, APINotEnabled
-from .exceptions import BadRequest, InvalidResource, ResourceGone
-from .input_tools import get_input, get_username, get_password
-from .__version__ import __author__, __author_email__
-from .__version__ import __copyright__, __description__
-from .__version__ import __license__, __title__
-from .__version__ import __url__, __version__
-
-import logging
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
 
 __all__ = (
     'SConnect',
@@ -55,6 +41,21 @@ __all__ = (
     'get_password',
     'ASCII_ART',
 )
+
+
+from requests import ConnectionError, RequestException
+from .steelconnection import SConnect, ASCII_ART
+from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
+from .exceptions import AuthenticationError, APINotEnabled
+from .exceptions import BadRequest, InvalidResource, ResourceGone
+from .input_tools import get_input, get_username, get_password
+from .__version__ import __author__, __author_email__
+from .__version__ import __copyright__, __description__
+from .__version__ import __license__, __title__
+from .__version__ import __url__, __version__
+
+import logging
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 def about():
