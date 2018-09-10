@@ -149,11 +149,9 @@ class SConnect(object):
                 self.__scm_version = None
             except InvalidResource as e:
                 # Connected to a webserver, but not SteelConnect.
+                message = "'{}' does not appear to be a SteelConnect Manager." 
                 print(e)
-                print(
-                    "'{}'".format(self.realm),
-                    "does not appear to be a SteelConnect Manager."
-                )
+                print(message.format(self.realm))
                 self.realm = self._get_realm(None)
                 self.__scm_version = None
             except AuthenticationError:
