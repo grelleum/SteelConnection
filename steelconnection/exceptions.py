@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""steelconnection.exceptions
-
-Contains exceptions raised by steelconnection.
-"""
+"""Provide custom exceptions."""
 
 
 class BadRequest(RuntimeError):
