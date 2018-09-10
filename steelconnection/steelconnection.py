@@ -59,8 +59,6 @@ class SConnect(object):
     :param str username: (optional) Admin account name.
     :param str password: (optional) Admin account password.
     :param str api_version: (optional) REST API version.
-    :returns: Dictionary or List of Dictionaries based on request.
-    :rtype: dict, or list
     """
 
     def __init__(
@@ -83,8 +81,13 @@ class SConnect(object):
         :param bool use_netrc: (optional) Get credentials from .netrc file.
         :param str api_version: (optional) REST API version.
         :param dict proxies: (optional) Dictionary of proxy servers.
+        :param str on_error: (optional) Define behavior for failed requests.
+        :param timeout: (optional) How many seconds to wait for the server 
+            to send data before giving up, as a float, 
+            or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
+        :type timeout: float or tuple
+        :param int connection_attempts: (optional) Number of login attemps.
         :returns: Dictionary or List of Dictionaries based on request.
-        :rtype: dict, or list
         """
         if use_netrc:
             if not realm:
