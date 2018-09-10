@@ -10,10 +10,10 @@
 SteelConnection:
 Simplify access to the Riverbed SteelConnect REST API.
 
-usage:
+Usage:
 
 import steelconnection
-sc = steelconnection.SConnect('REALM.riverbed.cc')
+sc = steelconnection.SConnect('REALM.riverbed.cc', username, password)
 org = sc.lookup.org('MyOrgName')
 nodes = sc.get('org/' + org_id + '/nodes')
 
