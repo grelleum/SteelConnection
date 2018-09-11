@@ -55,9 +55,8 @@ BINARY_DATA_MESSAGE = (
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
-
     Args:
-        realm (str):  (optional) FQDN of SteelConnect Manager.
+        realm (str): (optional) FQDN of SteelConnect Manager.
         username (str): (optional) Admin account name.
         password (str): (optional) Admin account password.
         use_netrc (bool): (optional) Get credentials from .netrc file.
@@ -69,6 +68,15 @@ class SConnect(object):
                         to send data before giving up
             or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
         connection_attempts (str): (optional) Number of login attemps.
+
+    Attributes:
+        realm (str): FQDN of SteelConnect Manager.
+        api_version (str): SteelConnect Manager REST API version.
+        ascii_art (str): Project logo.
+        timeout (float or tuple): Timeout values for requests.
+        result: Contains last result returned from a request.
+        response: Response object from last request.
+        session: Request session object used to access REST API.
     """
 
     def __init__(
