@@ -107,17 +107,13 @@ class SConnect(object):
         self.session.headers.update({'Content-type': 'application/json'})
 
         if use_netrc:
+            # requests will look for .netrc if auth is not provided.
             if not realm:
                 raise ValueError('Must supply realm when using .netrc.')
             if username or password:
-                raise ValueError(
-                    'Do not supply username or password when using .netrc.'
-                )
-            username, password = get_netrc_auth('https://' + self.realm)
-            if not username and password:
-                raise RuntimeError('Could not get credentials from .netrc.')
-
-        if realm and username and password:
+                error = 'Do not supply username or password when using .netrc.'
+                raise ValueError(error)
+        elif realm and username and password:
             self.realm = realm
             self.session.auth = username, password
         else:
