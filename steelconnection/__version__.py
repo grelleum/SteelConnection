@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Provide version and author details."""
 
 
