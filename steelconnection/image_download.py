@@ -3,7 +3,6 @@
 """
 Provide functions to sinplify virtual image build and download.
 
-Convienience functions for virtual machine image downloads.
 To be called from SteelConnection main object classes.
 Not supported for direct use.
 """
@@ -25,7 +24,7 @@ def no_op(*args, **kwargs):
 def print_flush(*args, **kwargs):
     """
     Print with flush.
-    
+
     Works with Python 2 or 3.
 
     :param \*args: Optional arguments that ``print`` accepts.
@@ -67,7 +66,8 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
 
 
 def _prepare_image(sconnect, nodeid, build, verbose):
-    """Request an image build from SCM.
+    """
+    Request an image build from SCM.
 
     :param str sconnect: SteelConnection object.
     :param str nodeid: The node id of the appliance.
@@ -89,7 +89,8 @@ def _prepare_image(sconnect, nodeid, build, verbose):
 
 
 def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
-    """Check status periodically until file is ready.
+    """
+    Check status periodically until file is ready.
 
     :param str sconnect: SteelConnection object.
     :param str nodeid: The node id of the appliance.
@@ -113,7 +114,8 @@ def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
 
 
 def _get_file_path(source_file, save_as):
-    """Get file name and determine destination file path.
+    """
+    Get file name and determine destination file path.
 
     :param str source_file: Name of the source file to download.
     :param str save_as: Filepath where file is written.
@@ -127,7 +129,8 @@ def _get_file_path(source_file, save_as):
 
 
 def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
-    """Save stream of binary data to disk.
+    """
+    Save stream of binary data to disk.
 
     :param str sconnect: SteelConnection object.
     :param str nodeid: The node id of the appliance.
