@@ -74,7 +74,7 @@ Enter password:
 Three connection attempts are made by default and can be configured with the `connections_attempts=N` parameter, where N is replaced with an interger.
 
 ##### Using a .netrc file (Optional):
-A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  .netrc is a standard way of storing login credentials for many network based servers.  It works like a hosts file, in that you specify servers and the credetials needed to access each server.  The .netrc file is stored in the root of your home directory.\
+A .netrc file can be used to store credentials on Mac, Unix, and Linux machines.  .netrc is a standard way of storing login credentials for many network based servers.  It works like a hosts file, in that you specify servers and the credetials needed to access each server.  The .netrc file is stored in the root of your home directory.  By specifying the `use_netrc=True` parameter you can prevent interactive login from being called and so it is safe for unattented scripts.\
 Use the commands below to setup a .netrc file, replacing REALM, USERNAME, and PASSWORD with your actual values.
 ```bash
 echo "machine REALM.riverbed.cc login USERNAME password PASSWORD" >> ~/.netrc
@@ -87,7 +87,7 @@ sc = steelconnection.SConnect('REALM.riverbed.cc', use_netrc=True)
 ```
 
 ##### Specifying username and password (Optional):
-If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation using the username and password keywaord argumets.\
+If you prefer to use some other method to obtain the username and password, you can supply those as the time of object creation.  Providing the realm, username, and password will prevent the interactive login from being called and so it is safe for unattented scripts.\
 For example, if you want to store your credentials in your system environment variables you could do something similar to the following:
 ```python
 import os
