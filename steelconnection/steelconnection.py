@@ -102,6 +102,7 @@ class SConnect(object):
             username, password = get_netrc_auth('https://' + self.realm)
             if not username and password:
                 raise RuntimeError('Could not get credentials from .netrc.')
+
         self.realm = self._get_realm(realm)
         self.__scm_version = None
         self.__version__ = __version__
@@ -123,11 +124,7 @@ class SConnect(object):
     # Authentication related methods.
 
     def _get_realm(self, realm):
-        """Prompt user for realm if not already supplied.
-
-        :param str realm: hostname or IP address of SteelConnect Manager.
-        :rtype: str
-        """
+        """Prompt user for realm if not already supplied."""
         message = 'Enter SteelConnect Manager fully qualified domain name: '
         while not realm:
             realm = get_input(message)
