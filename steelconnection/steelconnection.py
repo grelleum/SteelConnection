@@ -113,15 +113,18 @@ class SConnect(object):
                 raise ValueError(
                     'Do not supply username or password when using .netrc.'
                 )
-            connection_attempts = 0  # prevent interactive login.
             username, password = get_netrc_auth('https://' + self.realm)
             if not username and password:
                 raise RuntimeError('Could not get credentials from .netrc.')
 
-        self.realm = self._get_realm(realm)
-        self.session.auth = self._set_session_auth(username, password)
-        if not self.session.auth:
-            self._interactive_login(username, password, connection_attempts)
+        if realm and username and password:
+            self.realm = realm
+            self.session.auth = username, password
+        else:
+            self.realm = self._get_realm(realm)
+            self.session.auth = self._set_session_auth(username, password)
+            if not self.session.auth:
+                self._interactive_login(username, password, connection_attempts)
 
     # Authentication related methods.
 
