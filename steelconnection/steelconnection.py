@@ -55,10 +55,20 @@ BINARY_DATA_MESSAGE = (
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
-    :param str realm: hostname or IP address of SteelConnect Manager.
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :param str api_version: (optional) REST API version.
+
+    Args:
+        realm (str):  (optional) FQDN of SteelConnect Manager.
+        username (str): (optional) Admin account name.
+        password (str): (optional) Admin account password.
+        use_netrc (bool): (optional) Get credentials from .netrc file.
+        api_version (str): (optional) REST API version.
+        proxies (dict): (optional) Dictionary of proxy servers.
+        on_error (str): (optional) Define behavior for failed requests.
+        timeout (float or tuple): (optional)
+            As a float: The number of seconds to wait for the server
+                        to send data before giving up
+            or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
+        connection_attempts (str): (optional) Number of login attemps.
     """
 
     def __init__(
@@ -73,22 +83,7 @@ class SConnect(object):
         timeout=(5, 60),
         connection_attempts=3,
     ):
-        r"""Create a new steelconnection object.
-
-        :param str realm: (optional) FQDN of SteelConnect Manager.
-        :param str username: (optional) Admin account name.
-        :param str password: (optional) Admin account password.
-        :param bool use_netrc: (optional) Get credentials from .netrc file.
-        :param str api_version: (optional) REST API version.
-        :param dict proxies: (optional) Dictionary of proxy servers.
-        :param str on_error: (optional) Define behavior for failed requests.
-        :param timeout: (optional) How many seconds to wait for the server
-            to send data before giving up, as a float,
-            or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
-        :type timeout: float or tuple
-        :param int connection_attempts: (optional) Number of login attemps.
-        :returns: Dictionary or List of Dictionaries based on request.
-        """
+        r"""Initialize a new steelconnection object."""
         if use_netrc:
             if not realm:
                 raise ValueError('Must supply realm when using .netrc.')
