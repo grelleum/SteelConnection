@@ -125,6 +125,7 @@ class SConnect(object):
             self.session.auth = self._set_session_auth(username, password)
             if not self.session.auth:
                 self._interactive_login(username, password, connection_attempts)
+            # self._interactive_login(username, password, connection_attempts)
 
     # Authentication related methods.
 
@@ -145,7 +146,19 @@ class SConnect(object):
         if username and password:
             return username, password
         if not username and not password:
-            return get_netrc_auth('https://' + self.realm)
+            creds = get_netrc_auth('https://' + self.realm)
+            if creds:
+                warnings.simplefilter('always', DeprecationWarning)
+                warnings.warn(
+                    "Use the 'use_netrc=True' argument when accessing "
+                    " credentials stored in a '.netrc' file.\n"
+                    "Future versions will not check '.netrc' without "
+                    "explicit definition to avoid unexpected results.",
+                    category=DeprecationWarning,
+                    stacklevel=2
+                )
+                warnings.simplefilter('default', DeprecationWarning)
+            return creds
 
     def _interactive_login(self, username, password, connection_attempts):
         r"""Make a connection to SteelConnect."""
