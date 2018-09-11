@@ -123,9 +123,7 @@ class SConnect(object):
         else:
             self.realm = self._get_realm(realm)
             self.session.auth = self._set_session_auth(username, password)
-            if not self.session.auth:
-                self._interactive_login(username, password, connection_attempts)
-            # self._interactive_login(username, password, connection_attempts)
+            self._interactive_login(username, password, connection_attempts)
 
     # Authentication related methods.
 
