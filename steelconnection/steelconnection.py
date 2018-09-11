@@ -92,18 +92,6 @@ class SConnect(object):
         connection_attempts=3,
     ):
         r"""Initialize a new steelconnection object."""
-        if use_netrc:
-            if not realm:
-                raise ValueError('Must supply realm when using .netrc.')
-            if username or password:
-                raise ValueError(
-                    'Do not supply username or password when using .netrc.'
-                )
-            username, password = get_netrc_auth('https://' + self.realm)
-            if not username and password:
-                raise RuntimeError('Could not get credentials from .netrc.')
-
-        self.realm = self._get_realm(realm)
         self.__scm_version = None
         self.__version__ = __version__
         self.api_version = api_version
@@ -117,6 +105,20 @@ class SConnect(object):
         self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
+
+        if use_netrc:
+            if not realm:
+                raise ValueError('Must supply realm when using .netrc.')
+            if username or password:
+                raise ValueError(
+                    'Do not supply username or password when using .netrc.'
+                )
+            connection_attempts = 0  # prevent interactive login.
+            username, password = get_netrc_auth('https://' + self.realm)
+            if not username and password:
+                raise RuntimeError('Could not get credentials from .netrc.')
+
+        self.realm = self._get_realm(realm)
         self.session.auth = self._set_session_auth(username, password)
         if not self.session.auth:
             self._interactive_login(username, password, connection_attempts)
