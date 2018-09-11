@@ -16,12 +16,12 @@ import time
 from .exceptions import ResourceGone
 
 
-def no_op(*args, **kwargs):
+def _no_op(*args, **kwargs):
     """No operation."""
     return None
 
 
-def print_flush(*args, **kwargs):
+def _print_flush(*args, **kwargs):
     """
     Print with flush.
 
@@ -46,7 +46,7 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     :param bool quiet: Disable update printing when true.
     :rtype: dict
     """
-    verbose = no_op if quiet else print_flush
+    verbose = _no_op if quiet else _print_flush
     if build:
         _prepare_image(sconnect, nodeid, build, verbose)
     status = _wait_for_ready(sconnect, nodeid, verbose)
