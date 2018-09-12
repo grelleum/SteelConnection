@@ -457,11 +457,9 @@ class SConnect(object):
         :returns: None.
         :rtype: None
         """
+        display = '\n'.join((self.received, self.sent))
         if not response.ok:
-            print(
-                '\n'.join((self.received, self.sent)),
-                file=sys.stderr
-            )
+            print(display, file=sys.stderr)
             sys.exit(1)
 
     def _on_error_do_nothing(self, response):
