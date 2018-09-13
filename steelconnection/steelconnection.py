@@ -117,17 +117,39 @@ class SConnect(object):
             self.realm = realm
             self.session.auth = username, password
         else:
-            self.realm = self._get_realm(realm)
+            self.realm = self._get_realm(realm, connection_attempts)
             self.session.auth = self._set_session_auth(username, password)
             self._interactive_login(username, password, connection_attempts)
 
     # Authentication related methods.
 
-    def _get_realm(self, realm):
+    def _get_realm(self, realm, connection_attempts):
         """Prompt user for realm if not already supplied."""
-        message = 'Enter SteelConnect Manager fully qualified domain name: '
-        while not realm:
-            realm = get_input(message)
+        if realm:
+            return realm
+
+        prompt = 'Enter SteelConnect Manager fully qualified domain name: '
+        for _ in range(connection_attempts):
+            realm = get_input(prompt)
+            try:
+                orgs = self.get('orgs')
+            except IOError as e:
+                # Could not connect to server.
+                print('Error:', e)
+                print('Cannot connect to', realm)
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(realm, 'is not a SteelConnect Manager.')
+            except AuthenticationError:
+                # Connected to SteelConnect Manager.
+                break
+            else:
+                # Connected to SteelConnect Manager.
+                break
+        else:
+            raise RuntimeError('Could not connect to SteelConnect Manager.')
+
         return realm
 
     def _set_session_auth(self, username, password):
@@ -137,8 +159,10 @@ class SConnect(object):
         :param str realm: hostname or IP address of SteelConnect Manager.
         :rtype: tuple
         """
+
         if username and password:
             return username, password
+
         if not username and not password:
             creds = get_netrc_auth('https://' + self.realm)
             if creds:
@@ -159,8 +183,9 @@ class SConnect(object):
 
         if self.session.auth:
             return 'defined'
+
         username_supplied = username
-        for attempt in range(connection_attempts):
+        for _ in range(connection_attempts):
             if not username:
                 username = get_username()
             if not password:
@@ -168,19 +193,6 @@ class SConnect(object):
             self.session.auth = (username, password)
             try:
                 self.get('orgs')
-            except IOError as e:
-                # Could not connect to server.
-                print('Error:', e)
-                print('Cannot connect to realm: ', self.realm)
-                self.realm = self._get_realm(None)
-                self.__scm_version = None
-            except InvalidResource as e:
-                # Connected to a webserver, but not SteelConnect.
-                message = "'{}' does not appear to be a SteelConnect Manager."
-                print(e)
-                print(message.format(self.realm))
-                self.realm = self._get_realm(None)
-                self.__scm_version = None
             except AuthenticationError:
                 print('Authentication Failed')
                 username = username_supplied
