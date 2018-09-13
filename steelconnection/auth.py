@@ -78,7 +78,10 @@ def _get_creds(sconnect, username, password, connection_attempts):
                 return username, password
         if connection_attempts:
             raise RuntimeError('Failed to login to realm ' + sconnect.realm)
-    return username, password
+    if not username or not password:
+        return None
+    else:
+        return username, password
 
 
 def check_netrc(realm, username, password):
