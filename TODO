@@ -3,8 +3,13 @@ Test against various versions that may have issues with requests / SSL:
 
 better way to store authentication:  Keyring Support??
 
-Add input validation everywhere.
+-- Add input validation everywhere.
 
-Docstrings need additional usage info.
+-- Docstrings need additional usage info.
+-- prep for Sphinx API doc.
+
+-- Text EXAMPLES with no-touch mocked requests.
+
+-- Test logging capabilities.
 
 Possibly incorporate pre-built argparser as convenience object.
