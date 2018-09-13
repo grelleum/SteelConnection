@@ -127,12 +127,11 @@ class SConnect(object):
         """Prompt user for realm if not already supplied."""
         if realm:
             return realm
-
         prompt = 'Enter SteelConnect Manager fully qualified domain name: '
         for _ in range(connection_attempts):
             realm = get_input(prompt)
             try:
-                orgs = self.get('orgs')
+                self.get('orgs')
             except IOError as e:
                 # Could not connect to server.
                 print('Error:', e)
@@ -142,14 +141,11 @@ class SConnect(object):
                 print(e)
                 print(realm, 'is not a SteelConnect Manager.')
             except AuthenticationError:
-                # Connected to SteelConnect Manager.
-                break
+                break  # Success.
             else:
-                # Connected to SteelConnect Manager.
-                break
+                break  # Success.
         else:
             raise RuntimeError('Could not connect to SteelConnect Manager.')
-
         return realm
 
     def _set_session_auth(self, username, password):
@@ -184,7 +180,7 @@ class SConnect(object):
         if self.session.auth:
             return 'defined'
 
-        username_supplied = username
+        provided = username, password
         for _ in range(connection_attempts):
             if not username:
                 username = get_username()
@@ -195,8 +191,7 @@ class SConnect(object):
                 self.get('orgs')
             except AuthenticationError:
                 print('Authentication Failed')
-                username = username_supplied
-                password = None
+                username, password = provided
             else:
                 return self.response.ok
 
