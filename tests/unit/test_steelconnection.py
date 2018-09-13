@@ -370,27 +370,30 @@ def test_scon_realm_when_defined():
     assert sc.realm == 'some.realm'
 
 
-def test_scon_realm_when_not_defined(monkeypatch):
-    """Test SConnect.realm property when not provided."""
-    if sys.version_info.major < 3:
-        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
-    else:
-        monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
-    sc = steelconnection.SConnect(connection_attempts=0)
-    assert sc.realm == 'some.realm'
+# @responses.activate
+# def test_scon_realm_when_not_defined(monkeypatch):
+#     """Test SConnect.realm property when not provided."""
+#     if sys.version_info.major < 3:
+#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
+#     else:
+#         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
+#     responses.add(get_orgs)
+#     sc = steelconnection.SConnect(use_netrc=True)
+#     # sc = steelconnection.SConnect(connection_attempts=0)
+#     assert sc.realm == 'some.realm'
 
 
-@responses.activate
-def test_scon_realm_when_called_from_request_and_not_defined(monkeypatch):
-    """Test SConnect.realm property when not provided."""
-    responses.add(get_status)
-    if sys.version_info.major < 3:
-        monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
-    else:
-        monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
-    sc = steelconnection.SConnect(connection_attempts=0)
-    sc.get('status')
-    assert sc.realm == 'some.realm'
+# @responses.activate
+# def test_scon_realm_when_called_from_request_and_not_defined(monkeypatch):
+#     """Test SConnect.realm property when not provided."""
+#     responses.add(get_status)
+#     if sys.version_info.major < 3:
+#         monkeypatch.setattr('__builtin__.raw_input', lambda x: 'some.realm')
+#     else:
+#         monkeypatch.setattr('builtins.input', lambda x: 'some.realm')
+#     sc = steelconnection.SConnect(connection_attempts=0)
+#     sc.get('status')
+#     assert sc.realm == 'some.realm'
 
 
 # Helper methods:
@@ -418,8 +421,8 @@ def test_scm_version_invalid():
     """Test SConnect.scm_version method when an invalid status is returned."""
     responses.add(get_invalid_info)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    assert sc.scm_version == 'unavailable'
-    # assert sc.scm_version == 'Not a SteelConnect Manager'
+    # assert sc.scm_version == 'unavailable'
+    assert sc.scm_version == 'Not a SteelConnect Manager'
 
 
 @responses.activate
