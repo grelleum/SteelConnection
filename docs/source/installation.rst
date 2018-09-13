@@ -1,17 +1,17 @@
-::
-
 Installation
 ============
-To install or upgrade your copy to the latest version:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Install
+-------
 
 .. code:: bash
 
-   # Default Python
-   python -m pip install --upgrade steelconnection
+   pip install steelconnection
 
-   # Python 3
-   python3 -m pip install --upgrade steelconnection
 
-   # Python 2
-   python2 -m pip install --upgrade steelconnection
+Upgrade to latest version
+-------------------------
+
+.. code:: bash
+
+   pip install --upgrade steelconnection
