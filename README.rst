@@ -46,5 +46,8 @@ in the realm would look like this:
 
 ^^^^^^^
 
+Documentation
+-------------
+
 | Full Documentation is available on *Read the Docs*.
 | https://steelconnection.readthedocs.io/
