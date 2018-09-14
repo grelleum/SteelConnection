@@ -3,10 +3,13 @@ Test against various versions that may have issues with requests / SSL:
 
 better way to store authentication:  Keyring Support??
 
+-- Auth should raise exception after connection attemps are exhausted.
+
 -- Add input validation everywhere.
 
 -- Docstrings need additional usage info.
--- prep for Sphinx API doc.
+
+-- Finish tutorial on Read the Docs.
 
 -- Text EXAMPLES with no-touch mocked requests.
 
