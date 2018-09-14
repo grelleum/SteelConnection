@@ -113,8 +113,8 @@ can determine the minimum required data by checking the equivalent
 function in SteelConnect Manager web GUI.
 
 
-Retrieving Data:
-^^^^^^^^^^^^^^^^
+Retrieving Data
+---------------
 
 The SteelConnection methods leverage the popular requests package.
 Methods calls always return a native Python dictionary, or a list of
