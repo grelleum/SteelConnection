@@ -130,6 +130,7 @@ headers.
 | ``list_of_all_orgs = sc.get('orgs')``
 
 Here are the rules to determine what gets returned by an API request:
+
 - If response.json() is True and the ‘items’ key exists, then return a
   python list of response.json()[‘items’].
 - If response.json() is True and the ‘items’ key *does not* exist,
