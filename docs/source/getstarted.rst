@@ -1,6 +1,9 @@
 Getting Started
 ===============
 
+Prerequisites
+-------------
+
 -  Make sure the REST API is enabled on your SteelConnect realm before
    trying to access the REST API.
 
@@ -10,6 +13,10 @@ Getting Started
 
    pip install steelconnection
 
+
+Create an Object:
+-----------------
+
 -  Import steelconnection and create a new object.
 
 .. code:: python
@@ -18,7 +25,7 @@ Getting Started
    sc = steelconnection.SConnect()
 
 Quickstart
-''''''''''
+----------
 
 | See the examples folder for sample scripts.
 | https://github.com/grelleum/SteelConnection/tree/master/examples

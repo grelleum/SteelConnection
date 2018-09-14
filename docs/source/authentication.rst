@@ -12,8 +12,11 @@ to prevent the interactive method.  Scripts that need to run unattended
 should supply credentials at the time of object creation.
 
 
-Specifying username and password
---------------------------------
+Unattended Mode
+---------------
+
+Specifying authentication credentials
+'''''''''''''''''''''''''''''''''''''
 
 .. code:: python
 
