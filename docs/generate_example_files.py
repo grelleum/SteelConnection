@@ -17,7 +17,8 @@ def get_files(startdir):
 
 files = sorted(list(get_files('../examples')))
 for filepath, filename, rstfile in files:
-    out_filename = os.path.join('source', rstfile)
+    # out_filename = os.path.join('source', rstfile)
+    out_filename = rstfile
     print(filepath, filename, rstfile, out_filename)
     with open(filepath, 'rt') as infile, open(out_filename, 'wt') as outfile:
         outfile.write(filename + '\n')
@@ -38,7 +39,8 @@ Examples scripts to get you started.
 
 '''.lstrip()
 
-rst_filename = os.path.join('source', 'examples.rst')
+# rst_filename = os.path.join('source', 'examples.rst')
+rst_filename = 'examples.rst'
 with open(rst_filename, 'wt') as outfile:
     outfile.write(contents)
     for filepath, filename, rstfile in files:
