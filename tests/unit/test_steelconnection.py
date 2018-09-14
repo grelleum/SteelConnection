@@ -421,8 +421,8 @@ def test_scm_version_invalid():
     """Test SConnect.scm_version method when an invalid status is returned."""
     responses.add(get_invalid_info)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    # assert sc.scm_version == 'unavailable'
-    assert sc.scm_version == 'Not a SteelConnect Manager'
+    assert sc.scm_version == 'unavailable'
+    # assert sc.scm_version == 'Not a SteelConnect Manager'
 
 
 @responses.activate
