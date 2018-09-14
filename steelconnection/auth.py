@@ -9,25 +9,11 @@ Tools for handling credentials.
 from __future__ import print_function
 import warnings
 
+from requests.exceptions import ConnectionError
 from requests.utils import get_netrc_auth
 
 from .exceptions import AuthenticationError, InvalidResource
 from .input_tools import get_input, get_username, get_password_once
-
-
-# def unattended_mode(realm, username, password, use_netrc):
-#     if use_netrc:
-#         # requests will look for .netrc if auth is not provided.
-#         if not realm:
-#             raise ValueError('Must supply realm when using .netrc.')
-#         if username or password:
-#             error = 'Do not supply username or password when using .netrc.'
-#             raise ValueError(error)
-#         return True
-#     elif realm and username and password:
-#         return True
-#     else:
-#         return False
 
 
 def get_realm(sconnect, realm, connection_attempts):
@@ -40,7 +26,7 @@ def get_realm(sconnect, realm, connection_attempts):
         sconnect.realm = realm
         try:
             sconnect.get('orgs')
-        except IOError as e:
+        except ConnectionError as e:
             # Could not connect to server.
             print('Error:', e)
             print('Cannot connect to', realm)
@@ -57,7 +43,7 @@ def get_realm(sconnect, realm, connection_attempts):
     return realm
 
 
-def _get_creds(sconnect, username, password, connection_attempts):
+def get_creds(sconnect, username, password, connection_attempts):
     """Get realm and credentials based on supplied values."""
     if not username and not password:
         username, password = check_netrc(sconnect.realm, username, password)
