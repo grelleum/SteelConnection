@@ -50,16 +50,16 @@ in the realm would look like this:
    :maxdepth: 3
    :caption: SteelConnection User's Guide:
 
-   source/license
-   source/gethelp
-   source/getstarted
-   source/installation
-   source/tutorial
-   source/authentication
-   source/apiguide
-   source/exceptions
-   source/convenience
-   source/examples
+   license
+   gethelp
+   getstarted
+   installation
+   tutorial
+   authentication
+   apiguide
+   exceptions
+   convenience
+   examples
 
 Indices and tables
 ==================
