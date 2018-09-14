@@ -15,19 +15,19 @@ from .exceptions import AuthenticationError, InvalidResource
 from .input_tools import get_input, get_username, get_password_once
 
 
-def unattended_mode(realm, username, password, use_netrc):
-    if use_netrc:
-        # requests will look for .netrc if auth is not provided.
-        if not realm:
-            raise ValueError('Must supply realm when using .netrc.')
-        if username or password:
-            error = 'Do not supply username or password when using .netrc.'
-            raise ValueError(error)
-        return True
-    elif realm and username and password:
-        return True
-    else:
-        return False
+# def unattended_mode(realm, username, password, use_netrc):
+#     if use_netrc:
+#         # requests will look for .netrc if auth is not provided.
+#         if not realm:
+#             raise ValueError('Must supply realm when using .netrc.')
+#         if username or password:
+#             error = 'Do not supply username or password when using .netrc.'
+#             raise ValueError(error)
+#         return True
+#     elif realm and username and password:
+#         return True
+#     else:
+#         return False
 
 
 def get_realm(sconnect, realm, connection_attempts):
@@ -79,7 +79,7 @@ def _get_creds(sconnect, username, password, connection_attempts):
         if connection_attempts:
             raise RuntimeError('Failed to login to realm ' + sconnect.realm)
     if not username or not password:
-        return None
+        return '', ''  # Avoid requests deprecation warning.
     else:
         return username, password
 

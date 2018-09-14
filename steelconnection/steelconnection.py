@@ -118,9 +118,10 @@ class SConnect(object):
             self.session.auth = username, password
         else:
             self.realm = auth.get_realm(self, realm, connection_attempts)
-            self.session.auth = auth._get_creds(
+            creds = auth._get_creds(
                 self, username, password, connection_attempts,
             )
+            self.session.auth = creds
 
         # if use_netrc:
         #     # requests will look for .netrc if auth is not provided.
@@ -139,77 +140,77 @@ class SConnect(object):
 
     # Authentication related methods.
 
-    # def _get_realm(self, realm, connection_attempts):
-    #     """Prompt user for realm if not already supplied."""
-    #     if realm:
-    #         return realm
-    #     prompt = 'Enter SteelConnect Manager fully qualified domain name: '
-    #     for _ in range(connection_attempts):
-    #         realm = get_input(prompt)
-    #         try:
-    #             self.get('orgs')
-    #         except IOError as e:
-    #             # Could not connect to server.
-    #             print('Error:', e)
-    #             print('Cannot connect to', realm)
-    #         except InvalidResource as e:
-    #             # Connected to a webserver, but not SteelConnect.
-    #             print(e)
-    #             print(realm, 'is not a SteelConnect Manager.')
-    #         except AuthenticationError:
-    #             break  # Success.
-    #         else:
-    #             break  # Success.
-    #     else:
-    #         raise RuntimeError('Could not connect to SteelConnect Manager.')
-    #     return realm
+    def _get_realm(self, realm, connection_attempts):
+        """Prompt user for realm if not already supplied."""
+        if realm:
+            return realm
+        prompt = 'Enter SteelConnect Manager fully qualified domain name: '
+        for _ in range(connection_attempts):
+            realm = get_input(prompt)
+            try:
+                self.get('orgs')
+            except IOError as e:
+                # Could not connect to server.
+                print('Error:', e)
+                print('Cannot connect to', realm)
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(realm, 'is not a SteelConnect Manager.')
+            except AuthenticationError:
+                break  # Success.
+            else:
+                break  # Success.
+        else:
+            raise RuntimeError('Could not connect to SteelConnect Manager.')
+        return realm
 
-    # def _set_session_auth(self, username, password):
-    #     """Return a tuple of username and password
-    #     If both are supplied, return those, otherwise check .netrc file.
+    def _set_session_auth(self, username, password):
+        """Return a tuple of username and password
+        If both are supplied, return those, otherwise check .netrc file.
 
-    #     :param str realm: hostname or IP address of SteelConnect Manager.
-    #     :rtype: tuple
-    #     """
+        :param str realm: hostname or IP address of SteelConnect Manager.
+        :rtype: tuple
+        """
 
-    #     if username and password:
-    #         return username, password
+        if username and password:
+            return username, password
 
-    #     if not username and not password:
-    #         creds = get_netrc_auth('https://' + self.realm)
-    #         if creds:
-    #             warnings.simplefilter('always', DeprecationWarning)
-    #             warnings.warn(
-    #                 "Use the 'use_netrc=True' argument when accessing "
-    #                 " credentials stored in a '.netrc' file.\n"
-    #                 "Future versions will not check '.netrc' without "
-    #                 "explicit definition to avoid unexpected results.",
-    #                 category=DeprecationWarning,
-    #                 stacklevel=2
-    #             )
-    #             warnings.simplefilter('default', DeprecationWarning)
-    #         return creds
+        if not username and not password:
+            creds = get_netrc_auth('https://' + self.realm)
+            if creds:
+                warnings.simplefilter('always', DeprecationWarning)
+                warnings.warn(
+                    "Use the 'use_netrc=True' argument when accessing "
+                    " credentials stored in a '.netrc' file.\n"
+                    "Future versions will not check '.netrc' without "
+                    "explicit definition to avoid unexpected results.",
+                    category=DeprecationWarning,
+                    stacklevel=2
+                )
+                warnings.simplefilter('default', DeprecationWarning)
+            return creds
 
-    # def _interactive_login(self, username, password, connection_attempts):
-    #     r"""Make a connection to SteelConnect."""
+    def _interactive_login(self, username, password, connection_attempts):
+        r"""Make a connection to SteelConnect."""
 
-    #     if self.session.auth:
-    #         return 'defined'
+        if self.session.auth:
+            return 'defined'
 
-    #     provided = username, password
-    #     for _ in range(connection_attempts):
-    #         if not username:
-    #             username = get_username()
-    #         if not password:
-    #             password = get_password_once()
-    #         self.session.auth = (username, password)
-    #         try:
-    #             self.get('orgs')
-    #         except AuthenticationError:
-    #             print('Authentication Failed')
-    #             username, password = provided
-    #         else:
-    #             return self.response.ok
+        provided = username, password
+        for _ in range(connection_attempts):
+            if not username:
+                username = get_username()
+            if not password:
+                password = get_password_once()
+            self.session.auth = (username, password)
+            try:
+                self.get('orgs')
+            except AuthenticationError:
+                print('Authentication Failed')
+                username, password = provided
+            else:
+                return self.response.ok
 
     # Primary methods:
 
