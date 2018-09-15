@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+"""Provide version information when imported on command line."""
+
+
 from __future__ import print_function
 
 import sys

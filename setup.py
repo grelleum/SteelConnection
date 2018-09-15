@@ -1,10 +1,10 @@
 from setuptools import setup
 import re
-
+# import sys
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
-version = '0.91.2'
+version = '0.94.0'
 copyright = 'Copyright 2018 Greg Mueller'
 
 info = {
@@ -42,25 +42,28 @@ def create_version_file(info):
     ]
     text = "__{}__ = '{}'\n"
     with open(name + '/__version__.py', 'wt') as f:
+        f.write('"""Provide version and author details."""\n\n\n')
         for key in keys:
             f.write(text.format(key, export_info[key]))
 
 
-def read_and_update_readme():
-    with open('README.md', 'rt') as f:
+def read_and_update_readme(filename):
+    with open(filename, 'rt') as f:
         readme = f.read()
     long_description = re.sub(
-        r'##### version \d+\.[\d\.]+[a-z]?',
-        '##### version ' + info['version'],
+        r'   version \d+\.[\d\.]+[a-z]?',
+        '   version ' + info['version'],
         readme,
     )
-    with open('README.md', 'wt') as f:
+    with open(filename, 'wt') as f:
         f.write(long_description)
     return long_description
 
 
 print('VERSION:', info['version'])
 create_version_file(info)
-long_description = read_and_update_readme()
+# if '.tox' not in '-'.join(sys.argv):
+#     _ = read_and_update_readme('docs/index.rst')
+long_description = read_and_update_readme('README.rst')
 info['long_description'] = long_description
 setup(name=name, **info)

@@ -1,14 +1,13 @@
 # coding: utf-8
 
-"""SteelConnection image.
+"""
+Provide functions to sinplify virtual image build and download.
 
-Convienience functions for virtual machine image downloads.
 To be called from SteelConnection main object classes.
 Not supported for direct use.
 """
 
 from __future__ import print_function
-
 import locale
 import os
 import sys
@@ -17,33 +16,41 @@ import time
 from .exceptions import ResourceGone
 
 
-def no_op(*args, **kwargs):
-    """No operations."""
+def _no_op(*args, **kwargs):
+    """No operation."""
     return None
 
 
-def print_flush(*args, **kwargs):
-    """Python 2 or 3 print with flush.
+def _print_flush(*args, **kwargs):
+    """
+    Print with flush to allow Python 2 compatibility.
 
-    :param \*args: Optional arguments that ``print`` accepts.
-    :param \*\*kwargs: Optional arguments that ``print`` accepts.
-    :rtype: None
+    Args:
+        *args: Optional arguments that ``print`` accepts.
+        **kwargs: Optional arguments that ``print`` accepts.
+
+    Returns:
+        None
     """
     print(*args, **kwargs)
     sys.stdout.flush()
 
 
 def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
-    r"""Download image and save to file.
+    r"""
+    Download image and save to file.
 
-    :param str sconnect: SteelConnection object.
-    :param str nodeid: The node id of the appliance.
-    :param str save_as: The file path to download the image.
-    :param str build: Target hypervisor for image.
-    :param bool quiet: Disable update printing when true.
-    :rtype: dict
+    Args:
+        sconnect (str): SteelConnection object.
+        nodeid (str): The node id of the appliance.
+        save_as (str): The file path to download the image.
+        build (str): Target hypervisor for image.
+        quiet (bool): Disable update printing when true.
+
+    Returns:
+        dict: Object indication the success fo the operation.
     """
-    verbose = no_op if quiet else print_flush
+    verbose = _no_op if quiet else _print_flush
     if build:
         _prepare_image(sconnect, nodeid, build, verbose)
     status = _wait_for_ready(sconnect, nodeid, verbose)
@@ -63,13 +70,17 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
 
 
 def _prepare_image(sconnect, nodeid, build, verbose):
-    """Request an image build from SCM.
+    """
+    Request an image build from SCM.
 
-    :param str sconnect: SteelConnection object.
-    :param str nodeid: The node id of the appliance.
-    :param str build: Type of hypervisor for image.
-    :param function verbose: The print function.
-    :rtype: None
+    Args:
+        sconnect (str): SteelConnection object.
+        nodeid (str): The node id of the appliance.
+        build (str): Type of hypervisor for image.
+        verbose (function): The function used for prining.
+
+    Returns:
+        None
     """
     verbose('Requesting image of type ' + build, end=': ')
     sconnect.post(
@@ -85,14 +96,18 @@ def _prepare_image(sconnect, nodeid, build, verbose):
 
 
 def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
-    """Check status periodically until file is ready.
+    """
+    Check status periodically until file is ready.
 
-    :param str sconnect: SteelConnection object.
-    :param str nodeid: The node id of the appliance.
-    :param function verbose: The print function.
-    :param int retries: Number of times to check status before giving up.
-    :param int or float sleep_time: Pause interval between status checks.
-    :rtype: dict or None
+    Args:
+        sconnect (str): SteelConnection object.
+        nodeid (str): The node id of the appliance.
+        verbose (function): The function used for prining.
+        retries (int): Number of times to check status before giving up.
+        build (int or float): Pause interval between status checks.
+
+    Returns:
+        dict or None
     """
     for _ in range(retries):
         verbose('.', end='')
@@ -109,11 +124,15 @@ def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
 
 
 def _get_file_path(source_file, save_as):
-    """Get file name and determine destination file path.
+    """
+    Get file name and determine destination file path.
 
-    :param str source_file: Name of the source file to download.
-    :param str save_as: Filepath where file is written.
-    :rtype: str
+    Args:
+        source_file (str): Name of the source file to download.
+        save_as (str): Filepath where file is written.
+
+    Returns:
+        str: Path and filename.
     """
     if save_as is None:
         save_as = source_file
@@ -123,14 +142,18 @@ def _get_file_path(source_file, save_as):
 
 
 def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
-    """Save stream of binary data to disk.
+    """
+    Save stream of binary data to disk.
 
-    :param str sconnect: SteelConnection object.
-    :param str nodeid: The node id of the appliance.
-    :param str source_file: Name of the source file to download.
-    :param str save_as: Filepath where file is written.
-    :param function verbose: The print function.
-    :rtype: None
+    Args:
+        sconnect (str): SteelConnection object.
+        nodeid (str): The node id of the appliance.
+        source_file (str): Name of the source file to download.
+        save_as (str): Filepath where file is written.
+        verbose (function): The function used for prining.
+
+    Returns:
+        None
     """
     verbose("Downloading file as '{}'".format(save_as), end=' ')
     with open(save_as, 'wb') as fd:

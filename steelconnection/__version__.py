@@ -1,6 +1,9 @@
+"""Provide version and author details."""
+
+
 __title__ = 'steelconnection'
 __description__ = 'Simplify access to the Riverbed SteelConnect REST API.'
-__version__ = '0.91.2'
+__version__ = '0.94.0'
 __author__ = 'Greg Mueller'
 __author_email__ = 'steelconnection@grelleum.com'
 __copyright__ = 'Copyright 2018 Greg Mueller'

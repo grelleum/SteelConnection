@@ -16,17 +16,16 @@ class _LookUp(object):
         self.sconnect = sconnect
         self._models = model
 
-    def _lookup(self, domain, value, key, return_value='id'):
+    def _lookup(self, domain, value, key):
         """
         Generic lookup function.
         Given a resource type (domain), a value to match, and a key to lookup,
-        returns a tuple consisting of an object ID and the actual object.
+        returns a dictionary representing the object.
         """
         items = self.sconnect.get(domain)
         for item in items:
-            key_value = item.get(key, '')
-            if key_value and value in key_value:
-                self.sconnect.result = item.get(return_value, '')
+            if value == item.get(key):
+                self.sconnect.result = item
                 return item
         return None
 

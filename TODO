@@ -3,8 +3,16 @@ Test against various versions that may have issues with requests / SSL:
 
 better way to store authentication:  Keyring Support??
 
-Add input validation everywhere.
+-- Auth should raise exception after connection attemps are exhausted.
 
-Docstrings need additional usage info.
+-- Add input validation everywhere.
+
+-- Docstrings need additional usage info.
+
+-- Finish tutorial on Read the Docs.
+
+-- Text EXAMPLES with no-touch mocked requests.
+
+-- Test logging capabilities.
 
 Possibly incorporate pre-built argparser as convenience object.

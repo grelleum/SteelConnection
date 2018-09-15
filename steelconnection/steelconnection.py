@@ -24,13 +24,12 @@ Usage:
 """
 
 from __future__ import print_function
-
 import json
-import requests
 import sys
 import warnings
 
-from requests.utils import get_netrc_auth
+import requests
+
 from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
@@ -55,12 +54,14 @@ BINARY_DATA_MESSAGE = (
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
 
-    :param str realm: hostname or IP address of SteelConnect Manager.
-    :param str username: (optional) Admin account name.
-    :param str password: (optional) Admin account password.
-    :param str api_version: (optional) REST API version.
-    :returns: Dictionary or List of Dictionaries based on request.
-    :rtype: dict, or list
+    Attributes:
+        realm (str): FQDN of SteelConnect Manager.
+        api_version (str): SteelConnect Manager REST API version.
+        ascii_art (str): Project logo.
+        timeout (float or tuple): Timeout values for requests.
+        result: Contains last result returned from a request.
+        response: Response object from last request.
+        session: Request session object used to access REST API.
     """
 
     def __init__(
@@ -68,23 +69,30 @@ class SConnect(object):
         realm=None,
         username=None,
         password=None,
+        use_netrc=False,
         api_version='1.0',
         proxies=None,
         on_error='raise',
         timeout=(5, 60),
         connection_attempts=3,
     ):
-        r"""Create a new steelconnection object.
+        r"""Initialize a new steelconnection object.
 
-        :param str realm: hostname or IP address of SteelConnect Manager.
-        :param str username: (optional) Admin account name.
-        :param str password: (optional) Admin account password.
-        :param str api_version: (optional) REST API version.
-        :param dict proxies: (optional) Dictionary of proxy servers.
-        :returns: Dictionary or List of Dictionaries based on request.
-        :rtype: dict, or list
+        Args:
+            realm (str): (optional) FQDN of SteelConnect Manager.
+            username (str): (optional) Admin account name.
+            password (str): (optional) Admin account password.
+            use_netrc (bool): (optional) Get credentials from .netrc file.
+            api_version (str): (optional) REST API version.
+            proxies (dict): (optional) Dictionary of proxy servers.
+            on_error (str): (optional) Define behavior for failed requests.
+            timeout (float or tuple): (optional)
+                As a float: The number of seconds to wait for the server
+                            to send data before giving up
+                or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
+            connection_attempts (str): (optional) Number of login attemps.
         """
-        self.realm = self._get_realm(realm)
+
         self.__scm_version = None
         self.__version__ = __version__
         self.api_version = api_version
@@ -93,80 +101,98 @@ class SConnect(object):
         self.result = None
         self.response = None
         self.lookup = _LookUp(self)
-        self._raise_exception = self._exception_handling(on_error)
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
-        self.session.auth = self._set_session_auth(username, password)
-        if not self.session.auth:
-            self._interactive_login(username, password, connection_attempts)
 
-    # Authentication related methods.
+        # Auth relies on exceptions being raised.
+        self._raise_exception = self._on_error_raise_exception
+        self.realm = realm
+        unattended = self._is_unattended(
+            realm, username, password, use_netrc, connection_attempts
+        )
+        if unattended:
+            if username and password:
+                self.session.auth = username, password
+        else:
+            self.realm = self._get_realm(realm, connection_attempts)
+            self._set_session_auth(username, password, connection_attempts)
+        # Set user defined exception handler.
+        self._raise_exception = self._exception_handling(on_error)
 
-    def _get_realm(self, realm):
-        """Prompt user for realm if not already supplied.
+    # Authentication helpers:
 
-        :param str realm: hostname or IP address of SteelConnect Manager.
-        :rtype: str
-        """
-        while not realm:
-            realm = get_input(
-                'Enter SteelConnect Manager fully qualified domain name: '
-            )
-        return realm
+    def _is_unattended(self, realm, username, password, use_netrc, attempts):
+        """Check if user supplied enough information to continue."""
+        if attempts == 0:
+            return True
+        if use_netrc:
+            # requests will look for .netrc if auth is not provided.
+            if not realm:
+                raise ValueError('Must supply realm when using .netrc.')
+            if username or password:
+                error = 'Do not supply username or password when using .netrc.'
+                raise ValueError(error)
+            return True
+        elif realm and username and password:
+            return True
+        elif realm and not username and not password:
+            # Check if .netrc file is configured.
+            try:
+                self.get('orgs')
+            except AuthenticationError:
+                pass
+            else:
+                return True
+        return False
 
-    def _set_session_auth(self, username, password):
-        """Return a tuple of username and password
-        If both are supplied, return those, otherwise check .netrc file.
+    def _get_realm(self, realm, connection_attempts):
+        """Prompt user for realm if not supplied."""
+        prompt = 'Enter SteelConnect Manager fully qualified domain name: '
+        if realm:
+            return realm
+        for _ in range(connection_attempts):
+            realm = get_input(prompt)
+            self.realm = realm
+            try:
+                self.get('orgs')
+                return realm
+            except IOError as e:
+                # Could not connect to server.
+                print('Error:', e)
+                print('Cannot connect to', realm)
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(realm, 'is not a SteelConnect Manager.')
+            except AuthenticationError:
+                return realm
+        else:
+            error = 'Could not connect to SteelConnect Manager.'
+            raise RuntimeError(error)
 
-        :param str realm: hostname or IP address of SteelConnect Manager.
-        :rtype: tuple
-        """
-        if username and password:
-            return username, password
-        if not username and not password:
-            return get_netrc_auth('https://' + self.realm)
-
-    def _interactive_login(self, username, password, connection_attempts):
-        r"""Make a connection to SteelConnect."""
-
-        if self.session.auth:
-            return 'defined'
-        username_supplied = username
-        for attempt in range(connection_attempts):
+    def _set_session_auth(self, username, password, connection_attempts):
+        """Prompt for username and/or password."""
+        provided = username, password
+        for _ in range(connection_attempts):
             if not username:
                 username = get_username()
             if not password:
                 password = get_password_once()
-            self.session.auth = (username, password)
+            self.session.auth = username, password
             try:
                 self.get('orgs')
-            except IOError as e:
-                # Could not connect to server.
-                print('Error:', e)
-                print('Cannot connect to realm: ', self.realm)
-                self.realm = self._get_realm(None)
-                self.__scm_version = None
-            except InvalidResource as e:
-                # Connected to a webserver, but not SteelConnect.
-                print(e)
-                print(
-                    "'{}'".format(self.realm),
-                    "does not appear to be a SteelConnect Manager."
-                )
-                self.realm = self._get_realm(None)
-                self.__scm_version = None
+                return
             except AuthenticationError:
                 print('Authentication Failed')
-                username = username_supplied
-                password = None
-            else:
-                return self.response.ok
+                username, password = provided
+        if connection_attempts:
+            raise RuntimeError('Failed to login to realm ' + self.realm)
 
     # Primary methods:
 
-    def get(self, resource, params=None):
+    def get(self, resource, params=None, api='scm.config'):
         r"""Send a GET request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -176,7 +202,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.get,
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             params=params,
         )
         self.result = self._get_result(self.response)
@@ -192,17 +218,9 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        self.response = self._request(
-            request_method=self.session.get,
-            url=self.make_url('reporting', resource),
-            params=params,
-        )
-        self.result = self._get_result(self.response)
-        if self.result is None:
-            self._raise_exception(self.response)
-        return self.result
+        return self.get(resource, params, api='scm.reporting')
 
-    def delete(self, resource, data=None, params=None):
+    def delete(self, resource, data=None, params=None, api='scm.config'):
         r"""Send a DELETE request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -213,7 +231,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.delete,
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             params=params,
             data=data,
         )
@@ -222,7 +240,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def post(self, resource, data=None):
+    def post(self, resource, data=None, api='scm.config'):
         r"""Send a POST request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -232,7 +250,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.post,
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             data=data,
         )
         self.result = self._get_result(self.response)
@@ -240,7 +258,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def put(self, resource, data=None, params=None):
+    def put(self, resource, data=None, params=None, api='scm.config'):
         r"""Send a PUT request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -251,7 +269,7 @@ class SConnect(object):
         """
         self.response = self._request(
             request_method=self.session.put,
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             params=params,
             data=data,
         )
@@ -260,7 +278,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def stream(self, resource, params=None):
+    def stream(self, resource, params=None, api='scm.config'):
         r"""Send a GET request with streaming binary data.
 
         :param str resource: api resource to get.
@@ -269,7 +287,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self.session.get(
-            url=self.make_url('config', resource),
+            url=self.make_url(api, resource),
             params=params,
             stream=True,
         )
@@ -281,13 +299,13 @@ class SConnect(object):
     def make_url(self, api, resource):
         r"""Combine attributes and resource as a url string.
 
-        :param str api: api route, usually 'config' or 'reporting'.
+        :param str api: api route, usually 'scm.config' or 'scm.reporting'.
         :param str resource: resource path.
         :returns: Complete URL path to access resource.
         :rtype: str
         """
         resource = resource[1:] if resource.startswith('/') else resource
-        return 'https://{}/api/scm.{}/{}/{}'.format(
+        return 'https://{}/api/{}/{}/{}'.format(
             self.realm, api, self.api_version, resource,
         )
 
@@ -365,16 +383,13 @@ class SConnect(object):
         """
         if self.__scm_version is None:
             try:
-                status = self.get('status')
-            except InvalidResource:
+                info = self.get('info', api='common')
+                self.__scm_version = '{sw_version}_{sw_build}'.format(**info)
+            except (InvalidResource, KeyError):
                 self.__scm_version = 'unavailable'
             else:
-                version = status.get('scm_version')
-                build = status.get('scm_build')
-                if version and build:
-                    self.__scm_version = '.'.join((version, build))
-                else:
-                    self.__scm_version = 'unavailable'
+                if not info.get('scm_id'):
+                    self.__scm_version = 'Not a SteelConnect Manager'
         return self.__scm_version
 
     @property
@@ -444,11 +459,9 @@ class SConnect(object):
         :returns: None.
         :rtype: None
         """
+        display = '\n'.join((self.received, self.sent))
         if not response.ok:
-            print(
-                '\n'.join((self.received, self.sent)),
-                file=sys.stderr
-            )
+            print(display, file=sys.stderr)
             sys.exit(1)
 
     def _on_error_do_nothing(self, response):
