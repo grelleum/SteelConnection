@@ -106,6 +106,7 @@ class SConnect(object):
         self.session.headers.update({'Content-type': 'application/json'})
 
         self.realm = realm
+        self._raise_exception = self._on_error_raise_exception
         if use_netrc:
             # requests will look for .netrc if auth is not provided.
             if not realm:
