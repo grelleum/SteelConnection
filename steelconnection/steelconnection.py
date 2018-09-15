@@ -36,7 +36,7 @@ from .exceptions import BadRequest, ResourceGone, InvalidResource
 from .image_download import _download_image
 from .lookup import _LookUp
 from .input_tools import get_input, get_username, get_password_once
-from . import auth
+# from . import auth
 
 
 ASCII_ART = r"""
@@ -54,20 +54,6 @@ BINARY_DATA_MESSAGE = (
 
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
-
-    Args:
-        realm (str): (optional) FQDN of SteelConnect Manager.
-        username (str): (optional) Admin account name.
-        password (str): (optional) Admin account password.
-        use_netrc (bool): (optional) Get credentials from .netrc file.
-        api_version (str): (optional) REST API version.
-        proxies (dict): (optional) Dictionary of proxy servers.
-        on_error (str): (optional) Define behavior for failed requests.
-        timeout (float or tuple): (optional)
-            As a float: The number of seconds to wait for the server
-                        to send data before giving up
-            or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
-        connection_attempts (str): (optional) Number of login attemps.
 
     Attributes:
         realm (str): FQDN of SteelConnect Manager.
@@ -91,7 +77,23 @@ class SConnect(object):
         timeout=(5, 60),
         connection_attempts=3,
     ):
-        r"""Initialize a new steelconnection object."""
+        r"""Initialize a new steelconnection object.
+
+        Args:
+            realm (str): (optional) FQDN of SteelConnect Manager.
+            username (str): (optional) Admin account name.
+            password (str): (optional) Admin account password.
+            use_netrc (bool): (optional) Get credentials from .netrc file.
+            api_version (str): (optional) REST API version.
+            proxies (dict): (optional) Dictionary of proxy servers.
+            on_error (str): (optional) Define behavior for failed requests.
+            timeout (float or tuple): (optional)
+                As a float: The number of seconds to wait for the server
+                            to send data before giving up
+                or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
+            connection_attempts (str): (optional) Number of login attemps.
+        """
+
         self.__scm_version = None
         self.__version__ = __version__
         self.api_version = api_version
@@ -105,9 +107,27 @@ class SConnect(object):
         self.session.headers.update({'Accept': 'application/json'})
         self.session.headers.update({'Content-type': 'application/json'})
 
-        self.realm = realm
         # Auth relies on exceptions being raised.
         self._raise_exception = self._on_error_raise_exception
+        self.realm = realm
+        unattended = self._is_unattended(
+            realm, username, password, use_netrc, connection_attempts
+        )
+        if unattended:
+            if username and password:
+                self.session.auth = username, password
+        else:
+            self.realm = self._get_realm(realm, connection_attempts)
+            self._set_session_auth(username, password, connection_attempts)
+        # Set user defined exception handler.
+        self._raise_exception = self._exception_handling(on_error)
+
+    # Authentication helpers:
+
+    def _is_unattended(self, realm, username, password, use_netrc, attempts):
+        """Check if user supplied enough information to continue."""
+        if attempts == 0:
+            return True
         if use_netrc:
             # requests will look for .netrc if auth is not provided.
             if not realm:
@@ -115,16 +135,61 @@ class SConnect(object):
             if username or password:
                 error = 'Do not supply username or password when using .netrc.'
                 raise ValueError(error)
+            return True
         elif realm and username and password:
-            self.session.auth = username, password
+            return True
+        elif realm and not username and not password:
+            # Check if .netrc file is configured.
+            try:
+                self.get('orgs')
+            except AuthenticationError:
+                pass
+            else:
+                return True
+        return False
+
+    def _get_realm(self, realm, connection_attempts):
+        """Prompt user for realm if not supplied."""
+        prompt = 'Enter SteelConnect Manager fully qualified domain name: '
+        if realm:
+            return realm
+        for _ in range(connection_attempts):
+            realm = get_input(prompt)
+            self.realm = realm
+            try:
+                self.get('orgs')
+                return realm
+            except IOError as e:
+                # Could not connect to server.
+                print('Error:', e)
+                print('Cannot connect to', realm)
+            except InvalidResource as e:
+                # Connected to a webserver, but not SteelConnect.
+                print(e)
+                print(realm, 'is not a SteelConnect Manager.')
+            except AuthenticationError:
+                return realm
         else:
-            self.realm = auth.get_realm(self, realm, connection_attempts)
-            creds = auth.get_creds(
-                self, username, password, connection_attempts,
-            )
-            self.session.auth = creds
-        # Set user defined exception handler.
-        self._raise_exception = self._exception_handling(on_error)
+            error = 'Could not connect to SteelConnect Manager.'
+            raise RuntimeError(error)
+
+    def _set_session_auth(self, username, password, connection_attempts):
+        """Prompt for username and/or password."""
+        provided = username, password
+        for _ in range(connection_attempts):
+            if not username:
+                username = get_username()
+            if not password:
+                password = get_password_once()
+            self.session.auth = username, password
+            try:
+                self.get('orgs')
+                return
+            except AuthenticationError:
+                print('Authentication Failed')
+                username, password = provided
+        if connection_attempts:
+            raise RuntimeError('Failed to login to realm ' + self.realm)
 
     # Primary methods:
 
