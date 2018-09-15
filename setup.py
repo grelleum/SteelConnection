@@ -4,7 +4,7 @@ import os
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
-version = '0.93.0'
+version = '0.93.1'
 copyright = 'Copyright 2018 Greg Mueller'
 
 info = {
@@ -62,7 +62,7 @@ def read_and_update_readme(filename):
 
 print('VERSION:', info['version'])
 create_version_file(info)
-# _ = read_and_update_readme('docs/index.rst')
+_ = read_and_update_readme('docs/index.rst')
 long_description = read_and_update_readme('README.rst')
 info['long_description'] = long_description
 setup(name=name, **info)
