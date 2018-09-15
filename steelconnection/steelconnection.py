@@ -100,7 +100,6 @@ class SConnect(object):
         self.result = None
         self.response = None
         self.lookup = _LookUp(self)
-        self._raise_exception = self._exception_handling(on_error)
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({'Accept': 'application/json'})
@@ -122,6 +121,8 @@ class SConnect(object):
                 self, username, password, connection_attempts,
             )
             self.session.auth = creds
+        # replace exception handler after auth completes.
+        self._raise_exception = self._exception_handling(on_error)
 
     # Primary methods:
 
