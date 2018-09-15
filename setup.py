@@ -1,6 +1,6 @@
 from setuptools import setup
 import re
-import os
+# import sys
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
@@ -62,7 +62,8 @@ def read_and_update_readme(filename):
 
 print('VERSION:', info['version'])
 create_version_file(info)
-# _ = read_and_update_readme('docs/index.rst')
+# if '.tox' not in '-'.join(sys.argv):
+#     _ = read_and_update_readme('docs/index.rst')
 long_description = read_and_update_readme('README.rst')
 info['long_description'] = long_description
 setup(name=name, **info)
