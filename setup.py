@@ -1,6 +1,6 @@
 from setuptools import setup
 import re
-
+import os
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
@@ -47,21 +47,22 @@ def create_version_file(info):
             f.write(text.format(key, export_info[key]))
 
 
-def read_and_update_readme():
-    with open('README.md', 'rt') as f:
+def read_and_update_readme(filename):
+    with open(filename, 'rt') as f:
         readme = f.read()
     long_description = re.sub(
-        r'##### version \d+\.[\d\.]+[a-z]?',
-        '##### version ' + info['version'],
+        r'   version \d+\.[\d\.]+[a-z]?',
+        '   version ' + info['version'],
         readme,
     )
-    with open('README.md', 'wt') as f:
+    with open(filename, 'wt') as f:
         f.write(long_description)
     return long_description
 
 
 print('VERSION:', info['version'])
 create_version_file(info)
-long_description = read_and_update_readme()
+# _ = read_and_update_readme('docs/index.rst')
+long_description = read_and_update_readme('README.rst')
 info['long_description'] = long_description
 setup(name=name, **info)
