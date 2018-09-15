@@ -62,7 +62,7 @@ def read_and_update_readme(filename):
 
 print('VERSION:', info['version'])
 create_version_file(info)
-_ = read_and_update_readme('docs/index.rst')
+# _ = read_and_update_readme('docs/index.rst')
 long_description = read_and_update_readme('README.rst')
 info['long_description'] = long_description
 setup(name=name, **info)
