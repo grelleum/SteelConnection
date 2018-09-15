@@ -106,6 +106,7 @@ class SConnect(object):
         self.session.headers.update({'Content-type': 'application/json'})
 
         self.realm = realm
+        # Auth relies on exceptions being raised.
         self._raise_exception = self._on_error_raise_exception
         if use_netrc:
             # requests will look for .netrc if auth is not provided.
@@ -122,7 +123,7 @@ class SConnect(object):
                 self, username, password, connection_attempts,
             )
             self.session.auth = creds
-        # replace exception handler after auth completes.
+        # Set user defined exception handler.
         self._raise_exception = self._exception_handling(on_error)
 
     # Primary methods:
