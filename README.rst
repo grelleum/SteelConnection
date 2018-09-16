@@ -9,7 +9,7 @@ Simplify access to the Riverbed SteelConnect REST API.
     _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
    /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
 
-   version 0.94.0
+   version 0.94.1
    pip install steelconnection
 
 -  Always crafts a correct URL based on the resource provided.
@@ -21,6 +21,7 @@ Simplify access to the Riverbed SteelConnect REST API.
 
 | **Beta software:**
 | *actively working to simplify; some behavior may change before 1.0.0 release*.
+
 
 | **Supports:**
 | Python 2.7, 3.4, 3.5, 3.6, 3.7

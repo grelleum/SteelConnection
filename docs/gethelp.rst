@@ -13,8 +13,9 @@ If you decide to post an issue, please keep the following in mind:
 - Errors are meaningless without the code that produced those errors.
 - If your code does not produce the result you expect, let me know
   what results you expected.
-- Please wrap your code in triple-backtics so that all indentation
-  will be preserved.
+- | Please wrap your code in triple-backtics so that all indentation
+    will be preserved.
+  | https://guides.github.com/features/mastering-markdown/
 
 Here is how code and errors should be posted when opening an issue on GitHub:
 
@@ -25,6 +26,7 @@ Here is how code and errors should be posted when opening an issue on GitHub:
        print('triple backticks makes your code...')
        print('...look the same as it does in your editor!')
    ```
+
 
 
 SteelConnect API Reference:

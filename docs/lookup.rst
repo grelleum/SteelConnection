@@ -4,21 +4,26 @@ Lookup
 
 Lookup methods provide simplified ways of finding objects.
 
-| The SteelConnect Manager stores resources in a database with a uniquie
-  identifier (id). Many API calls require that you know the id number of
-  the resource you are interested in, which you might not know off hand.
-  SteelConnection provides a collection of ``lookup`` functions to look
-  up the resources based on known values. These functions return the
-  actual resouce.
+The SteelConnect Manager stores resources in a database with a uniquie
+identifier (id). Many API calls require that you know the id number of
+the resource you are interested in, which you might not know off hand.
+SteelConnection provides a collection of ``lookup`` functions to look
+up the resources based on known values. These functions return the
+actual resouce.
 
 These are the available lookup functions:
-- ``lookup.org(org_short_name)``
-- ``lookup.node(serial)``
-- ``lookup.site(site_name, org_id=org['id'])``
-- ``lookup.model(model)``
+
+.. code:: python
+
+   <object>.lookup.org(org_short_name)
+   <object>.lookup.node(serial)
+   <object>.lookup.site(site_name, org['id'])
+   <object>.lookup.wan(wan_name, org['id'])
+   <object>.lookup.model(model)
 
 These functions are accessed directly from the object you created and
 are specific to the SteelConnect API.
+
 
 Lookup Organization
 -------------------
@@ -35,6 +40,7 @@ field.
    'org-Spacely-0a0b1cbadb33f34'
    >>>
 
+
 Lookup Node
 -----------
 
@@ -48,6 +54,7 @@ when you supply the commonly known appliance serial number.
    'node-56f1968e222ab789'
    >>>
 
+
 Lookup Site
 -----------
 
@@ -60,6 +67,21 @@ could exist in multiple organizations, the org_id is a;so required.
    >>> site['id']
    'site-Skypad-884b9071141e4bc0'
    >>>
+
+
+Lookup WAN
+----------
+
+The site id can be found in a similar way, but since the same site name
+could exist in multiple organizations, the org_id is a;so required.
+
+.. code:: python
+
+   >>> wan = sc.lookup.site('MPLS', orgid='org-Spacely-0a501e7f27b2c03e')
+   >>> wan['id']
+   ''wan-MPLS-f26c9eb4f80a868b''
+   >>>
+
 
 Lookup Model
 ------------

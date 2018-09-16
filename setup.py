@@ -4,7 +4,7 @@ import re
 
 name = 'steelconnection'
 description = 'Simplify access to the Riverbed SteelConnect REST API.'
-version = '0.94.0'
+version = '0.94.1'
 copyright = 'Copyright 2018 Greg Mueller'
 
 info = {
@@ -13,8 +13,11 @@ info = {
     'author': 'Greg Mueller',
     'author_email': 'steelconnection@grelleum.com',
     'license': 'MIT',
-    'url': 'https://github.com/grelleum/SteelConnection',
-    'long_description_content_type': 'text/markdown',
+    'project_urls': {
+        'Documentation': 'https://steelconnection.readthedocs.io/',
+        'Source': 'https://github.com/grelleum/SteelConnection',
+    },
+    'long_description_content_type': 'text/x-rst',
     'install_requires': ['requests>=2.12.1'],
     'keywords': ['SteelConnect', 'REST', 'API', 'Riverbed', 'Grelleum'],
     'packages': ['steelconnection'],
@@ -38,13 +41,17 @@ def create_version_file(info):
     export_info['copyright'] = copyright
     keys = [
         'title', 'description', 'version', 'author',
-        'author_email', 'copyright', 'license', 'url',
+        'author_email', 'copyright', 'license',
     ]
     text = "__{}__ = '{}'\n"
     with open(name + '/__version__.py', 'wt') as f:
         f.write('"""Provide version and author details."""\n\n\n')
         for key in keys:
             f.write(text.format(key, export_info[key]))
+        f.write(text.format('url', info['project_urls']['Source']))
+        f.write(text.format(
+            'documentation', info['project_urls']['Documentation']
+        ))
 
 
 def read_and_update_readme(filename):
