@@ -13,11 +13,13 @@ actual resouce.
 
 These are the available lookup functions:
 
-- ``lookup.org(org_short_name)``
-- ``lookup.node(serial)``
-- ``lookup.site(site_name, org_id=org['id'])``
-- ``lookup.wan(wan_name, org_id=org['id'])``
-- ``lookup.model(model)``
+.. code:: python
+
+   <object>.lookup.org(org_short_name)
+   <object>.lookup.node(serial)
+   <object>.lookup.site(site_name, org['id'])
+   <object>.lookup.wan(wan_name, org['id'])
+   <object>.lookup.model(model)
 
 These functions are accessed directly from the object you created and
 are specific to the SteelConnect API.
