@@ -12,6 +12,7 @@ Lookup methods provide simplified ways of finding objects.
   actual resouce.
 
 These are the available lookup functions:
+
 - ``lookup.org(org_short_name)``
 - ``lookup.node(serial)``
 - ``lookup.site(site_name, org_id=org['id'])``
