@@ -4,12 +4,12 @@ Lookup
 
 Lookup methods provide simplified ways of finding objects.
 
-| The SteelConnect Manager stores resources in a database with a uniquie
-  identifier (id). Many API calls require that you know the id number of
-  the resource you are interested in, which you might not know off hand.
-  SteelConnection provides a collection of ``lookup`` functions to look
-  up the resources based on known values. These functions return the
-  actual resouce.
+The SteelConnect Manager stores resources in a database with a uniquie
+identifier (id). Many API calls require that you know the id number of
+the resource you are interested in, which you might not know off hand.
+SteelConnection provides a collection of ``lookup`` functions to look
+up the resources based on known values. These functions return the
+actual resouce.
 
 These are the available lookup functions:
 
