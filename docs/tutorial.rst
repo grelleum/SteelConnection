@@ -161,13 +161,16 @@ The zone will be assigned to the network interface.
 
    net_id = site['networks'][0]
 
+
    # Retreive the network from SteelConnect Manager.
 
    network = sc.get('/network/' + net_id)
 
+
    # Get Zone ID from the network object.
 
    zone_id = network['zone']
+
 
    # Now we can assign this zone to the third network interface.
    # First, we get the port ID from the node.
@@ -175,18 +178,22 @@ The zone will be assigned to the network interface.
 
    port_id = node['ports'][2]
 
+
    # Retreive the port from SteelConnect Manager.
 
    port = sc.get('/port/' + port_id)
+
 
    # Set the 'segment' key to the zone ID.
 
    port['segment'] = zone_id
 
+
    # We can also disable tagging for this port.
    # It should already be disabled, since that it the default state.
 
    port['tagged'] = 0
+
 
    # Upload port to the SteelConnect Manager.
 
@@ -201,7 +208,7 @@ virtual gateway images.
 
 .. code:: python
 
-   # Here we specify the destination filename as 'vgw.zip1,
+   # Here we specify the destination filename as 'vgw.zip1',
    # and the type of hypervisor as 'kvm'.
 
    sc.download_image(save_as='vgw.zip', build='kvm')
