@@ -86,3 +86,35 @@ to the resource '/org/<ORG_ID>/sites'.
 
 The post command will return the newly created site, which we have assigned
 to the name 'site'.
+
+
+Set uplink to static IP
+-----------------------
+
+Here we will set the uplink to use a static IP address.  When you create
+a new site, it new uplink will be created for that site.  The site object
+will include a list of uplinks for that site.  Since our site only has one
+uplink, we can access the uplink ID using index zero.
+
+.. code:: python
+
+   # Get the uplink ID from the site object, index 0.
+   uplink_id = site['uplinks'][0]
+
+   # Get uplink object from SteelConnect Manager.
+   uplink = sc.get('uplink/' + uplink_id)
+
+Next, we will change the uplink type from 'dhcp' to 'static', and configure
+an IP address and default gateway.  The change we are making is to the
+local dictionary object, so we will need to upload the changes to the
+SteelConnect Manager.
+
+.. code:: python
+
+   # Set uplink to static and define IP addresses.
+   uplink['type'] = 'static'
+   uplink['static_ip_v4'] = '172.17.3.249/24'
+   uplink['static_gw_v4'] = '172.17.3.1'
+
+   # Upload modified object to the SCM.
+   result = sc.put('uplink/' + uplink_id, data=uplink)
