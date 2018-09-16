@@ -113,8 +113,8 @@ SteelConnect Manager.
 
    # Set uplink to static and define IP addresses.
    uplink['type'] = 'static'
-   uplink['static_ip_v4'] = '172.17.3.249/24'
-   uplink['static_gw_v4'] = '172.17.3.1'
+   uplink['static_ip_v4'] = '172.30.12.249/29'
+   uplink['static_gw_v4'] = '172.30.12.254'
 
    # Upload modified object to the SCM.
    result = sc.put('uplink/' + uplink_id, data=uplink)
