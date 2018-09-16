@@ -31,26 +31,32 @@ class _LookUp(object):
 
     def node(self, serial, key='serial'):
         """
-        Returns a tuple of node_id and node
-        matching a provided appliance serial number.
+        Returns a node matching a provided appliance serial number.
         """
         return self._lookup(domain='nodes', value=serial, key=key)
 
     def org(self, name, key='name'):
         """
-        Returns a tuple of org_id and org
-        matching a provided organization short name.
+        Returns a org matching a provided organization short name.
         """
         return self._lookup(domain='orgs', value=name, key=key)
 
     def site(self, name, orgid=None, key='name'):
         """
-        Returns a tuple of site_id and site
-        matching a provided site short name and org_id.
+        Returns a site matching a provided site short name and org_id.
         """
         if not orgid:
             raise ValueError('orgid required when looking up a site.')
         resource = '/'.join(('org', orgid, 'sites'))
+        return self._lookup(domain=resource, value=name, key=key)
+
+    def wan(self, name, orgid=None, key='name'):
+        """
+        Returns a wan matching a provided wan name and org_id.
+        """
+        if not orgid:
+            raise ValueError('orgid required when looking up a wan.')
+        resource = '/'.join(('org', orgid, 'wans'))
         return self._lookup(domain=resource, value=name, key=key)
 
     def model(self, value, default=None):
