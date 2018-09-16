@@ -13,7 +13,10 @@ info = {
     'author': 'Greg Mueller',
     'author_email': 'steelconnection@grelleum.com',
     'license': 'MIT',
-    'url': 'https://github.com/grelleum/SteelConnection',
+    'project_urls': {
+        'Documentation': 'https://steelconnection.readthedocs.io/',
+        'Source': 'https://github.com/grelleum/SteelConnection',
+    },
     'long_description_content_type': 'text/x-rst',
     'install_requires': ['requests>=2.12.1'],
     'keywords': ['SteelConnect', 'REST', 'API', 'Riverbed', 'Grelleum'],
