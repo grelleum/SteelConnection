@@ -1,8 +1,6 @@
 Tutorial
 ========
 
-* **This is a work in progress, please check back soon for updates** *
-
 In this tutorial, we are going to create a new site, configure static
 IP address on the uplinks and deploy a virtual gateway to that site.
 
