@@ -26,6 +26,7 @@ Usage:
 from __future__ import print_function
 import json
 import sys
+import logging
 import warnings
 
 import requests
@@ -49,6 +50,9 @@ BINARY_DATA_MESSAGE = (
     "Binary data returned. "
     "Use '.savefile(filename)' method or access using '.response.content'."
 )
+
+# logger = logging.getLogger(__name__).addHandler(logging.NullHandler())
+# logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 class SConnect(object):
@@ -92,6 +96,8 @@ class SConnect(object):
                 or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
             connection_attempts (str): (optional) Number of login attemps.
         """
+
+        # self.logger = logging.getLogger(__name__)
 
         self.__scm_version = None
         self.__version__ = __version__
@@ -323,6 +329,9 @@ class SConnect(object):
         response = request_method(
             url=url, params=params, data=data, timeout=self.timeout,
         )
+        # req = response.request
+        # self.logger.info(': '.join((req.method, req.url)))
+        # self.logger.debug('SENT: {}'.format(repr(req.body)))
         return response
 
     def _get_result(self, response):
@@ -337,6 +346,7 @@ class SConnect(object):
                 # work-around for get:'/node/{node_id}/image_status'
                 return response.json()
             else:
+                # logger.warn(self.received.replace('\n', ', '))
                 return None
         if response.headers['Content-Type'] == 'application/octet-stream':
             return {'status': BINARY_DATA_MESSAGE}

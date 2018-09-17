@@ -47,8 +47,8 @@ import logging
 
 from requests import ConnectionError, RequestException
 
-from .steelconnection import SConnect, ASCII_ART
-from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
+from .api import SConnect, ASCII_ART
+from .api import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
 from .input_tools import get_input, get_username, get_password
