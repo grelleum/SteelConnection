@@ -51,8 +51,7 @@ BINARY_DATA_MESSAGE = (
     "Use '.savefile(filename)' method or access using '.response.content'."
 )
 
-# logger = logging.getLogger(__name__).addHandler(logging.NullHandler())
-# logging.getLogger(__name__).addHandler(logging.NullHandler())
+log = logging.getLogger(__name__)
 
 
 class SConnect(object):
@@ -96,8 +95,6 @@ class SConnect(object):
                 or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
             connection_attempts (str): (optional) Number of login attemps.
         """
-
-        # self.logger = logging.getLogger(__name__)
 
         self.__scm_version = None
         self.__version__ = __version__
@@ -329,9 +326,9 @@ class SConnect(object):
         response = request_method(
             url=url, params=params, data=data, timeout=self.timeout,
         )
-        # req = response.request
-        # self.logger.info(': '.join((req.method, req.url)))
-        # self.logger.debug('SENT: {}'.format(repr(req.body)))
+        req = response.request
+        log.info(': '.join((req.method, req.url)))
+        log.debug('SENT: {}'.format(repr(req.body)))
         return response
 
     def _get_result(self, response):
@@ -341,13 +338,15 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on response.
         :rtype: dict, list, or None
         """
+        recv = 'RECV: ' + self.received.replace('\n', ', ')
         if not response.ok:
             if response.text and 'Queued' in response.text:
                 # work-around for get:'/node/{node_id}/image_status'
                 return response.json()
             else:
-                # logger.warn(self.received.replace('\n', ', '))
+                log.warn(recv)
                 return None
+        log.debug(recv)
         if response.headers['Content-Type'] == 'application/octet-stream':
             return {'status': BINARY_DATA_MESSAGE}
         if not response.json():
