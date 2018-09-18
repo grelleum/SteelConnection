@@ -51,7 +51,7 @@ BINARY_DATA_MESSAGE = (
     "Use '.savefile(filename)' method or access using '.response.content'."
 )
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class SConnect(object):
@@ -326,9 +326,8 @@ class SConnect(object):
         response = request_method(
             url=url, params=params, data=data, timeout=self.timeout,
         )
-        req = response.request
-        log.info(': '.join((req.method, req.url)))
-        log.debug('SENT: {}'.format(repr(req.body)))
+        if data:
+            logger.debug('SENT: {}'.format(repr(data)))
         return response
 
     def _get_result(self, response):
@@ -338,15 +337,13 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on response.
         :rtype: dict, list, or None
         """
-        recv = 'RECV: ' + self.received.replace('\n', ', ')
         if not response.ok:
             if response.text and 'Queued' in response.text:
                 # work-around for get:'/node/{node_id}/image_status'
                 return response.json()
             else:
-                log.warn(recv)
+                logger.warning(self.recv)
                 return None
-        log.debug(recv)
         if response.headers['Content-Type'] == 'application/octet-stream':
             return {'status': BINARY_DATA_MESSAGE}
         if not response.json():
@@ -432,6 +429,28 @@ class SConnect(object):
             self.response.status_code,
             self.response.reason,
             repr(error_message),
+        )
+
+
+    @property
+    def recv(self):
+        """Return summary of the previous API response.
+
+        :returns: Details regarding previous API request.
+        :rtype: str
+        """
+        error = None
+        if self.response.text and not self.response.ok:
+            try:
+                details = self.response.json()
+                error = details.get('error', {}).get('message')
+            except ValueError:
+                pass
+        error = ',  Error: ' + repr(error) if error else ''
+        return 'RECV: {} - {}{}'.format(
+            self.response.status_code,
+            self.response.reason,
+            error,
         )
 
     # Error handling and Exception generation.
