@@ -45,7 +45,7 @@ org id.
 .. code:: python
 
    # Replace ORG_SHORT_NAME with your Org's short name.
-   org_id = sc.lookup.org('ORG_SHORT_NAME')['id]
+   org_id = sc.lookup.org('ORG_SHORT_NAME')['id']
 
 
 Create a new site
