@@ -431,7 +431,6 @@ class SConnect(object):
             repr(error_message),
         )
 
-
     @property
     def recv(self):
         """Return summary of the previous API response.
