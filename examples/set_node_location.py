@@ -106,15 +106,10 @@ def arguments(argv):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('realm', type=str, help='Domain name of SteelConnect Manager')
     parser.add_argument('organization', type=str, help='Name of target organization')
-    parser.add_argument(
-        '-u',
-        '--username',
-        help='Username for SteelConnect Manager: prompted if not supplied',
+    parser.add_argument('-u', '--username', help='Username for SteelConnect Manager (optional)'
     )
     parser.add_argument(
-        '-p',
-        '--password',
-        help='Password for SteelConnect Manager: prompted if not supplied',
+        '-p', '--password', help='Password for SteelConnect Manager (optional)'
     )
     return parser.parse_args()
 
