@@ -1,5 +1,6 @@
 from setuptools import setup
 import re
+
 # import sys
 
 name = 'steelconnection'
@@ -30,7 +31,7 @@ info = {
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent'
+        'Operating System :: OS Independent',
     ],
 }
 
@@ -40,8 +41,13 @@ def create_version_file(info):
     export_info['title'] = name
     export_info['copyright'] = copyright
     keys = [
-        'title', 'description', 'version', 'author',
-        'author_email', 'copyright', 'license',
+        'title',
+        'description',
+        'version',
+        'author',
+        'author_email',
+        'copyright',
+        'license',
     ]
     text = "__{}__ = '{}'\n"
     with open(name + '/__version__.py', 'wt') as f:
@@ -49,18 +55,14 @@ def create_version_file(info):
         for key in keys:
             f.write(text.format(key, export_info[key]))
         f.write(text.format('url', info['project_urls']['Source']))
-        f.write(text.format(
-            'documentation', info['project_urls']['Documentation']
-        ))
+        f.write(text.format('documentation', info['project_urls']['Documentation']))
 
 
 def read_and_update_readme(filename):
     with open(filename, 'rt') as f:
         readme = f.read()
     long_description = re.sub(
-        r'   version \d+\.[\d\.]+[a-z]?',
-        '   version ' + info['version'],
-        readme,
+        r'   version \d+\.[\d\.]+[a-z]?', '   version ' + info['version'], readme
     )
     with open(filename, 'wt') as f:
         f.write(long_description)

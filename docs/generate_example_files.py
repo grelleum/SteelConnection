@@ -6,6 +6,7 @@ from glob import glob
 import os
 import sys
 
+
 def get_files(startdir):
     for filepath in glob(os.path.join(startdir, '*.py')):
         path, filename = os.path.split(filepath)

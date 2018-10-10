@@ -59,10 +59,18 @@ from .__version__ import __url__, __version__
 
 
 def about():
-    return '\n'.join((
-        __author__, __author_email__, __copyright__, __description__,
-        __license__, __title__, __url__, __version__,
-    ))
+    return '\n'.join(
+        (
+            __author__,
+            __author_email__,
+            __copyright__,
+            __description__,
+            __license__,
+            __title__,
+            __url__,
+            __version__,
+        )
+    )
 
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

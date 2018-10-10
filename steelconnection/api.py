@@ -290,9 +290,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self.session.get(
-            url=self.make_url(api, resource),
-            params=params,
-            stream=True,
+            url=self.make_url(api, resource), params=params, stream=True
         )
         for chunk in self.response.iter_content(chunk_size=65536):
             yield chunk
@@ -309,7 +307,7 @@ class SConnect(object):
         """
         resource = resource[1:] if resource.startswith('/') else resource
         return 'https://{}/api/{}/{}/{}'.format(
-            self.realm, api, self.api_version, resource,
+            self.realm, api, self.api_version, resource
         )
 
     def _request(self, request_method, url, data=None, params=None):
@@ -324,7 +322,7 @@ class SConnect(object):
         """
         data = json.dumps(data) if data and isinstance(data, dict) else data
         response = request_method(
-            url=url, params=params, data=data, timeout=self.timeout,
+            url=url, params=params, data=data, timeout=self.timeout
         )
         if data:
             logger.debug('SENT: {}'.format(repr(data)))
@@ -363,11 +361,7 @@ class SConnect(object):
         :param bool quiet: Disable update printing when true.
         """
         return _download_image(
-            sconnect=self,
-            nodeid=nodeid,
-            save_as=save_as,
-            build=build,
-            quiet=quiet,
+            sconnect=self, nodeid=nodeid, save_as=save_as, build=build, quiet=quiet
         )
 
     def savefile(self, filename):
@@ -426,9 +420,7 @@ class SConnect(object):
             except ValueError:
                 pass
         return 'Status: {} - {}\nError: {}'.format(
-            self.response.status_code,
-            self.response.reason,
-            repr(error_message),
+            self.response.status_code, self.response.reason, repr(error_message)
         )
 
     @property
@@ -447,18 +439,13 @@ class SConnect(object):
                 pass
         error = ',  Error: ' + repr(error) if error else ''
         return 'RECV: {} - {}{}'.format(
-            self.response.status_code,
-            self.response.reason,
-            error,
+            self.response.status_code, self.response.reason, error
         )
 
     # Error handling and Exception generation.
 
     def _exception_handling(self, on_error):
-        choices = {
-            'raise': self._on_error_raise_exception,
-            'exit': self._on_error_exit,
-        }
+        choices = {'raise': self._on_error_raise_exception, 'exit': self._on_error_exit}
         return choices.get(on_error, self._on_error_do_nothing)
 
     def _on_error_raise_exception(self, response):
@@ -525,12 +512,14 @@ class SConnect(object):
         :rtype: str
         """
         scm_version = self.scm_version if self.scm_version else 'unavailable'
-        details = ', '.join([
-            "realm: '{}'".format(self.realm),
-            "scm version: '{}'".format(scm_version),
-            "api version: '{}'".format(self.api_version),
-            "package version: '{}'".format(self.__version__),
-        ])
+        details = ', '.join(
+            [
+                "realm: '{}'".format(self.realm),
+                "scm version: '{}'".format(scm_version),
+                "api version: '{}'".format(self.api_version),
+                "package version: '{}'".format(self.__version__),
+            ]
+        )
         return '{}({})'.format(self.__class__.__name__, details)
 
     def __str__(self):
@@ -554,13 +543,13 @@ class SConnect(object):
 
 # Deprecated classes.
 
+
 def SConAPI(*args, **kwargs):
     warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
     warnings.warn(
-        "'SConAPI' is deprecated, "
-        "use steelconnection.SConnect() instead",
+        "'SConAPI' is deprecated, " "use steelconnection.SConnect() instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
     warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
     return SConnect(*args, **kwargs)
@@ -572,7 +561,7 @@ def SConWithoutExceptions(*args, **kwargs):
         "'SConWithoutExceptions' is deprecated, "
         "use steelconnection.SConnect(on_error=None) instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
     warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
     return SConnect(*args, on_error=None, **kwargs)
@@ -584,7 +573,7 @@ def SConExitOnError(*args, **kwargs):
         "'SConExitOnError' is deprecated, "
         "use steelconnection.SConnect(on_error=None) instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
     warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
     return SConnect(*args, on_error='exit', **kwargs)

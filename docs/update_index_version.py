@@ -4,11 +4,7 @@ import re
 def update_version(version, filename):
     with open(filename, 'rt') as f:
         text = f.read()
-    text = re.sub(
-        r'   version \d+\.[\d\.]+[a-z]?',
-        '   version ' + version,
-        text,
-    )
+    text = re.sub(r'   version \d+\.[\d\.]+[a-z]?', '   version ' + version, text)
     with open(filename, 'wt') as f:
         f.write(text)
 
