@@ -26,6 +26,7 @@ def test_create_site(monkeypatch):
         monkeypatch.setattr('builtins.input', lambda x: username)
     monkeypatch.setattr('getpass.getpass', lambda x: password)
     import create_site
+
     create_site.scm_name = realm
     create_site.org_name = org_name
     create_site.new_site = {

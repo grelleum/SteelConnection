@@ -35,7 +35,7 @@ def test_clear_location_fields():
 def test_set_node_location():
     script = 'examples/set_node_location.py'
     command = 'python "{}" "{}" "{}" -u="{}" -p="{}"'.format(
-        script, realm, org_name, username, password,
+        script, realm, org_name, username, password
     )
     output = subprocess.check_output(command, shell=True)
     assert output

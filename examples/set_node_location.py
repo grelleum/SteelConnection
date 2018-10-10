@@ -41,11 +41,7 @@ def main(argv):
     if organization.endswith('.cc') and not realm.endswith('.cc'):
         realm, organization = organization, realm
 
-    sc = steelconnection.SConnect(
-        realm,
-        username=args.username,
-        password=args.password,
-    )
+    sc = steelconnection.SConnect(realm, username=args.username, password=args.password)
 
     # Find the target organization.
     org = sc.lookup.org(organization)
@@ -97,12 +93,7 @@ def status(category, values, suffix=''):
     """Return status in human-readable format."""
     size = len(values)
     pluralization = '' if size == 1 else 's'
-    return '* Found {} {}{} {}.'.format(
-        size,
-        category,
-        pluralization,
-        suffix
-    )
+    return '* Found {} {}{} {}.'.format(size, category, pluralization, suffix)
 
 
 def arguments(argv):
@@ -113,20 +104,16 @@ def arguments(argv):
         'for those nodes where the location is unset.'
     )
     parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('realm', type=str, help='Domain name of SteelConnect Manager')
+    parser.add_argument('organization', type=str, help='Name of target organization')
     parser.add_argument(
-        'realm', type=str,
-        help='Domain name of SteelConnect Manager',
-    )
-    parser.add_argument(
-        'organization', type=str,
-        help='Name of target organization',
-    )
-    parser.add_argument(
-        '-u', '--username',
+        '-u',
+        '--username',
         help='Username for SteelConnect Manager: prompted if not supplied',
     )
     parser.add_argument(
-        '-p', '--password',
+        '-p',
+        '--password',
         help='Password for SteelConnect Manager: prompted if not supplied',
     )
     return parser.parse_args()

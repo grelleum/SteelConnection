@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 #    ______          _______                       __  _
@@ -36,13 +35,15 @@ def main():
     for port in ports:
         resource = 'port/{}'.format(port['id'])
         port_status = sc.getstatus(resource)
-        print(line.format(
-            port['port_id'],
-            port['ifname'],
-            'UP' if port_status['link'] else 'DOWN',
-            port_status['speed'],
-            port_status['duplex'],
-        ))
+        print(
+            line.format(
+                port['port_id'],
+                port['ifname'],
+                'UP' if port_status['link'] else 'DOWN',
+                port_status['speed'],
+                port_status['duplex'],
+            )
+        )
     print()
 
 

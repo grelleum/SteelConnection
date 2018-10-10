@@ -30,6 +30,7 @@ def test_get_ports(capsys, monkeypatch):
         monkeypatch.setattr('builtins.input', provide_input)
     monkeypatch.setattr('getpass.getpass', lambda x: password)
     import get_ports
+
     get_ports.main()
     captured = capsys.readouterr()
     assert not captured.err
