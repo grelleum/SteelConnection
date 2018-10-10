@@ -63,10 +63,7 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     if sconnect.response.ok:
         locale.setlocale(locale.LC_ALL, '')
         filesize = locale.format('%d', os.stat(save_as).st_size, grouping=True)
-        return {
-            'filename': save_as,
-            'filesize': '{} bytes'.format(filesize),
-        }
+        return {'filename': save_as, 'filesize': '{} bytes'.format(filesize)}
 
 
 def _prepare_image(sconnect, nodeid, build, verbose):
@@ -83,10 +80,7 @@ def _prepare_image(sconnect, nodeid, build, verbose):
         None
     """
     verbose('Requesting image of type ' + build, end=': ')
-    sconnect.post(
-        '/node/{}/prepare_image'.format(nodeid),
-        data={'type': build}
-    )
+    sconnect.post('/node/{}/prepare_image'.format(nodeid), data={'type': build})
     # In case there is no config for the appliance, the build will fail.
     # Checking the status when build fails will result in error 500.
     # Checking immediately, the explanation will have no error reason.
@@ -158,8 +152,7 @@ def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
     verbose("Downloading file as '{}'".format(save_as), end=' ')
     with open(save_as, 'wb') as fd:
         chunks = sconnect.stream(
-            '/node/{}/get_image'.format(nodeid),
-            params={'file': source_file},
+            '/node/{}/get_image'.format(nodeid), params={'file': source_file}
         )
         for index, chunk in enumerate(chunks):
             fd.write(chunk)

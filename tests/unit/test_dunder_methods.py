@@ -4,12 +4,13 @@ import responses
 import steelconnection
 
 
-class NameSpace():
+class NameSpace:
     def __init__(self, ok):
         self.ok = ok
 
 
 # Dunder Methods:
+
 
 def test_scon_returns_true():
     """Test object returns True when reponse is OK."""
@@ -59,7 +60,7 @@ def test_scon_repr():
     responses.add(
         responses.GET,
         'https://some.realm/api/common/1.0/info',
-        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC',},
+        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC'},
         status=200,
     )
     realm = 'some.realm'
@@ -80,24 +81,26 @@ def test_scon_str():
     responses.add(
         responses.GET,
         'https://some.realm/api/common/1.0/info',
-        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC',},
+        json={'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC'},
         status=200,
     )
     realm = 'some.realm'
     scm_version = '1.23.4_56'
     api_version = '1.0'
     pkg_version = steelconnection.__version__
-    expected = '\n'.join((
-        'SteelConnection:',
-        ">> realm: '{}'",
-        ">> scm version: '{}'",
-        ">> api version: '{}'",
-        ">> package version: '{}'",
-        '>> GET: https://some.realm/api/common/1.0/info',
-        '>> Data Sent: None',
-        '>> Status: 200 - OK',
-        '>> Error: None'
-    ))
+    expected = '\n'.join(
+        (
+            'SteelConnection:',
+            ">> realm: '{}'",
+            ">> scm version: '{}'",
+            ">> api version: '{}'",
+            ">> package version: '{}'",
+            '>> GET: https://some.realm/api/common/1.0/info',
+            '>> Data Sent: None',
+            '>> Status: 200 - OK',
+            '>> Error: None',
+        )
+    )
     expected = expected.format(realm, scm_version, api_version, pkg_version)
     sc = steelconnection.SConnect(realm, 'u', 'p', api_version=api_version)
     assert str(sc) == expected

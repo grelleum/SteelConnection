@@ -11,14 +11,7 @@ db = {
         'scm_version': '1.23.4',
         'scm_build': '56',
     },
-    'orgs': {
-        'items': [
-            {
-                'id': 'org-12345',
-                'name': 'WineAndCheese',
-            }
-        ]
-    },
+    'orgs': {'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]},
     'sites': {
         'items': [
             {
@@ -33,19 +26,19 @@ db = {
                 'city': 'Downtown, US',
                 'name': 'DOWN',
             },
-        ],
+        ]
     },
     'nodes': {
         'items': [
-             {
+            {
                 'id': 'node-12345',
                 'org': 'org-12345',
                 'site': 'site-12345',
                 'serial': 'XNABCD0123456789',
-                'model': 'yogi'
-             }
-        ],
-    }
+                'model': 'yogi',
+            }
+        ]
+    },
 }
 
 

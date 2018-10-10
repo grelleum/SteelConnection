@@ -3,10 +3,7 @@
 import json
 from steelconnection import InvalidResource, AuthenticationError
 
-codes = {
-    'netrc401': 401,
-    'nonesuch': 404,
-}
+codes = {'netrc401': 401, 'nonesuch': 404}
 
 org = {'id': 'not_an_org_id', 'name': 'steelconnection'}
 status = {'scm_version': '2.9.1', 'scm_build': '50'}
@@ -50,7 +47,6 @@ def get_text(data):
 
 
 class Fake_Request(object):
-
     def __init__(self, url, data):
         self.method = 'FAKE'
         self.url = url
@@ -58,7 +54,6 @@ class Fake_Request(object):
 
 
 class Fake_Response(object):
-
     def __init__(self, url, status_code, data, auth=None, content='json'):
         self.url = url
         self.ok = True if status_code < 300 else False
@@ -74,20 +69,16 @@ class Fake_Response(object):
 
 
 class Fake_Session(object):
-
     def __init__(self):
         self.proxies = {}
         self.headers = {
             'User-Agent': 'python-requests/2.19.1',
             'Accept-Encoding': 'gzip, deflate',
             'Accept': '*/*',
-            'Connection': 'keep-alive'
+            'Connection': 'keep-alive',
         }
 
-    def get(
-            self, url, auth=None, headers=None,
-            params=None, data=None, timeout=None,
-    ):
+    def get(self, url, auth=None, headers=None, params=None, data=None, timeout=None):
         if data is not None:
             raise ValueError('get data must be None.')
         if url == 'https://old.school/api/scm.config/1.0/status':
@@ -101,13 +92,12 @@ class Fake_Session(object):
         resource = url.split('/')[-1]
         data = responses.get(resource, {})
         if resource == 'netrc401' and auth:
-                resource = 'netrc'
+            resource = 'netrc'
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data, auth)
 
     def getstatus(
-            self, url, auth=None, headers=None,
-            params=None, data=None, timeout=None,
+        self, url, auth=None, headers=None, params=None, data=None, timeout=None
     ):
         if data is not None:
             raise ValueError('getstatus data must be None.')
@@ -117,18 +107,14 @@ class Fake_Session(object):
         return Fake_Response(url, status_code, data, auth)
 
     def delete(
-            self, url, auth=None, headers=None,
-            params=None, data=None, timeout=None,
+        self, url, auth=None, headers=None, params=None, data=None, timeout=None
     ):
         resource = url.split('/')[-1]
         data = responses.get(resource, {}) if not data else data
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data, auth)
 
-    def post(
-            self, url, auth=None, headers=None,
-            params=None, data=None, timeout=None,
-    ):
+    def post(self, url, auth=None, headers=None, params=None, data=None, timeout=None):
         if params is not None:
             raise ValueError('post params must be None.')
         if data is None:
@@ -137,10 +123,7 @@ class Fake_Session(object):
         status_code = codes.get(resource, 200)
         return Fake_Response(url, status_code, data, auth)
 
-    def put(
-            self, url, auth=None, headers=None,
-            params=None, data=None, timeout=None,
-    ):
+    def put(self, url, auth=None, headers=None, params=None, data=None, timeout=None):
         if data is None:
             raise ValueError('put method must have data')
         resource = url.split('/')[-1]

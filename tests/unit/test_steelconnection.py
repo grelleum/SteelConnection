@@ -7,7 +7,7 @@ import responses
 import steelconnection
 
 
-class NameSpace():
+class NameSpace:
     def __init__(self):
         pass
 
@@ -18,19 +18,8 @@ db = {
         'scm_version': '1.23.4',
         'scm_build': '56',
     },
-    'info': {
-        'sw_version': '1.23.4',
-        'sw_build': '56',
-        'scm_id': 'ABC',
-    },
-    'orgs': {
-        'items': [
-            {
-                'id': 'org-12345',
-                'name': 'WineAndCheese',
-            }
-        ]
-    },
+    'info': {'sw_version': '1.23.4', 'sw_build': '56', 'scm_id': 'ABC'},
+    'orgs': {'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]},
     'sites': {
         'items': [
             {
@@ -45,23 +34,23 @@ db = {
                 'city': 'Downtown, US',
                 'name': 'DOWN',
             },
-        ],
+        ]
     },
     'nodes': {
         'items': [
-             {
+            {
                 'id': 'node-12345',
                 'org': 'org-12345',
                 'site': 'site-12345',
                 'serial': 'XNABCD0123456789',
-                'model': 'yogi'
-             }
-        ],
+                'model': 'yogi',
+            }
+        ]
     },
     'image_status': {
         'status': 'Success',
         'image_file': 'node-12345-random.zip',
-        'image_type': 'kvm'
+        'image_type': 'kvm',
     },
     'image_download': b'abcdefghijklmnopqrstuvwxyz',
     'invalid_status': {},
@@ -146,9 +135,7 @@ get_invalid_info = responses.Response(
 # )
 
 get_info_404 = responses.Response(
-    method='GET',
-    url='https://some.realm/api/common/1.0/info',
-    status=404,
+    method='GET', url='https://some.realm/api/common/1.0/info', status=404
 )
 
 get_stream = responses.Response(
@@ -180,15 +167,11 @@ getstatus_node = responses.Response(
 )
 
 getstatus_nonesuch = responses.Response(
-    method='GET',
-    url='https://some.realm/api/scm.reporting/1.0/nonesuch',
-    status=404,
+    method='GET', url='https://some.realm/api/scm.reporting/1.0/nonesuch', status=404
 )
 
 delete_nonesuch = responses.Response(
-    method='DELETE',
-    url='https://some.realm/api/scm.config/1.0/nonesuch',
-    status=404,
+    method='DELETE', url='https://some.realm/api/scm.config/1.0/nonesuch', status=404
 )
 
 delete_org = responses.Response(
@@ -206,9 +189,7 @@ post_nodes = responses.Response(
 )
 
 post_nonesuch = responses.Response(
-    method='POST',
-    url='https://some.realm/api/scm.config/1.0/nonesuch',
-    status=404,
+    method='POST', url='https://some.realm/api/scm.config/1.0/nonesuch', status=404
 )
 
 post_prepare_image = responses.Response(
@@ -226,13 +207,12 @@ put_node = responses.Response(
 )
 
 put_nonesuch = responses.Response(
-    method='PUT',
-    url='https://some.realm/api/scm.config/1.0/nonesuch',
-    status=404,
+    method='PUT', url='https://some.realm/api/scm.config/1.0/nonesuch', status=404
 )
 
 
 # Primary Methods:
+
 
 @responses.activate
 def test_scon_get():
@@ -292,6 +272,7 @@ def test_scon_put():
 
 # Primary Methods can generate exceptions:
 
+
 @responses.activate
 def test_scon_get_exception():
     """Test SConnect.get method."""
@@ -338,6 +319,7 @@ def test_scon_put_exception():
 
 
 # Properties:
+
 
 def test_ascii_art():
     """Test SConnect.ascii_art returns a string."""
@@ -398,11 +380,10 @@ def test_scon_realm_when_defined():
 
 # Helper methods:
 
+
 def test_scon_make_url():
     """Test SConnect.url method."""
-    sc = steelconnection.SConnect(
-        'NO.REALM', api_version='999', connection_attempts=0
-    )
+    sc = steelconnection.SConnect('NO.REALM', api_version='999', connection_attempts=0)
     url = sc.make_url('FAKE', 'PATH')
     assert url == 'https://NO.REALM/api/FAKE/999/PATH'
 
@@ -444,6 +425,7 @@ def test_stream():
 
 # Download image:
 
+
 @responses.activate
 def test_download_image():
     """Test SConnect.download_image method."""
@@ -470,6 +452,7 @@ def test_savefile():
 
 
 # Get Results:
+
 
 @responses.activate
 def test_scon_get_result_not_ok():
@@ -498,10 +481,14 @@ def test_scon_get_result_octet_stream():
     responses.add(get_image)
     sc = steelconnection.SConnect('some.realm', connection_attempts=0)
     sc.get('image')
-    assert sc._get_result(sc.response) == {'status': ' '.join((
-        "Binary data returned.",
-        "Use '.savefile(filename)' method or access using '.response.content'."
-    ))}
+    assert sc._get_result(sc.response) == {
+        'status': ' '.join(
+            (
+                "Binary data returned.",
+                "Use '.savefile(filename)' method or access using '.response.content'.",
+            )
+        )
+    }
 
 
 @responses.activate

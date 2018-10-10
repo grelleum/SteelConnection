@@ -7,12 +7,20 @@ import steelconnection
 
 
 def test_import_dunder_all():
-    expected = set((
-        'SConnect', 'SConWithoutExceptions', 'SConExitOnError',
-        'AuthenticationError', 'APINotEnabled',
-        'BadRequest', 'InvalidResource',
-        'get_input', 'get_username', 'get_password',
-    ))
+    expected = set(
+        (
+            'SConnect',
+            'SConWithoutExceptions',
+            'SConExitOnError',
+            'AuthenticationError',
+            'APINotEnabled',
+            'BadRequest',
+            'InvalidResource',
+            'get_input',
+            'get_username',
+            'get_password',
+        )
+    )
     set(steelconnection.__all__) == expected
 
 

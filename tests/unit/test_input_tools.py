@@ -31,6 +31,7 @@ def test_get_password(monkeypatch):
 def test_get_password_validate(capsys, monkeypatch):
     def fake_getpass(_, words=['DOES', 'NOT', 'MATCH', 'MATCH']):
         return words.pop(0)
+
     monkeypatch.setattr('getpass.getpass', fake_getpass)
     password = input_tools.get_password()
     captured = capsys.readouterr()

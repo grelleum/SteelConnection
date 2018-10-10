@@ -12,14 +12,7 @@ db = {
         'scm_version': '1.23.4',
         'scm_build': '56',
     },
-    'orgs': {
-        'items': [
-            {
-                'id': 'org-12345',
-                'name': 'WineAndCheese',
-            }
-        ]
-    },
+    'orgs': {'items': [{'id': 'org-12345', 'name': 'WineAndCheese'}]},
     'sites': {
         'items': [
             {
@@ -34,23 +27,23 @@ db = {
                 'city': 'Downtown, US',
                 'name': 'DOWN',
             },
-        ],
+        ]
     },
     'nodes': {
         'items': [
-             {
+            {
                 'id': 'node-12345',
                 'org': 'org-12345',
                 'site': 'site-12345',
                 'serial': 'XNABCD0123456789',
-                'model': 'yogi'
-             }
-        ],
+                'model': 'yogi',
+            }
+        ]
     },
     'image_status': {
         'status': 'Success',
         'image_file': 'node-12345-random.zip',
-        'image_type': 'kvm'
+        'image_type': 'kvm',
     },
     'image_download': b'abcdefghijklmnopqrstuvwxyz',
     'invalid_status': {},
@@ -95,6 +88,7 @@ post_prepare_image = responses.Response(
 
 # no_op
 
+
 def test_no_op():
     """Verify no_op always returns None."""
     assert steelconnection.image_download._no_op() is None
@@ -104,6 +98,7 @@ def test_no_op():
 
 
 # _get_file_path
+
 
 def test_get_file_path():
     """Test SConnect.image_download._get_file_path method."""
@@ -126,6 +121,7 @@ def test_get_file_path_with_dir():
 
 
 # _download_image
+
 
 @responses.activate
 def test_download_image_quiet(capsys):
@@ -172,6 +168,7 @@ def test_download_image_not_available():
 
 
 # _wait_for_ready
+
 
 @responses.activate
 def test_wait_for_ready_timeout():

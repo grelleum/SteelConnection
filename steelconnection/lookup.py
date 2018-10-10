@@ -89,7 +89,7 @@ model = {
     'tiger1g': 'SDI-2030',
     'ursus': 'SDI-AP5r',
     'xirrusap': 'Xirrus AP',
-    'yogi': 'SDI-VGW'
+    'yogi': 'SDI-VGW',
 }
 
 model_reversed = sorted((v, k) for k, v in model.items())

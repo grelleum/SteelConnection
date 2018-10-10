@@ -11,6 +11,7 @@ import fake_requests
 
 # Authentication Methods:
 
+
 def test_ask_for_auth_with_netrc(monkeypatch):
     """_ask_for_auth should not prompt when netrc file exists."""
     monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)

@@ -7,6 +7,7 @@ import fake_requests
 
 # Raise Exceptions:
 
+
 def test_raise_exception_no_exception():
     """_raise_exception should raise the correct exceptions based on status."""
     sc = steelconnection.SConnect('sc', connection_attempts=0)
@@ -56,6 +57,7 @@ def test_raise_exception_APINotEnabled():
 
 # Alternate Behavior:
 
+
 def test_raise_exception_without_exceptions():
     """_raise_exception should raise the correct exceptions based on status."""
     sc = steelconnection.SConnect('sc', connection_attempts=0, on_error=False)
@@ -82,6 +84,7 @@ def test_exit_when_raise_exception_with_exit_on_error(capsys):
 
 
 # Deprecated Classes:
+
 
 def test_DEPRECATED_SConAPI():
     """_raise_exception should raise the correct exceptions based on status."""
