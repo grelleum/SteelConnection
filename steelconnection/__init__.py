@@ -25,21 +25,21 @@ Full documentation available at https://pypi.org/project/steelconnection/
 
 
 __all__ = (
-    'SConnect',
-    'SConAPI',
-    'SConWithoutExceptions',
-    'SConExitOnError',
-    'ConnectionError',
-    'RequestException',
-    'AuthenticationError',
-    'APINotEnabled',
-    'BadRequest',
-    'InvalidResource',
-    'ResourceGone',
-    'get_input',
-    'get_username',
-    'get_password',
-    'ASCII_ART',
+    "SConnect",
+    "SConAPI",
+    "SConWithoutExceptions",
+    "SConExitOnError",
+    "ConnectionError",
+    "RequestException",
+    "AuthenticationError",
+    "APINotEnabled",
+    "BadRequest",
+    "InvalidResource",
+    "ResourceGone",
+    "get_input",
+    "get_username",
+    "get_password",
+    "ASCII_ART",
 )
 
 
@@ -59,7 +59,7 @@ from .__version__ import __url__, __version__
 
 
 def about():
-    return '\n'.join(
+    return "\n".join(
         (
             __author__,
             __author_email__,
