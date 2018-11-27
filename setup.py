@@ -47,7 +47,7 @@ def create_version_file(info):
         "copyright",
         "license",
     ]
-    text = "__{}__ = '{}'\n"
+    text = '__{}__ = "{}"\n'
     with open(name + "/__version__.py", "wt") as f:
         f.write('"""Provide version and author details."""\n\n\n')
         for key in keys:
