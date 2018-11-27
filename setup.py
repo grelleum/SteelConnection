@@ -1,8 +1,6 @@
 from setuptools import setup
 import re
 
-# import sys
-
 name = "steelconnection"
 description = "Simplify access to the Riverbed SteelConnect REST API."
 version = "0.95.0"
