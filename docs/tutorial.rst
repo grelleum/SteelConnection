@@ -183,7 +183,7 @@ The zone will be assigned to the network interface.
    result = sc.put('/port/' + port_id, data=port)
 
 
-Download Vritaul Gateway image
+Download Virtual Gateway image
 ------------------------------
 
 SteelConnection provides a convenience method to generate and download
