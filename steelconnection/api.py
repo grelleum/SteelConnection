@@ -336,8 +336,11 @@ class SConnect(object):
         :rtype: dict, list, or None
         """
         if not response.ok:
+            # work-around for get:'/node/{node_id}/image_status'
             if response.text and "Queued" in response.text:
-                # work-around for get:'/node/{node_id}/image_status'
+                return response.json()
+            # work-around for get:'/sshtunnel/'
+            elif _sshtunnel_bad_return_code_hack(response):
                 return response.json()
             else:
                 logger.warning(self.recv)
@@ -539,6 +542,22 @@ class SConnect(object):
         details.extend(self.sent.splitlines())
         details.extend(self.received.splitlines())
         return "\n>> ".join(details)
+
+
+# Hacks for bad responses.
+
+def _sshtunnel_bad_return_code_hack(response):
+    if not response.request.method == 'GET':
+        return False
+    resource_path = response.request.url.split('/')
+    resource = resource_path[-1] if resource_path else ''
+    if resource != 'sshtunnel':
+        return False
+    if not response.text:
+        return False
+    if response.text != '[]':
+        return False
+    return True
 
 
 # Deprecated classes.
