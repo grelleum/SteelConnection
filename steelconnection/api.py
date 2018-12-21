@@ -546,16 +546,20 @@ class SConnect(object):
 
 # Hacks for bad responses.
 
+
 def _sshtunnel_bad_return_code_hack(response):
-    if not response.request.method == 'GET':
+    """Check if response is for a sshtunnel get.
+    Under certain circumstanses the SCM may incorrectly return a 401.
+    """
+    if not response.request.method == "GET":
         return False
-    resource_path = response.request.url.split('/')
-    resource = resource_path[-1] if resource_path else ''
-    if resource != 'sshtunnel':
+    resource_path = response.request.url.split("/")
+    resource = resource_path[-1] if resource_path else ""
+    if resource != "sshtunnel":
         return False
     if not response.text:
         return False
-    if response.text != '[]':
+    if response.text != "[]":
         return False
     return True
 
