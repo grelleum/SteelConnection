@@ -328,26 +328,13 @@ class SConnect(object):
         return response
 
     def _log_request(self, response):
-        sent = ", ".join(
-            repr(x)
-            for x in (
-                response.request.method,
-                response.request.url,
-                response.request.headers,
-                response.request.body,
-            )
-        )
-        logger.debug("SENT: " + sent)
-        recv = ", ".join(
-            repr(x)
-            for x in (
-                response.reason,
-                response.status_code,
-                response.headers,
-                response.text,
-            )
-        )
-        logger.debug("RECV: " + recv)
+        req = response.request
+        logger.info("REQUEST: {} {}".format(req.method, req.url))
+        logger.debug("REQUEST.headers: " + repr(req.headers))
+        logger.debug("REQUEST.body: " + repr(req.body))
+        logger.info("RESPONSE: {} {}".format(response.status_code, response.reason))
+        logger.debug("RESPONSE.headers: " + repr(response.headers))
+        logger.debug("RESPONSE.text: " + repr(response.text))
 
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
@@ -356,6 +343,11 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on response.
         :rtype: dict, list, or None
         """
+        # if response.headers.get("Content-Type", "").startswith("application/json"):
+        #     try:
+        #         decoded_json = response.json()
+        #     except json.JSONDecodeError:
+        #         decoded_json = ""
         if not response.ok:
             # work-around for get:'/node/{node_id}/image_status'
             if response.text and "Queued" in response.text:
