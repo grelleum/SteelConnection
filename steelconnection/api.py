@@ -324,9 +324,30 @@ class SConnect(object):
         response = request_method(
             url=url, params=params, data=data, timeout=self.timeout
         )
-        if data:
-            logger.debug("SENT: {}".format(repr(data)))
+        self._log_request(response)
         return response
+
+    def _log_request(self, response):
+        sent = ", ".join(
+            repr(x)
+            for x in (
+                response.request.method,
+                response.request.url,
+                response.request.headers,
+                response.request.body,
+            )
+        )
+        logger.debug("SENT: " + sent)
+        recv = ", ".join(
+            repr(x)
+            for x in (
+                response.reason,
+                response.status_code,
+                response.headers,
+                response.text,
+            )
+        )
+        logger.debug("RECV: " + recv)
 
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
@@ -353,6 +374,33 @@ class SConnect(object):
             return response.json()["items"]
         else:
             return response.json()
+
+    # def _get_result(self, response):
+    #     r"""Return response data as native Python datatype.
+
+    #     :param requests.response response: Response from HTTP request.
+    #     :returns: Dictionary or List of Dictionaries based on response.
+    #     :rtype: dict, list, or None
+    #     """
+    #     sc.response.headers.get('Content-Type', '').startswith('application/json')
+    #     if not response.ok:
+    #         # work-around for get:'/node/{node_id}/image_status'
+    #         if response.text and "Queued" in response.text:
+    #             return response.json()
+    #         # work-around for get:'/sshtunnel/'
+    #         elif _sshtunnel_bad_return_code_hack(response):
+    #             return response.json()
+    #         else:
+    #             logger.warning(self.recv)
+    #             return None
+    #     if response.headers["Content-Type"] == "application/octet-stream":
+    #         return {"status": BINARY_DATA_MESSAGE}
+    #     if not response.json():
+    #         return {}
+    #     elif "items" in response.json():
+    #         return response.json()["items"]
+    #     else:
+    #         return response.json()
 
     # These handle binary content.
 
