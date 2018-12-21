@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 #    ______          _______                       __  _
@@ -22,22 +21,22 @@ import os
 
 def main():
     sc = steelconnection.SConnect()
-    sc.get('status')
+    sc.get("status")
 
     # steelconnection.get_input is compatible with both Python 2 and 3.
-    serial = steelconnection.get_input('Enter appliance serial number: ')
+    serial = steelconnection.get_input("Enter appliance serial number: ")
     node = sc.lookup.node(serial)
 
-    hypervisor = steelconnection.get_input('Enter the hypervisor type: ')
-    filename = 'scon_vgw_{}_{}.zip'.format(serial, hypervisor)
+    hypervisor = steelconnection.get_input("Enter the hypervisor type: ")
+    filename = "scon_vgw_{}_{}.zip".format(serial, hypervisor)
 
     # Put filename into the HOME/Downloads folder.
-    home = os.path.expanduser('~')
-    filepath = os.path.join(home, 'Downloads', filename)
+    home = os.path.expanduser("~")
+    filepath = os.path.join(home, "Downloads", filename)
 
-    success = sc.download_image(node['id'], save_as=filepath, build=hypervisor)
+    success = sc.download_image(node["id"], save_as=filepath, build=hypervisor)
     print(success)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

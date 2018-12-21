@@ -11,11 +11,12 @@ import fake_requests
 
 # Authentication Methods:
 
+
 def test_ask_for_auth_with_netrc(monkeypatch):
     """_ask_for_auth should not prompt when netrc file exists."""
-    monkeypatch.setattr(requests, 'Session', fake_requests.Fake_Session)
-    sc = steelconnection.SConnect('some.realm', connection_attempts=0)
-    assert sc.get('netrc') == fake_requests.netrc
+    monkeypatch.setattr(requests, "Session", fake_requests.Fake_Session)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    assert sc.get("netrc") == fake_requests.netrc
 
 
 # def test_auth_get_creds_when_auth_supplied():

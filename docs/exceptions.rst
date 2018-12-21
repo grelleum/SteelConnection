@@ -34,7 +34,7 @@ Specific Exceptions:
 +---------------------+------+-----------------------------------------------+
 | InvalidResource     | 404  | Path or resource not found.                   |
 +---------------------+------+-----------------------------------------------+
-| ResourceGone        | 401  | Resource no longer available.                 |
+| ResourceGone        | 402  | Resource no longer available.                 |
 +---------------------+------+-----------------------------------------------+
 
 Alternate Error Behavior

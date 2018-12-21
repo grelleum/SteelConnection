@@ -26,6 +26,7 @@ Usage:
 from __future__ import print_function
 import json
 import sys
+import logging
 import warnings
 
 import requests
@@ -50,6 +51,8 @@ BINARY_DATA_MESSAGE = (
     "Use '.savefile(filename)' method or access using '.response.content'."
 )
 
+logger = logging.getLogger(__name__)
+
 
 class SConnect(object):
     r"""Make REST API calls to Riverbed SteelConnect Manager.
@@ -70,9 +73,9 @@ class SConnect(object):
         username=None,
         password=None,
         use_netrc=False,
-        api_version='1.0',
+        api_version="1.0",
         proxies=None,
-        on_error='raise',
+        on_error="raise",
         timeout=(5, 60),
         connection_attempts=3,
     ):
@@ -103,8 +106,8 @@ class SConnect(object):
         self.lookup = _LookUp(self)
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
-        self.session.headers.update({'Accept': 'application/json'})
-        self.session.headers.update({'Content-type': 'application/json'})
+        self.session.headers.update({"Accept": "application/json"})
+        self.session.headers.update({"Content-type": "application/json"})
 
         # Auth relies on exceptions being raised.
         self._raise_exception = self._on_error_raise_exception
@@ -130,9 +133,9 @@ class SConnect(object):
         if use_netrc:
             # requests will look for .netrc if auth is not provided.
             if not realm:
-                raise ValueError('Must supply realm when using .netrc.')
+                raise ValueError("Must supply realm when using .netrc.")
             if username or password:
-                error = 'Do not supply username or password when using .netrc.'
+                error = "Do not supply username or password when using .netrc."
                 raise ValueError(error)
             return True
         elif realm and username and password:
@@ -140,7 +143,7 @@ class SConnect(object):
         elif realm and not username and not password:
             # Check if .netrc file is configured.
             try:
-                self.get('orgs')
+                self.get("orgs")
             except AuthenticationError:
                 pass
             else:
@@ -149,27 +152,27 @@ class SConnect(object):
 
     def _get_realm(self, realm, connection_attempts):
         """Prompt user for realm if not supplied."""
-        prompt = 'Enter SteelConnect Manager fully qualified domain name: '
+        prompt = "Enter SteelConnect Manager fully qualified domain name: "
         if realm:
             return realm
         for _ in range(connection_attempts):
             realm = get_input(prompt)
             self.realm = realm
             try:
-                self.get('orgs')
+                self.get("orgs")
                 return realm
             except IOError as e:
                 # Could not connect to server.
-                print('Error:', e)
-                print('Cannot connect to', realm)
+                print("Error:", e)
+                print("Cannot connect to", realm)
             except InvalidResource as e:
                 # Connected to a webserver, but not SteelConnect.
                 print(e)
-                print(realm, 'is not a SteelConnect Manager.')
+                print(realm, "is not a SteelConnect Manager.")
             except AuthenticationError:
                 return realm
         else:
-            error = 'Could not connect to SteelConnect Manager.'
+            error = "Could not connect to SteelConnect Manager."
             raise RuntimeError(error)
 
     def _set_session_auth(self, username, password, connection_attempts):
@@ -182,17 +185,17 @@ class SConnect(object):
                 password = get_password_once()
             self.session.auth = username, password
             try:
-                self.get('orgs')
+                self.get("orgs")
                 return
             except AuthenticationError:
-                print('Authentication Failed')
+                print("Authentication Failed")
                 username, password = provided
         if connection_attempts:
-            raise RuntimeError('Failed to login to realm ' + self.realm)
+            raise RuntimeError("Failed to login to realm " + self.realm)
 
     # Primary methods:
 
-    def get(self, resource, params=None, api='scm.config'):
+    def get(self, resource, params=None, api="scm.config"):
         r"""Send a GET request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -218,9 +221,9 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on request.
         :rtype: dict, or list
         """
-        return self.get(resource, params, api='scm.reporting')
+        return self.get(resource, params, api="scm.reporting")
 
-    def delete(self, resource, data=None, params=None, api='scm.config'):
+    def delete(self, resource, data=None, params=None, api="scm.config"):
         r"""Send a DELETE request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -240,7 +243,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def post(self, resource, data=None, api='scm.config'):
+    def post(self, resource, data=None, api="scm.config"):
         r"""Send a POST request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -258,7 +261,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def put(self, resource, data=None, params=None, api='scm.config'):
+    def put(self, resource, data=None, params=None, api="scm.config"):
         r"""Send a PUT request to the SteelConnect.Config API.
 
         :param str resource: api resource to get.
@@ -278,7 +281,7 @@ class SConnect(object):
             self._raise_exception(self.response)
         return self.result
 
-    def stream(self, resource, params=None, api='scm.config'):
+    def stream(self, resource, params=None, api="scm.config"):
         r"""Send a GET request with streaming binary data.
 
         :param str resource: api resource to get.
@@ -287,9 +290,7 @@ class SConnect(object):
         :rtype: dict, or list
         """
         self.response = self.session.get(
-            url=self.make_url(api, resource),
-            params=params,
-            stream=True,
+            url=self.make_url(api, resource), params=params, stream=True
         )
         for chunk in self.response.iter_content(chunk_size=65536):
             yield chunk
@@ -304,9 +305,9 @@ class SConnect(object):
         :returns: Complete URL path to access resource.
         :rtype: str
         """
-        resource = resource[1:] if resource.startswith('/') else resource
-        return 'https://{}/api/{}/{}/{}'.format(
-            self.realm, api, self.api_version, resource,
+        resource = resource[1:] if resource.startswith("/") else resource
+        return "https://{}/api/{}/{}/{}".format(
+            self.realm, api, self.api_version, resource
         )
 
     def _request(self, request_method, url, data=None, params=None):
@@ -321,8 +322,10 @@ class SConnect(object):
         """
         data = json.dumps(data) if data and isinstance(data, dict) else data
         response = request_method(
-            url=url, params=params, data=data, timeout=self.timeout,
+            url=url, params=params, data=data, timeout=self.timeout
         )
+        if data:
+            logger.debug("SENT: {}".format(repr(data)))
         return response
 
     def _get_result(self, response):
@@ -333,17 +336,21 @@ class SConnect(object):
         :rtype: dict, list, or None
         """
         if not response.ok:
-            if response.text and 'Queued' in response.text:
-                # work-around for get:'/node/{node_id}/image_status'
+            # work-around for get:'/node/{node_id}/image_status'
+            if response.text and "Queued" in response.text:
+                return response.json()
+            # work-around for get:'/sshtunnel/'
+            elif _sshtunnel_bad_return_code_hack(response):
                 return response.json()
             else:
+                logger.warning(self.recv)
                 return None
-        if response.headers['Content-Type'] == 'application/octet-stream':
-            return {'status': BINARY_DATA_MESSAGE}
+        if response.headers["Content-Type"] == "application/octet-stream":
+            return {"status": BINARY_DATA_MESSAGE}
         if not response.json():
             return {}
-        elif 'items' in response.json():
-            return response.json()['items']
+        elif "items" in response.json():
+            return response.json()["items"]
         else:
             return response.json()
 
@@ -357,11 +364,7 @@ class SConnect(object):
         :param bool quiet: Disable update printing when true.
         """
         return _download_image(
-            sconnect=self,
-            nodeid=nodeid,
-            save_as=save_as,
-            build=build,
-            quiet=quiet,
+            sconnect=self, nodeid=nodeid, save_as=save_as, build=build, quiet=quiet
         )
 
     def savefile(self, filename):
@@ -369,7 +372,7 @@ class SConnect(object):
 
         :param str filename: Where to save the response.content.
         """
-        with open(filename, 'wb') as fd:
+        with open(filename, "wb") as fd:
             fd.write(self.response.content)
 
     # Property methods that appear like dynamic attributes.
@@ -383,13 +386,13 @@ class SConnect(object):
         """
         if self.__scm_version is None:
             try:
-                info = self.get('info', api='common')
-                self.__scm_version = '{sw_version}_{sw_build}'.format(**info)
+                info = self.get("info", api="common")
+                self.__scm_version = "{sw_version}_{sw_build}".format(**info)
             except (InvalidResource, KeyError):
-                self.__scm_version = 'unavailable'
+                self.__scm_version = "unavailable"
             else:
-                if not info.get('scm_id'):
-                    self.__scm_version = 'Not a SteelConnect Manager'
+                if not info.get("scm_id"):
+                    self.__scm_version = "Not a SteelConnect Manager"
         return self.__scm_version
 
     @property
@@ -399,7 +402,7 @@ class SConnect(object):
         :returns: Details regarding previous API request.
         :rtype: str
         """
-        return '{}: {}\nData Sent: {}'.format(
+        return "{}: {}\nData Sent: {}".format(
             self.response.request.method,
             self.response.request.url,
             repr(self.response.request.body),
@@ -416,22 +419,36 @@ class SConnect(object):
         if not self.response.ok and self.response.text:
             try:
                 details = self.response.json()
-                error_message = details.get('error', {}).get('message')
+                error_message = details.get("error", {}).get("message")
             except ValueError:
                 pass
-        return 'Status: {} - {}\nError: {}'.format(
-            self.response.status_code,
-            self.response.reason,
-            repr(error_message),
+        return "Status: {} - {}\nError: {}".format(
+            self.response.status_code, self.response.reason, repr(error_message)
+        )
+
+    @property
+    def recv(self):
+        """Return summary of the previous API response.
+
+        :returns: Details regarding previous API request.
+        :rtype: str
+        """
+        error = None
+        if self.response.text and not self.response.ok:
+            try:
+                details = self.response.json()
+                error = details.get("error", {}).get("message")
+            except ValueError:
+                pass
+        error = ",  Error: " + repr(error) if error else ""
+        return "RECV: {} - {}{}".format(
+            self.response.status_code, self.response.reason, error
         )
 
     # Error handling and Exception generation.
 
     def _exception_handling(self, on_error):
-        choices = {
-            'raise': self._on_error_raise_exception,
-            'exit': self._on_error_exit,
-        }
+        choices = {"raise": self._on_error_raise_exception, "exit": self._on_error_exit}
         return choices.get(on_error, self._on_error_do_nothing)
 
     def _on_error_raise_exception(self, response):
@@ -450,7 +467,7 @@ class SConnect(object):
         }
         if not response.ok:
             exception = exceptions.get(response.status_code, RuntimeError)
-            raise exception('\n'.join((self.received, self.sent)))
+            raise exception("\n".join((self.received, self.sent)))
 
     def _on_error_exit(self, response):
         r"""Display error and exit.
@@ -459,7 +476,7 @@ class SConnect(object):
         :returns: None.
         :rtype: None
         """
-        display = '\n'.join((self.received, self.sent))
+        display = "\n".join((self.received, self.sent))
         if not response.ok:
             print(display, file=sys.stderr)
             sys.exit(1)
@@ -497,14 +514,16 @@ class SConnect(object):
         :returns: Information about this object.
         :rtype: str
         """
-        scm_version = self.scm_version if self.scm_version else 'unavailable'
-        details = ', '.join([
-            "realm: '{}'".format(self.realm),
-            "scm version: '{}'".format(scm_version),
-            "api version: '{}'".format(self.api_version),
-            "package version: '{}'".format(self.__version__),
-        ])
-        return '{}({})'.format(self.__class__.__name__, details)
+        scm_version = self.scm_version if self.scm_version else "unavailable"
+        details = ", ".join(
+            [
+                "realm: '{}'".format(self.realm),
+                "scm version: '{}'".format(scm_version),
+                "api version: '{}'".format(self.api_version),
+                "package version: '{}'".format(self.__version__),
+            ]
+        )
+        return "{}({})".format(self.__class__.__name__, details)
 
     def __str__(self):
         """Return a string with information about this object instance.
@@ -512,9 +531,9 @@ class SConnect(object):
         :returns: Information about this object.
         :rtype: str
         """
-        scm_version = self.scm_version if self.scm_version else 'unavailable'
+        scm_version = self.scm_version if self.scm_version else "unavailable"
         details = [
-            'SteelConnection:',
+            "SteelConnection:",
             "realm: '{}'".format(self.realm),
             "scm version: '{}'".format(scm_version),
             "api version: '{}'".format(self.api_version),
@@ -522,42 +541,61 @@ class SConnect(object):
         ]
         details.extend(self.sent.splitlines())
         details.extend(self.received.splitlines())
-        return '\n>> '.join(details)
+        return "\n>> ".join(details)
+
+
+# Hacks for bad responses.
+
+
+def _sshtunnel_bad_return_code_hack(response):
+    """Check if response is for a sshtunnel get.
+    Under certain circumstanses the SCM may incorrectly return a 401.
+    """
+    if not response.request.method == "GET":
+        return False
+    resource_path = response.request.url.split("/")
+    resource = resource_path[-1] if resource_path else ""
+    if resource != "sshtunnel":
+        return False
+    if not response.text:
+        return False
+    if response.text.startswith("[") and response.text.endswith("]"):
+        return True
 
 
 # Deprecated classes.
 
+
 def SConAPI(*args, **kwargs):
-    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
     warnings.warn(
-        "'SConAPI' is deprecated, "
-        "use steelconnection.SConnect() instead",
+        "'SConAPI' is deprecated, " "use steelconnection.SConnect() instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
-    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
+    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
     return SConnect(*args, **kwargs)
 
 
 def SConWithoutExceptions(*args, **kwargs):
-    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
     warnings.warn(
         "'SConWithoutExceptions' is deprecated, "
         "use steelconnection.SConnect(on_error=None) instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
-    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
+    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
     return SConnect(*args, on_error=None, **kwargs)
 
 
 def SConExitOnError(*args, **kwargs):
-    warnings.simplefilter('always', DeprecationWarning)  # Disable filter.
+    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
     warnings.warn(
         "'SConExitOnError' is deprecated, "
         "use steelconnection.SConnect(on_error=None) instead",
         category=DeprecationWarning,
-        stacklevel=2
+        stacklevel=2,
     )
-    warnings.simplefilter('default', DeprecationWarning)  # Reset filter.
-    return SConnect(*args, on_error='exit', **kwargs)
+    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
+    return SConnect(*args, on_error="exit", **kwargs)

@@ -25,21 +25,21 @@ Full documentation available at https://pypi.org/project/steelconnection/
 
 
 __all__ = (
-    'SConnect',
-    'SConAPI',
-    'SConWithoutExceptions',
-    'SConExitOnError',
-    'ConnectionError',
-    'RequestException',
-    'AuthenticationError',
-    'APINotEnabled',
-    'BadRequest',
-    'InvalidResource',
-    'ResourceGone',
-    'get_input',
-    'get_username',
-    'get_password',
-    'ASCII_ART',
+    "SConnect",
+    "SConAPI",
+    "SConWithoutExceptions",
+    "SConExitOnError",
+    "ConnectionError",
+    "RequestException",
+    "AuthenticationError",
+    "APINotEnabled",
+    "BadRequest",
+    "InvalidResource",
+    "ResourceGone",
+    "get_input",
+    "get_username",
+    "get_password",
+    "ASCII_ART",
 )
 
 
@@ -47,8 +47,8 @@ import logging
 
 from requests import ConnectionError, RequestException
 
-from .steelconnection import SConnect, ASCII_ART
-from .steelconnection import SConAPI, SConWithoutExceptions, SConExitOnError
+from .api import SConnect, ASCII_ART
+from .api import SConAPI, SConWithoutExceptions, SConExitOnError
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
 from .input_tools import get_input, get_username, get_password
@@ -59,10 +59,18 @@ from .__version__ import __url__, __version__
 
 
 def about():
-    return '\n'.join((
-        __author__, __author_email__, __copyright__, __description__,
-        __license__, __title__, __url__, __version__,
-    ))
+    return "\n".join(
+        (
+            __author__,
+            __author_email__,
+            __copyright__,
+            __description__,
+            __license__,
+            __title__,
+            __url__,
+            __version__,
+        )
+    )
 
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

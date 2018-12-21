@@ -56,17 +56,14 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     status = _wait_for_ready(sconnect, nodeid, verbose)
     if status is None:
         raise ValueError("\n'build' not specified and no image available.")
-    source_file = status['image_file']
+    source_file = status["image_file"]
     verbose("\nImage file '{}' available for download.".format(source_file))
     save_as = _get_file_path(source_file, save_as)
     _stream_download(sconnect, nodeid, source_file, save_as, verbose)
     if sconnect.response.ok:
-        locale.setlocale(locale.LC_ALL, '')
-        filesize = locale.format('%d', os.stat(save_as).st_size, grouping=True)
-        return {
-            'filename': save_as,
-            'filesize': '{} bytes'.format(filesize),
-        }
+        locale.setlocale(locale.LC_ALL, "")
+        filesize = locale.format("%d", os.stat(save_as).st_size, grouping=True)
+        return {"filename": save_as, "filesize": "{} bytes".format(filesize)}
 
 
 def _prepare_image(sconnect, nodeid, build, verbose):
@@ -82,17 +79,14 @@ def _prepare_image(sconnect, nodeid, build, verbose):
     Returns:
         None
     """
-    verbose('Requesting image of type ' + build, end=': ')
-    sconnect.post(
-        '/node/{}/prepare_image'.format(nodeid),
-        data={'type': build}
-    )
+    verbose("Requesting image of type " + build, end=": ")
+    sconnect.post("/node/{}/prepare_image".format(nodeid), data={"type": build})
     # In case there is no config for the appliance, the build will fail.
     # Checking the status when build fails will result in error 500.
     # Checking immediately, the explanation will have no error reason.
     # By delaying after the build, we can get correct error on check.
     time.sleep(0.5)
-    verbose('Done.')
+    verbose("Done.")
 
 
 def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
@@ -110,17 +104,17 @@ def _wait_for_ready(sconnect, nodeid, verbose, retries=600, sleep_time=1):
         dict or None
     """
     for _ in range(retries):
-        verbose('.', end='')
+        verbose(".", end="")
         try:
-            status = sconnect.get('/node/{}/image_status'.format(nodeid))
+            status = sconnect.get("/node/{}/image_status".format(nodeid))
         except ResourceGone:
             return None
         else:
-            if status.get('status', False):
+            if status.get("status", False):
                 return status
         time.sleep(sleep_time)
     else:
-        raise RuntimeError('Timed out waiting for image ready.')
+        raise RuntimeError("Timed out waiting for image ready.")
 
 
 def _get_file_path(source_file, save_as):
@@ -155,14 +149,13 @@ def _stream_download(sconnect, nodeid, source_file, save_as, verbose):
     Returns:
         None
     """
-    verbose("Downloading file as '{}'".format(save_as), end=' ')
-    with open(save_as, 'wb') as fd:
+    verbose("Downloading file as '{}'".format(save_as), end=" ")
+    with open(save_as, "wb") as fd:
         chunks = sconnect.stream(
-            '/node/{}/get_image'.format(nodeid),
-            params={'file': source_file},
+            "/node/{}/get_image".format(nodeid), params={"file": source_file}
         )
         for index, chunk in enumerate(chunks):
             fd.write(chunk)
             if index % 50 == 0:
-                verbose('.', end='')
-    verbose('\nDownload complete.')
+                verbose(".", end="")
+    verbose("\nDownload complete.")

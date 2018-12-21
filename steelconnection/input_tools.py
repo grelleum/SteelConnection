@@ -11,7 +11,7 @@ import getpass
 import sys
 
 
-def get_input(prompt=''):
+def get_input(prompt=""):
     """Get input in a Python 2/3 compatible way."""
     try:
         data = raw_input(prompt)
@@ -21,24 +21,24 @@ def get_input(prompt=''):
         return data
 
 
-def get_username(prompt=''):
-    return get_input('Enter username: ')
+def get_username(prompt=""):
+    return get_input("Enter username: ")
 
 
 def get_password(prompt=None, password=None):
     """Get password from terminal with discretion."""
-    prompt = 'Enter password: ' if prompt is None else prompt
+    prompt = "Enter password: " if prompt is None else prompt
     while not password:
         verify = False
         while password != verify:
             if verify:
-                print('Passwords do not match. Try again', file=sys.stderr)
+                print("Passwords do not match. Try again", file=sys.stderr)
             password = getpass.getpass(prompt)
-            verify = getpass.getpass('Retype password: ')
+            verify = getpass.getpass("Retype password: ")
     return password
 
 
 def get_password_once(prompt=None):
     """Get password from terminal with discretion."""
-    prompt = 'Enter password: ' if prompt is None else prompt
+    prompt = "Enter password: " if prompt is None else prompt
     return getpass.getpass(prompt)

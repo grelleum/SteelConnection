@@ -1,8 +1,6 @@
 Tutorial
 ========
 
-* **This is a work in progress, please check back soon for updates** *
-
 In this tutorial, we are going to create a new site, configure static
 IP address on the uplinks and deploy a virtual gateway to that site.
 
@@ -47,7 +45,7 @@ org id.
 .. code:: python
 
    # Replace ORG_SHORT_NAME with your Org's short name.
-   org_id = sc.lookup.org('ORG_SHORT_NAME')['id]
+   org_id = sc.lookup.org('ORG_SHORT_NAME')['id']
 
 
 Create a new site
@@ -185,7 +183,7 @@ The zone will be assigned to the network interface.
    result = sc.put('/port/' + port_id, data=port)
 
 
-Download Vritaul Gateway image
+Download Virtual Gateway image
 ------------------------------
 
 SteelConnection provides a convenience method to generate and download
