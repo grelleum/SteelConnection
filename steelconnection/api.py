@@ -559,9 +559,8 @@ def _sshtunnel_bad_return_code_hack(response):
         return False
     if not response.text:
         return False
-    if response.text != "[]":
-        return False
-    return True
+    if response.text.startswith("[") and response.text.endswith("]"):
+        return True
 
 
 # Deprecated classes.
