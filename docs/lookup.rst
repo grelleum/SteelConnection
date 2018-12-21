@@ -73,7 +73,7 @@ Lookup WAN
 ----------
 
 The site id can be found in a similar way, but since the same site name
-could exist in multiple organizations, the org_id is a;so required.
+could exist in multiple organizations, the org_id is also required.
 
 .. code:: python
 
