@@ -79,7 +79,7 @@ could exist in multiple organizations, the org_id is also required.
 
    >>> wan = sc.lookup.site('MPLS', orgid='org-Spacely-0a501e7f27b2c03e')
    >>> wan['id']
-   ''wan-MPLS-f26c9eb4f80a868b''
+   'wan-MPLS-f26c9eb4f80a868b'
    >>>
 
 
