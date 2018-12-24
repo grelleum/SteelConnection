@@ -428,7 +428,9 @@ class SConnect(object):
             try:
                 details = self.response.json()
                 error_message = details.get("error", {}).get("message")
-            except ValueError:
+            except ValueError:  # bad json
+                pass
+            except AttributeError:  # non-dict json
                 pass
         return "Status: {} - {}\nError: {}".format(
             self.response.status_code, self.response.reason, repr(error_message)
