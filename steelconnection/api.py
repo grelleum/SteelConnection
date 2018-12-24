@@ -343,17 +343,12 @@ class SConnect(object):
         :returns: Dictionary or List of Dictionaries based on response.
         :rtype: dict, list, or None
         """
-        # if response.headers.get("Content-Type", "").startswith("application/json"):
-        #     try:
-        #         decoded_json = response.json()
-        #     except json.JSONDecodeError:
-        #         decoded_json = ""
         if not response.ok:
             # work-around for get:'/node/{node_id}/image_status'
             if response.text and "Queued" in response.text:
                 return response.json()
-            # work-around for get:'/sshtunnel/'
-            elif _sshtunnel_bad_return_code_hack(response):
+            # work-around for invalid 401 return
+            elif _bad_401_return_code_hack(response):
                 return response.json()
             else:
                 logger.warning(self.recv)
@@ -366,33 +361,6 @@ class SConnect(object):
             return response.json()["items"]
         else:
             return response.json()
-
-    # def _get_result(self, response):
-    #     r"""Return response data as native Python datatype.
-
-    #     :param requests.response response: Response from HTTP request.
-    #     :returns: Dictionary or List of Dictionaries based on response.
-    #     :rtype: dict, list, or None
-    #     """
-    #     sc.response.headers.get('Content-Type', '').startswith('application/json')
-    #     if not response.ok:
-    #         # work-around for get:'/node/{node_id}/image_status'
-    #         if response.text and "Queued" in response.text:
-    #             return response.json()
-    #         # work-around for get:'/sshtunnel/'
-    #         elif _sshtunnel_bad_return_code_hack(response):
-    #             return response.json()
-    #         else:
-    #             logger.warning(self.recv)
-    #             return None
-    #     if response.headers["Content-Type"] == "application/octet-stream":
-    #         return {"status": BINARY_DATA_MESSAGE}
-    #     if not response.json():
-    #         return {}
-    #     elif "items" in response.json():
-    #         return response.json()["items"]
-    #     else:
-    #         return response.json()
 
     # These handle binary content.
 
@@ -478,7 +446,9 @@ class SConnect(object):
             try:
                 details = self.response.json()
                 error = details.get("error", {}).get("message")
-            except ValueError:
+            except ValueError:  # bad json
+                pass
+            except AttributeError:  # non-dict json
                 pass
         error = ",  Error: " + repr(error) if error else ""
         return "RECV: {} - {}{}".format(
@@ -586,20 +556,19 @@ class SConnect(object):
 
 # Hacks for bad responses.
 
-
-def _sshtunnel_bad_return_code_hack(response):
-    """Check if response is for a sshtunnel get.
+def _bad_401_return_code_hack(response):
+    """Check if 401 response includes valid json response.
     Under certain circumstanses the SCM may incorrectly return a 401.
     """
-    if not response.request.method == "GET":
+    if response.code != 401:
         return False
-    resource_path = response.request.url.split("/")
-    resource = resource_path[-1] if resource_path else ""
-    if resource != "sshtunnel":
-        return False
-    if not response.text:
-        return False
-    if response.text.startswith("[") and response.text.endswith("]"):
+    if response.headers.get("Content-Type", "").startswith("application/json"):
+        try:
+            decoded_json = response.json()
+        except json.JSONDecodeError:
+            return False
+        if isinstance(decoded_json, dict) and 'error' in decoded_json:
+            return False
         return True
 
 
