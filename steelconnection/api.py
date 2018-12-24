@@ -351,7 +351,7 @@ class SConnect(object):
             elif _bad_401_return_code_hack(response):
                 return response.json()
             else:
-                logger.warning(self.recv)
+                logger.warning('RECEIVED: ' + self.received.replace('\n', ', '))
                 return None
         if response.headers["Content-Type"] == "application/octet-stream":
             return {"status": BINARY_DATA_MESSAGE}
@@ -436,26 +436,26 @@ class SConnect(object):
             self.response.status_code, self.response.reason, repr(error_message)
         )
 
-    @property
-    def recv(self):
-        """Return summary of the previous API response.
+    # @property
+    # def recv(self):
+    #     """Return summary of the previous API response.
 
-        :returns: Details regarding previous API request.
-        :rtype: str
-        """
-        error = None
-        if self.response.text and not self.response.ok:
-            try:
-                details = self.response.json()
-                error = details.get("error", {}).get("message")
-            except ValueError:  # bad json
-                pass
-            except AttributeError:  # non-dict json
-                pass
-        error = ",  Error: " + repr(error) if error else ""
-        return "RECV: {} - {}{}".format(
-            self.response.status_code, self.response.reason, error
-        )
+    #     :returns: Details regarding previous API request.
+    #     :rtype: str
+    #     """
+    #     error = None
+    #     if self.response.text and not self.response.ok:
+    #         try:
+    #             details = self.response.json()
+    #             error = details.get("error", {}).get("message")
+    #         except ValueError:  # bad json
+    #             pass
+    #         except AttributeError:  # non-dict json
+    #             pass
+    #     error = ",  Error: " + repr(error) if error else ""
+    #     return "RECV: {} - {}{}".format(
+    #         self.response.status_code, self.response.reason, error
+    #     )
 
     # Error handling and Exception generation.
 
