@@ -560,7 +560,7 @@ def _bad_401_return_code_hack(response):
     """Check if 401 response includes valid json response.
     Under certain circumstanses the SCM may incorrectly return a 401.
     """
-    if response.code != 401:
+    if response.status_code != 401:
         return False
     if response.headers.get("Content-Type", "").startswith("application/json"):
         try:
