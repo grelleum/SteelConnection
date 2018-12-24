@@ -58,6 +58,7 @@ in the realm would look like this:
    authentication
    apiguide
    exceptions
+   logging
    convenience
    examples
 
