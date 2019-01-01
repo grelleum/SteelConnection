@@ -351,7 +351,7 @@ class SConnect(object):
             elif _bad_401_return_code_hack(response):
                 return response.json()
             else:
-                logger.warning('RECEIVED: ' + self.received.replace('\n', ', '))
+                logger.warning("RECEIVED: " + self.received.replace("\n", ", "))
                 return None
         if response.headers["Content-Type"] == "application/octet-stream":
             return {"status": BINARY_DATA_MESSAGE}
@@ -537,6 +537,7 @@ class SConnect(object):
 
 # Hacks for bad responses.
 
+
 def _bad_401_return_code_hack(response):
     """Check if 401 response includes valid json response.
     Under certain circumstanses the SCM may incorrectly return a 401.
@@ -548,7 +549,7 @@ def _bad_401_return_code_hack(response):
             decoded_json = response.json()
         except json.JSONDecodeError:
             return False
-        if isinstance(decoded_json, dict) and 'error' in decoded_json:
+        if isinstance(decoded_json, dict) and "error" in decoded_json:
             return False
         return True
 
