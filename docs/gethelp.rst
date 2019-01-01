@@ -35,7 +35,7 @@ SteelConnect API Reference:
 The SteelConnect API is documented as two APIs:
 
 | Config API: Read and change configuration.
-| https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.config/index.html
+| https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.config/index.html
 
 | Reporting API: Get current status information.
-| https://support.riverbed.com/apis/scm_beta/scm-2.10.0/scm.reporting/index.html
+| https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.reporting/index.html
