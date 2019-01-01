@@ -324,9 +324,17 @@ class SConnect(object):
         response = request_method(
             url=url, params=params, data=data, timeout=self.timeout
         )
-        if data:
-            logger.debug("SENT: {}".format(repr(data)))
+        self._log_request(response)
         return response
+
+    def _log_request(self, response):
+        req = response.request
+        logger.info("REQUEST: {} {}".format(req.method, req.url))
+        logger.debug("REQUEST.headers: " + repr(req.headers))
+        logger.debug("REQUEST.body: " + repr(req.body))
+        logger.info("RESPONSE: {} {}".format(response.status_code, response.reason))
+        logger.debug("RESPONSE.headers: " + repr(response.headers))
+        logger.debug("RESPONSE.text: " + repr(response.text))
 
     def _get_result(self, response):
         r"""Return response data as native Python datatype.
@@ -339,11 +347,11 @@ class SConnect(object):
             # work-around for get:'/node/{node_id}/image_status'
             if response.text and "Queued" in response.text:
                 return response.json()
-            # work-around for get:'/sshtunnel/'
-            elif _sshtunnel_bad_return_code_hack(response):
+            # work-around for invalid 401 return
+            elif _bad_401_return_code_hack(response):
                 return response.json()
             else:
-                logger.warning(self.recv)
+                logger.warning("RECEIVED: " + self.received.replace("\n", ", "))
                 return None
         if response.headers["Content-Type"] == "application/octet-stream":
             return {"status": BINARY_DATA_MESSAGE}
@@ -420,29 +428,12 @@ class SConnect(object):
             try:
                 details = self.response.json()
                 error_message = details.get("error", {}).get("message")
-            except ValueError:
+            except ValueError:  # bad json
+                pass
+            except AttributeError:  # non-dict json
                 pass
         return "Status: {} - {}\nError: {}".format(
             self.response.status_code, self.response.reason, repr(error_message)
-        )
-
-    @property
-    def recv(self):
-        """Return summary of the previous API response.
-
-        :returns: Details regarding previous API request.
-        :rtype: str
-        """
-        error = None
-        if self.response.text and not self.response.ok:
-            try:
-                details = self.response.json()
-                error = details.get("error", {}).get("message")
-            except ValueError:
-                pass
-        error = ",  Error: " + repr(error) if error else ""
-        return "RECV: {} - {}{}".format(
-            self.response.status_code, self.response.reason, error
         )
 
     # Error handling and Exception generation.
@@ -547,19 +538,19 @@ class SConnect(object):
 # Hacks for bad responses.
 
 
-def _sshtunnel_bad_return_code_hack(response):
-    """Check if response is for a sshtunnel get.
+def _bad_401_return_code_hack(response):
+    """Check if 401 response includes valid json response.
     Under certain circumstanses the SCM may incorrectly return a 401.
     """
-    if not response.request.method == "GET":
+    if response.status_code != 401:
         return False
-    resource_path = response.request.url.split("/")
-    resource = resource_path[-1] if resource_path else ""
-    if resource != "sshtunnel":
-        return False
-    if not response.text:
-        return False
-    if response.text.startswith("[") and response.text.endswith("]"):
+    if response.headers.get("Content-Type", "").startswith("application/json"):
+        try:
+            decoded_json = response.json()
+        except json.JSONDecodeError:
+            return False
+        if isinstance(decoded_json, dict) and "error" in decoded_json:
+            return False
         return True
 
 
