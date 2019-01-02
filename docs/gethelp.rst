@@ -1,7 +1,7 @@
 Getting Help
 ============
 
-Issues with SteelConneciton:
+Getting Help with SteelConneciton:
 ----------------------------
 
 | For help with SteelConneciton (this Python package) open an issue
