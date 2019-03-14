@@ -50,6 +50,7 @@ class Fake_Request(object):
     def __init__(self, url, data):
         self.method = "FAKE"
         self.url = url
+        self.headers = {"Content-Type": "application/json"}
         self.body = get_text(data)
 
 
