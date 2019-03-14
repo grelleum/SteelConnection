@@ -35,7 +35,7 @@ from .__version__ import __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
 from .image_download import _download_image
-from .lookup import _LookUp
+from .lookup import LookUp
 from .input_tools import get_input, get_username, get_password_once
 
 
@@ -103,7 +103,7 @@ class SConnect(object):
         self.timeout = timeout
         self.result = None
         self.response = None
-        self.lookup = _LookUp(self)
+        self.lookup = LookUp(self)
         self.session = requests.Session()
         self.session.proxies = proxies if proxies else self.session.proxies
         self.session.headers.update({"Accept": "application/json"})

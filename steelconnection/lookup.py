@@ -8,7 +8,7 @@ Should be instantiated within a steelconnection object.
 """
 
 
-class _LookUp(object):
+class LookUp(object):
     """Provide convienience tools to lookup objects."""
 
     def __init__(self, sconnect):
@@ -28,6 +28,36 @@ class _LookUp(object):
                 self.sconnect.result = item
                 return item
         return None
+
+    def iter_find(self, domain, search):
+        """
+        Generic search function.
+        Given a resource type (domain)
+        and a dictionary of {keyword: value} pairs to match,
+        returns a gereator of dictionaries matching the search criteria.
+        """
+        for obj in self.sconnect.get(domain):
+            if all(obj[key] == value for key, value in search.items()):
+                yield obj
+
+    def find(self, domain, search):
+        """
+        Generic search function.
+        Given a resource type (domain), a value to match, and a key to lookup,
+        returns a list of dictionaries matching the search criteria.
+        """
+        return list(self.iter_find(domain, search))
+
+    def find_one(self, domain, search):
+        """
+        Generic lookup function.
+        Given a resource type (domain), a value to match, and a key to lookup,
+        returns a dictionary representing the object.
+        """
+        try:
+            return next(self.iter_find(domain, search))
+        except StopIteration:
+            return None
 
     def node(self, serial, key="serial"):
         """
