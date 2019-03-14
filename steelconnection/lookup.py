@@ -14,20 +14,7 @@ class LookUp(object):
     def __init__(self, sconnect):
         """Obtain access to SteelConect Manager."""
         self.sconnect = sconnect
-        self._models = model
-
-    def _lookup(self, domain, value, key):
-        """
-        Generic lookup function.
-        Given a resource type (domain), a value to match, and a key to lookup,
-        returns a dictionary representing the object.
-        """
-        items = self.sconnect.get(domain)
-        for item in items:
-            if value == item.get(key):
-                self.sconnect.result = item
-                return item
-        return None
+        self._models = models
 
     def iter_find(self, domain, search):
         """
@@ -59,35 +46,35 @@ class LookUp(object):
         except StopIteration:
             return None
 
-    def node(self, serial, key="serial"):
+    def node(self, pattern, key="serial"):
         """
         Returns a node matching a provided appliance serial number.
         """
-        return self._lookup(domain="nodes", value=serial, key=key)
+        return self.find_one(domain="nodes", search={key: pattern})
 
-    def org(self, name, key="name"):
+    def org(self, pattern, key="name"):
         """
         Returns a org matching a provided organization short name.
         """
-        return self._lookup(domain="orgs", value=name, key=key)
+        return self.find_one(domain="orgs", search={key: pattern})
 
-    def site(self, name, orgid=None, key="name"):
+    def site(self, pattern, orgid=None, key="name"):
         """
         Returns a site matching a provided site short name and org_id.
         """
         if not orgid:
             raise ValueError("orgid required when looking up a site.")
         resource = "/".join(("org", orgid, "sites"))
-        return self._lookup(domain=resource, value=name, key=key)
+        return self.find_one(domain=resource, search={key: pattern})
 
-    def wan(self, name, orgid=None, key="name"):
+    def wan(self, pattern, orgid=None, key="name"):
         """
         Returns a wan matching a provided wan name and org_id.
         """
         if not orgid:
             raise ValueError("orgid required when looking up a wan.")
         resource = "/".join(("org", orgid, "wans"))
-        return self._lookup(domain=resource, value=name, key=key)
+        return self.find_one(domain=resource, search={key: pattern})
 
     def model(self, value, default=None):
         """
@@ -97,7 +84,7 @@ class LookUp(object):
         return self._models.get(value, default)
 
 
-model = {
+models = {
     "aardvark": "SDI-S12",
     "baloo": "SDI-SH",
     "beorn": "SDI-ZAKSH",
@@ -122,5 +109,5 @@ model = {
     "yogi": "SDI-VGW",
 }
 
-model_reversed = sorted((v, k) for k, v in model.items())
-model.update(dict(model_reversed))
+models_reversed = sorted((v, k) for k, v in models.items())
+models.update(dict(models_reversed))

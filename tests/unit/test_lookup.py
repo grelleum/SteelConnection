@@ -65,21 +65,21 @@ get_orgs = responses.Response(
 
 
 @responses.activate
-def test_lookup_lookup_success():
+def test_lookup_find_one_successful():
     responses.add(get_orgs)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
     item = db["orgs"]["items"][0]
-    key = item["name"]
-    result = sc.lookup._lookup(domain="orgs", value=key, key="name")
+    value = item["name"]
+    result = sc.lookup.find_one(domain="orgs", search={"name": value})
     assert result == item
 
 
 @responses.activate
-def test_lookup_lookup_fails():
+def test_lookup_find_one_unsuccessful():
     responses.add(get_orgs)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
-    key = "DNE"
-    result = sc.lookup._lookup(domain="orgs", value=key, key="name")
+    value = "DNE"
+    result = sc.lookup.find_one(domain="orgs", search={"name": value})
     assert result is None
 
 
