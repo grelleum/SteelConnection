@@ -14,7 +14,7 @@ class LookUp(object):
     def __init__(self, sconnect):
         """Obtain access to SteelConect Manager."""
         self.sconnect = sconnect
-        self._models = models
+        self._model = model
 
     def iter_find(self, domain, search):
         """
@@ -81,10 +81,10 @@ class LookUp(object):
         Translates a model code name to real name and visa versa.
         """
         default = default if default else value
-        return self._models.get(value, default)
+        return self._model.get(value, default)
 
 
-models = {
+model = {
     "aardvark": "SDI-S12",
     "baloo": "SDI-SH",
     "beorn": "SDI-ZAKSH",
@@ -109,5 +109,6 @@ models = {
     "yogi": "SDI-VGW",
 }
 
-models_reversed = sorted((v, k) for k, v in models.items())
-models.update(dict(models_reversed))
+model_reversed = sorted((v, k) for k, v in model.items())
+model.update(dict(model_reversed))
+
