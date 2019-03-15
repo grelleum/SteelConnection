@@ -3,6 +3,7 @@ Welcome to SteelConnection!
 Simplify access to the Riverbed SteelConnect REST API.
 
 .. code::
+
              ______          __
             / __/ /____ ___ / /
      _______\ \/ __/ -_) -_) /   __  _
