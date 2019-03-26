@@ -24,9 +24,10 @@ Usage:
 """
 
 from __future__ import print_function
+import logging
 import json
 import sys
-import logging
+import time
 import warnings
 
 import requests
@@ -364,6 +365,21 @@ class SConnect(object):
             return response.json()["items"]
         else:
             return response.json()
+
+    # Convinience methods.
+
+    def sshtunnel(self, node_id, timeout=30):
+        try:
+            tunnel = self.get("sshtunnel/" + node_id)
+        except InvalidResource:
+            tunnel = self.post("sshtunnel/" + node_id)
+            start = time.time()
+            expires = start + timeout
+            while not tunnel and time.time() < expires:
+                time.sleep(0.2)
+                tunnel = self.get("sshtunnel/" + node_id)
+        finally:
+            return tunnel
 
     # These handle binary content.
 
