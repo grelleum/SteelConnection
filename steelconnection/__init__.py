@@ -56,7 +56,7 @@ from .lookup import LookUp
 from .__version__ import __author__, __author_email__
 from .__version__ import __copyright__, __description__
 from .__version__ import __license__, __title__
-from .__version__ import __url__, __version__
+from .__version__ import __url__, __documentation__, __version__
 
 
 def about():
