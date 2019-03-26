@@ -355,7 +355,8 @@ class SConnect(object):
             elif _bad_401_return_code_hack(response):
                 return response.json()
             else:
-                logger.warning("RECEIVED: " + self.received.replace("\n", ", "))
+                logger.info("RECEIVED: " + self.received.replace("\n", ", "))
+                # logger.warning("RECEIVED: " + self.received.replace("\n", ", "))
                 return None
         if response.headers["Content-Type"] == "application/octet-stream":
             return {"status": BINARY_DATA_MESSAGE}
