@@ -36,7 +36,7 @@ def test_import_on_command_line():
         "Python version: " + ".".join(str(x) for x in sys.version_info[:3]),
         "SteelConnection version: " + steelconnection.__version__,
         "Documentation: " + steelconnection.__documentation__,
-        "Project home: " + steelconnection.__url__,
+        "Project home:  " + steelconnection.__url__,
     ]
-    expected = u"\n".join(lines) + "\n"
+    expected = u"\n".join(lines) + "\n\n"
     assert repr(output) == repr(expected)

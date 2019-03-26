@@ -68,6 +68,7 @@ def about():
             __description__,
             __license__,
             __title__,
+            __documentation__,
             __url__,
             __version__,
         )
