@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#    ______          _______                       __  _
-#   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
-#  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
-# /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+#         ______          __
+#        / __/ /____ ___ / /
+#    ____\ \/ __/ -_) -_) /      __  _
+#   / _____/\__/\__/\__/_/_ ____/ /_(_)__  ___
+#  / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+#  \___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
 
 
 """
@@ -26,9 +28,7 @@ Full documentation available at https://pypi.org/project/steelconnection/
 
 __all__ = (
     "SConnect",
-    "SConAPI",
-    "SConWithoutExceptions",
-    "SConExitOnError",
+    "Timer",
     "ConnectionError",
     "RequestException",
     "AuthenticationError",
@@ -47,8 +47,7 @@ import logging
 
 from requests import ConnectionError, RequestException
 
-from .api import SConnect, ASCII_ART
-from .api import SConAPI, SConWithoutExceptions, SConExitOnError
+from .api import SConnect, ASCII_ART, Timer
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, InvalidResource, ResourceGone
 from .input_tools import get_input, get_username, get_password

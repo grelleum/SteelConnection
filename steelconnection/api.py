@@ -41,12 +41,12 @@ from .input_tools import get_input, get_username, get_password_once
 
 
 ASCII_ART = r"""
-       ______          __
-      / __/ /____ ___ / /
-  ____\ \/ __/ -_) -_) /      __  _
- / _____/\__/\__/\__/_/_ ____/ /_(_)__  ___
-/ /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
-\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
+        ______          __
+       / __/ /____ ___ / /
+   ____\ \/ __/ -_) -_) /      __  _
+  / _____/\__/\__/\__/_/_ ____/ /_(_)__  ___
+ / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+ \___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
 """
 
 
@@ -587,40 +587,3 @@ def _bad_401_return_code_hack(response):
             return False
         return True
 
-
-# Deprecated classes.
-
-
-def SConAPI(*args, **kwargs):
-    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
-    warnings.warn(
-        "'SConAPI' is deprecated, " "use steelconnection.SConnect() instead",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
-    return SConnect(*args, **kwargs)
-
-
-def SConWithoutExceptions(*args, **kwargs):
-    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
-    warnings.warn(
-        "'SConWithoutExceptions' is deprecated, "
-        "use steelconnection.SConnect(on_error=None) instead",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
-    return SConnect(*args, on_error=None, **kwargs)
-
-
-def SConExitOnError(*args, **kwargs):
-    warnings.simplefilter("always", DeprecationWarning)  # Disable filter.
-    warnings.warn(
-        "'SConExitOnError' is deprecated, "
-        "use steelconnection.SConnect(on_error=None) instead",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    warnings.simplefilter("default", DeprecationWarning)  # Reset filter.
-    return SConnect(*args, on_error="exit", **kwargs)
