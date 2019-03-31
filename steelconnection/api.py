@@ -369,18 +369,16 @@ class SConnect(object):
 
     # Convinience methods.
 
-    def sshtunnel(self, node_id, timeout=30):
-        try:
-            tunnel = self.get("sshtunnel/" + node_id)
-        except InvalidResource:
-            tunnel = self.post("sshtunnel/" + node_id)
-            start = time.time()
-            expires = start + timeout
-            while not tunnel and time.time() < expires:
-                time.sleep(0.2)
+    def sshtunnel(self, node_id, timeout=15):
+        timer = Timer(timeout)
+        tunnel = {"status": "unknown"}
+        while timer and tunnel.get('status') != "connected":
+            try:
                 tunnel = self.get("sshtunnel/" + node_id)
-        finally:
-            return tunnel
+            except InvalidResource:
+                tunnel = self.post("sshtunnel/" + node_id)
+            time.sleep(0.1)
+        return tunnel
 
     # These handle binary content.
 
@@ -553,6 +551,22 @@ class SConnect(object):
         details.extend(self.sent.splitlines())
         details.extend(self.received.splitlines())
         return "\n>> ".join(details)
+
+
+class Timer(object):
+    def __init__(self, timeout=15):
+        self.start = time.time()
+        self.timeout = self.start + timeout
+
+    @property
+    def time(self):
+        return time.time() - self.start
+
+    def __bool__(self):
+        return time.time() < self.timeout
+
+    def __repr__(self):
+        return "{:.3f} seconds".format(self.time)
 
 
 # Hacks for bad responses.
