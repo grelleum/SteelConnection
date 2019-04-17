@@ -50,7 +50,7 @@ class LookUp(object):
         """
         Returns a node matching a provided appliance serial number.
         """
-        return self.find_one(domain="nodes", search={key: pattern})
+        return self.find_one(domain="nodes", search={key: pattern.upper()})
 
     def org(self, pattern, key="name"):
         """
