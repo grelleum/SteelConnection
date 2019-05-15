@@ -55,9 +55,9 @@ A Tale of Two APIs
 | Riverbed divides the REST API into two APIs: \* Config: used to make
   configurations changes and get information about SteelConnect
   resources.
-| https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.config/index.html
+| https://support.riverbed.com/apis/scm_beta/scm-2.11.1/scm.config/index.html
   \* Reporting: used to get current status information about a resource.
-| https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.reporting/index.html
+| https://support.riverbed.com/apis/scm_beta/scm-2.11.1/scm.reporting/index.html
 
 By nature, the Reporting API only requires the HTTP GET method, where-as
 the more commonly used Confg API requires GET, POST, PUT and DELETE.
@@ -78,7 +78,7 @@ Crafting your API calls
 | These take the form: “*HTTP Method*” “*resource path*”.
 
 | Take the network section for example:
-| https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.config/index.html#!/network:
+| https://support.riverbed.com/apis/scm_beta/scm-2.11.1/scm.config/index.html#!/network:
 
 - ``GET /networks`` List networks.
 - ``GET /org/:orgid/networks`` Get network for an org.
