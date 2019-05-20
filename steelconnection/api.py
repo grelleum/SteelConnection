@@ -370,8 +370,9 @@ class SConnect(object):
     # Convinience methods.
 
     def sshtunnel(self, node_id, timeout=15):
-        if not self.getstatus("node/" + node_id).get("state") == "online":
-            return {"status": "offline"}
+        state = self.getstatus("node/" + node_id).get("state")
+        if state not in ("online", "recovery"):
+            return {"status": state}
         timer = Timer(timeout)
         tunnel = {"status": "unknown"}
         while timer and tunnel.get('status') != "connected":
