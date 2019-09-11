@@ -369,10 +369,24 @@ class SConnect(object):
 
     # Convinience methods.
 
-    def sshtunnel(self, node_id, timeout=15):
-        state = self.getstatus("node/" + node_id).get("state")
-        if state not in ("online", "recovery"):
-            return {"status": state}
+    def sshtunnel(self, node_id, timeout=15, restart=False):
+        r"""Start an sshtunnel for the specified node id.
+        Blocks until tunnel comes up or timeout expires.
+        If restart == True, any existing sshtunnel will be deleted
+        before a new tunnel is established.
+
+        :param str node_id: Response from HTTP request.
+        :param bool restart: Set True to stop an existing tunnel before starting.
+        :returns: Dictionary containing response.
+        :rtype: dict
+        """
+        if not self.getstatus("node/" + node_id).get("state") == "online":
+            return {"status": "offline"}
+        if restart:
+            try:
+                self.delete("sshtunnel/" + node_id)
+            except InvalidResource:
+                pass
         timer = Timer(timeout)
         tunnel = {"status": "unknown"}
         while timer and tunnel.get('status') != "connected":
@@ -382,6 +396,7 @@ class SConnect(object):
                 tunnel = self.post("sshtunnel/" + node_id)
             time.sleep(0.1)
         return tunnel
+
 
     # These handle binary content.
 
