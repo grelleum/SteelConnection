@@ -369,9 +369,10 @@ class SConnect(object):
 
     # Convinience methods.
 
-    def sshtunnel(self, node_id, timeout=15, restart=False):
-        r"""Start an sshtunnel for the specified node id.
+    def sshtunnel(self, node_id, timeout=15, restart=False, stop=False):
+        r"""Start (or stop) an sshtunnel for the specified node id.
         Blocks until tunnel comes up or timeout expires.
+        If stop == True, any existing sshtunnel will be deleted.
         If restart == True, any existing sshtunnel will be deleted
         before a new tunnel is established.
 
@@ -382,11 +383,13 @@ class SConnect(object):
         """
         if not self.getstatus("node/" + node_id).get("state") == "online":
             return {"status": "offline"}
-        if restart:
+        if stop or restart:
             try:
                 self.delete("sshtunnel/" + node_id)
             except InvalidResource:
                 pass
+        if stop:
+            return {}
         timer = Timer(timeout)
         tunnel = {"status": "unknown"}
         while timer and tunnel.get('status') != "connected":
@@ -604,4 +607,3 @@ def _bad_401_return_code_hack(response):
         if isinstance(decoded_json, dict) and "error" in decoded_json:
             return False
         return True
-
