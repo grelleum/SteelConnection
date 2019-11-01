@@ -84,6 +84,16 @@ def test_lookup_find_one_unsuccessful():
 
 
 @responses.activate
+def test_lookup_find():
+    responses.add(get_orgs)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    items = db["orgs"]["items"]
+    value = items[0]["name"]
+    result = sc.lookup.find(domain="orgs", search={"name": value})
+    assert result == items
+
+
+@responses.activate
 def test_lookup_node():
     responses.add(get_nodes)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
