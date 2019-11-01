@@ -54,6 +54,7 @@ db = {
     },
     "image_download": b"abcdefghijklmnopqrstuvwxyz",
     "invalid_status": {},
+    "non_dict": b"[]",
 }
 
 
@@ -83,6 +84,13 @@ get_nonesuch = responses.Response(
     method="GET",
     url="https://some.realm/api/scm.config/1.0/nonesuch",
     body=db["image_download"],
+    status=404,
+)
+
+get_nonesuch_non_dict = responses.Response(
+    method="GET",
+    url="https://some.realm/api/scm.config/1.0/nonesuch",
+    body=db["non_dict"],
     status=404,
 )
 
@@ -340,6 +348,16 @@ def test_received_with_success():
 def test_received_not_ok_and_no_json():
     """Test SConnect.received when response.text is not json formatted."""
     responses.add(get_nonesuch)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    with pytest.raises(RuntimeError):
+        sc.get("nonesuch")
+    assert sc.received == "Status: 404 - Not Found\nError: None"
+
+
+@responses.activate
+def test_received_not_ok_and_non_dict_json():
+    """Test SConnect.received when response.text is not json dict."""
+    responses.add(get_nonesuch_non_dict)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
     with pytest.raises(RuntimeError):
         sc.get("nonesuch")
