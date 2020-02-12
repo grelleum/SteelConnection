@@ -62,7 +62,7 @@ def _download_image(sconnect, nodeid, save_as=None, build=None, quiet=False):
     _stream_download(sconnect, nodeid, source_file, save_as, verbose)
     if sconnect.response.ok:
         locale.setlocale(locale.LC_ALL, "")
-        filesize = locale.format("%d", os.stat(save_as).st_size, grouping=True)
+        filesize = locale.format_string("%d", os.stat(save_as).st_size, grouping=True)
         return {"filename": save_as, "filesize": "{} bytes".format(filesize)}
 
 

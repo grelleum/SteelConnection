@@ -19,6 +19,7 @@ db = {
         "scm_build": "56",
     },
     "info": {"sw_version": "1.23.4", "sw_build": "56", "scm_id": "ABC"},
+    "non_scm_info": {"sw_version": "1.23.4", "sw_build": "56"},
     "orgs": {"items": [{"id": "org-12345", "name": "WineAndCheese"}]},
     "sites": {
         "items": [
@@ -54,6 +55,7 @@ db = {
     },
     "image_download": b"abcdefghijklmnopqrstuvwxyz",
     "invalid_status": {},
+    "non_dict": b"[]",
 }
 
 
@@ -86,6 +88,13 @@ get_nonesuch = responses.Response(
     status=404,
 )
 
+get_nonesuch_non_dict = responses.Response(
+    method="GET",
+    url="https://some.realm/api/scm.config/1.0/nonesuch",
+    body=db["non_dict"],
+    status=404,
+)
+
 get_orgs = responses.Response(
     method="GET",
     url="https://some.realm/api/scm.config/1.0/orgs",
@@ -111,6 +120,13 @@ get_info = responses.Response(
     method="GET",
     url="https://some.realm/api/common/1.0/info",
     json=db["info"],
+    status=200,
+)
+
+get_non_scm_info = responses.Response(
+    method="GET",
+    url="https://some.realm/api/common/1.0/info",
+    json=db["non_scm_info"],
     status=200,
 )
 
@@ -346,6 +362,16 @@ def test_received_not_ok_and_no_json():
     assert sc.received == "Status: 404 - Not Found\nError: None"
 
 
+@responses.activate
+def test_received_not_ok_and_non_dict_json():
+    """Test SConnect.received when response.text is not json dict."""
+    responses.add(get_nonesuch_non_dict)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    with pytest.raises(RuntimeError):
+        sc.get("nonesuch")
+    assert sc.received == "Status: 404 - Not Found\nError: None"
+
+
 def test_scon_realm_when_defined():
     """Test SConnect.realm property when pre-defined."""
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
@@ -388,11 +414,13 @@ def test_scon_make_url():
     assert url == "https://NO.REALM/api/FAKE/999/PATH"
 
 
+#
+
+
 @responses.activate
 def test_scm_version():
     """Test SConnect.scm_version method."""
     responses.add(get_info)
-    # responses.add(get_status)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
     assert sc.scm_version == "1.23.4_56"
 
@@ -403,7 +431,14 @@ def test_scm_version_invalid():
     responses.add(get_invalid_info)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
     assert sc.scm_version == "unavailable"
-    # assert sc.scm_version == 'Not a SteelConnect Manager'
+
+
+@responses.activate
+def test_scm_version_other_riverbed_platform():
+    """Test SConnect.scm_version method when run against another Riverbed product."""
+    responses.add(get_non_scm_info)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    assert sc.scm_version == 'Not a SteelConnect Manager'
 
 
 @responses.activate
@@ -412,6 +447,9 @@ def test_scm_version_unavailable():
     responses.add(get_info_404)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
     assert sc.scm_version == "unavailable"
+
+
+#
 
 
 @responses.activate

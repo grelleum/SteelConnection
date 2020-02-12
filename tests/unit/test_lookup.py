@@ -39,6 +39,17 @@ db = {
             }
         ]
     },
+    "wans": {
+        "items": [
+            {
+                "id": "wan-Internet-34567",
+                "org": "org-12345",
+                "name": "Internet",
+                "longname": "The Internet",
+                "internet": 1,
+            }
+        ]
+    },
 }
 
 
@@ -63,6 +74,13 @@ get_orgs = responses.Response(
     status=200,
 )
 
+get_wans_from_org = responses.Response(
+    method="GET",
+    url="https://some.realm/api/scm.config/1.0/org/org-12345/wans",
+    json=db["wans"],
+    status=200,
+)
+
 
 @responses.activate
 def test_lookup_find_one_successful():
@@ -81,6 +99,16 @@ def test_lookup_find_one_unsuccessful():
     value = "DNE"
     result = sc.lookup.find_one(domain="orgs", search={"name": value})
     assert result is None
+
+
+@responses.activate
+def test_lookup_find():
+    responses.add(get_orgs)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    items = db["orgs"]["items"]
+    value = items[0]["name"]
+    result = sc.lookup.find(domain="orgs", search={"name": value})
+    assert result == items
 
 
 @responses.activate
@@ -122,6 +150,27 @@ def test_lookup_site_without_org():
     key = item["name"]
     with pytest.raises(ValueError):
         sc.lookup.site(key)
+
+
+@responses.activate
+def test_lookup_wan():
+    responses.add(get_orgs)
+    responses.add(get_wans_from_org)
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    item = db["wans"]["items"][0]
+    key = item["name"]
+    org_id = item["org"]
+    result = sc.lookup.wan(key, orgid=org_id)
+    assert result == item
+
+
+@responses.activate
+def test_lookup_wan_without_org():
+    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+    item = db["wans"]["items"][0]
+    key = item["name"]
+    with pytest.raises(ValueError):
+        sc.lookup.wan(key)
 
 
 def test_lookup_model():
