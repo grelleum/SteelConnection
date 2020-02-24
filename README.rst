@@ -1,5 +1,17 @@
 Welcome to SteelConnection!
 ===========================
+
+.. image:: https://img.shields.io/pypi/v/steelconnection.svg
+        :target: https://pypi.python.org/pypi/steelconnection
+
+.. image:: https://readthedocs.org/projects/steelconnection/badge/?version=latest
+        :target: https://steelconnection.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/grelleum/steelconnection/shield.svg
+     :target: https://pyup.io/repos/github/grelleum/steelconnection/
+     :alt: Updates
+
 Simplify access to the Riverbed SteelConnect REST API.
 
 .. code::
