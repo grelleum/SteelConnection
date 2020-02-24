@@ -381,8 +381,10 @@ class SConnect(object):
         :returns: Dictionary containing response.
         :rtype: dict
         """
-        if not self.getstatus("node/" + node_id).get("state") == "online":
-            return {"status": "offline"}
+        node_state = self.getstatus("node/" + node_id).get("state")
+        if node_state in ("offline", "unknown"):
+            return {"status": node_state}
+
         if stop or restart:
             try:
                 self.delete("sshtunnel/" + node_id)
@@ -390,16 +392,16 @@ class SConnect(object):
                 pass
         if stop:
             return {}
+
         timer = Timer(timeout)
         tunnel = {"status": "unknown"}
-        while timer and tunnel.get('status') != "connected":
+        while timer and tunnel.get("status") != "connected":
             try:
                 tunnel = self.get("sshtunnel/" + node_id)
             except InvalidResource:
                 tunnel = self.post("sshtunnel/" + node_id)
             time.sleep(0.1)
         return tunnel
-
 
     # These handle binary content.
 
