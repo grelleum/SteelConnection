@@ -8,10 +8,6 @@ Welcome to SteelConnection!
         :target: https://steelconnection.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/grelleum/steelconnection/shield.svg
-     :target: https://pyup.io/repos/github/grelleum/steelconnection/
-     :alt: Updates
-
 Simplify access to the Riverbed SteelConnect REST API.
 
 .. code::
