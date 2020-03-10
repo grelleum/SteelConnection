@@ -385,6 +385,7 @@ class SConnect(object):
         if node_state in ("offline", "unknown"):
             return {"status": node_state}
 
+        # Delete existing tunnel is requested.
         if stop or restart:
             try:
                 self.delete("sshtunnel/" + node_id)
@@ -392,6 +393,11 @@ class SConnect(object):
                 pass
         if stop:
             return {}
+
+        # Verfiy tunnel has stopped before attempting to start new one.
+        timer = Timer(timeout)
+        while restart and timer and self.get("sshtunnel/" + node_id):
+            time.sleep(0.1)
 
         timer = Timer(timeout)
         tunnel = {"status": "unknown"}
