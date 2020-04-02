@@ -28,11 +28,10 @@ import logging
 import json
 import sys
 import time
-import warnings
 
 import requests
 
-from .__version__ import __version__
+from .about import version as __version__
 from .exceptions import AuthenticationError, APINotEnabled
 from .exceptions import BadRequest, ResourceGone, InvalidResource
 from .image_download import _download_image
