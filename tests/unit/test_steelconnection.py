@@ -513,20 +513,20 @@ def test_scon_get_result_not_ok_with_body():
     assert sc._get_result(sc.response) == json.loads(sc.response.text)
 
 
-@responses.activate
-def test_scon_get_result_octet_stream():
-    """Test SConnect._get_result method."""
-    responses.add(get_image)
-    sc = steelconnection.SConnect("some.realm", connection_attempts=0)
-    sc.get("image")
-    assert sc._get_result(sc.response) == {
-        "status": " ".join(
-            (
-                "Binary data returned.",
-                "Use '.savefile(filename)' method or access using '.response.content'.",
-            )
-        )
-    }
+# @responses.activate
+# def test_scon_get_result_octet_stream():
+#     """Test SConnect._get_result method."""
+#     responses.add(get_image)
+#     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
+#     sc.get("image")
+#     assert sc._get_result(sc.response) == {
+#         "status": " ".join(
+#             (
+#                 "Binary data returned.",
+#                 "Use '.savefile(filename)' method or access using '.response.content'.",
+#             )
+#         )
+#     }
 
 
 @responses.activate
