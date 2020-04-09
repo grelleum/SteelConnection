@@ -11,9 +11,9 @@ Welcome to SteelConnection!
 .. image:: https://img.shields.io/travis/grelleum/steelconnection.svg
         :target: https://travis-ci.com/grelleum/steelconnection
 
-.. image:: https://codecov.io/github/grelleum/steelconnection/coverage.svg?branch=develop
-   :target: https://codecov.io/github/grelleum/steelconnection?branch=develop
-   :alt: Code Coverage
+.. image:: https://codecov.io/gh/grelleum/steelconnection/branch/develop/graph/badge.svg
+  :target: https://codecov.io/gh/grelleum/steelconnection
+
 
 Simplify access to the Riverbed SteelConnect REST API.
 
