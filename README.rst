@@ -8,6 +8,11 @@ Welcome to SteelConnection!
         :target: https://steelconnection.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://img.shields.io/travis/grelleum/steelconnection.svg
+        :target: https://travis-ci.com/grelleum/steelconnection
+
+
+
 Simplify access to the Riverbed SteelConnect REST API.
 
 .. code::
