@@ -24,10 +24,6 @@ def test_import_dunder_all():
     set(steelconnection.__all__) == expected
 
 
-def test_import_about():
-    assert isinstance(steelconnection.about(), str)
-
-
 def test_import_on_command_line():
     output = subprocess.check_output("python -m steelconnection", shell=True)
     output = output.decode()
