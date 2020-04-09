@@ -16,7 +16,7 @@ script:
   tox
 
 before_install:
-  pip install codecov
+  pip install codecov coverage==4.5.4
 
 after_success:
   codecov
