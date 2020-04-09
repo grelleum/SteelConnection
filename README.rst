@@ -12,7 +12,7 @@ Welcome to SteelConnection!
         :target: https://travis-ci.com/grelleum/steelconnection
 
 .. image:: https://codecov.io/gh/grelleum/steelconnection/branch/develop/graph/badge.svg
-  :target: https://codecov.io/gh/grelleum/steelconnection
+        :target: https://codecov.io/gh/grelleum/steelconnection
 
 
 Simplify access to the Riverbed SteelConnect REST API.
