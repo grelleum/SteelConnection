@@ -24,15 +24,15 @@ def test_import_dunder_all():
     set(steelconnection.__all__) == expected
 
 
-# def test_import_on_command_line():
-#     output = subprocess.check_output("python -m steelconnection", shell=True)
-#     output = output.decode()
-#     lines = [
-#         steelconnection.ASCII_ART,
-#         "Python version: " + ".".join(str(x) for x in sys.version_info[:3]),
-#         "SteelConnection version: " + steelconnection.__version__,
-#         "Documentation: " + steelconnection.__documentation__,
-#         "Project home:  " + steelconnection.__url__,
-#     ]
-#     expected = u"\n".join(lines) + "\n\n"
-#     assert repr(output) == repr(expected)
+def test_import_on_command_line():
+    output = subprocess.check_output("python -m steelconnection", shell=True)
+    output = output.decode()
+    lines = [
+        steelconnection.ASCII_ART,
+        "Python version: " + ".".join(str(x) for x in sys.version_info[:3]),
+        "SteelConnection version: " + steelconnection.version,
+        "Documentation: " + steelconnection.about.documentation,
+        "Project home:  " + steelconnection.about.project_home,
+    ]
+    expected = u"\n".join(lines) + "\n\n"
+    assert repr(output) == repr(expected)
