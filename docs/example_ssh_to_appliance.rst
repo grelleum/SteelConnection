@@ -43,10 +43,10 @@ ssh_to_appliance.py
    commands = ["ip -4 a", "lpm routes"]
    
    
-   def main(argv):
+   def main():
        """SSH to appliances and run commands."""
    
-       sc = steelconnection.SConnect(realm)
+       sc = steelconnection.SConnect(REALM)
    
        for appliance in appliances:
    
@@ -57,8 +57,8 @@ ssh_to_appliance.py
            tunnel = sc.sshtunnel(node_id)
    
            # Setup proxy command for Paramiko
-           hostname = f"{appliance}.{realm}"
-           proxy_command = f"nc -X connect -x {realm}:3903 {hostname} 22"
+           hostname = f"{appliance}.{REALM}"
+           proxy_command = f"nc -X connect -x {REALM}:3903 {hostname} 22"
    
            # Create a scoket for the proxied connection.
            sock = paramiko.proxy.ProxyCommand(proxy_command)
@@ -82,6 +82,6 @@ ssh_to_appliance.py
    
    
    if __name__ == "__main__":
-       result = main(sys.argv[1:])
+       main()
    
    
