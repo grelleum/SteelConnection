@@ -6,8 +6,8 @@ Change version number in this file and execute.
 
 import re
 
-version = "1.1.7"
-print("VERSION:", version)
+version = "1.1.8"
+print('"version: {}"'.format(version))
 
 
 py_regex = re.compile(r"version = \"\d+\.[\d\.]+[a-z]?\"")

@@ -4,7 +4,7 @@ import re
 
 name = "steelconnection"
 description = "Simplify access to the Riverbed SteelConnect CX REST API."
-version = "1.1.7"
+version = "1.1.8"
 author = "Greg Mueller"
 author_email = "steelconnection@grelleum.com"
 copyright = "Copyright 2018-2020 Greg Mueller"
