@@ -14,14 +14,15 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+
+sys.path.insert(0, os.path.abspath(".."))
 
 import steelconnection
 
 # -- Project information -----------------------------------------------------
 
 project = "SteelConnection"
-copyright = "2018, 2019, Greg Mueller"
+copyright = "2018-2020 Greg Mueller"
 author = "Greg Mueller"
 
 # The short X.Y version
