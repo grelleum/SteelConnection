@@ -438,7 +438,7 @@ def test_scm_version_other_riverbed_platform():
     """Test SConnect.scm_version method when run against another Riverbed product."""
     responses.add(get_non_scm_info)
     sc = steelconnection.SConnect("some.realm", connection_attempts=0)
-    assert sc.scm_version == 'Not a SteelConnect Manager'
+    assert sc.scm_version == 'Not a SteelConnect CX Manager'
 
 
 @responses.activate
