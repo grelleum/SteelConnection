@@ -9,3 +9,4 @@ Convenience methods and functions are available to accomplish common tasks.
    lookup.rst
    image_download.rst
    input_tools.rst
+   sshtunnel.rst
