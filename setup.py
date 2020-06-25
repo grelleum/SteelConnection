@@ -42,32 +42,3 @@ setup(
         "Operating System :: OS Independent",
     ],
 )
-
-
-# info = {
-#     "name": name,
-#     "description": description,
-#     "version": version,
-#     "author": author,
-#     "author_email": author_email,
-#     "license": license,
-#     "url": project_home,
-#     "long_description_content_type": "text/x-rst",
-#     "long_description": long_description,
-#     "install_requires": ["requests>=2.12.1"],
-#     "keywords": ["SteelConnect CX", "REST", "API", "Riverbed", "Grelleum"],
-#     "packages": ["steelconnection"],
-#     "classifiers": [
-#         "Programming Language :: Python :: 2",
-#         "Programming Language :: Python :: 2.7",
-#         "Programming Language :: Python :: 3",
-#         "Programming Language :: Python :: 3.5",
-#         "Programming Language :: Python :: 3.6",
-#         "Programming Language :: Python :: 3.7",
-#         "Programming Language :: Python :: 3.8",
-#         "License :: OSI Approved :: MIT License",
-#         "Operating System :: OS Independent",
-#     ],
-# }
-
-# setup(**info)
