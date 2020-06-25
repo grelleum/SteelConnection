@@ -12,7 +12,7 @@ virtual_image_download.py
    #
    #
    # SteelConnection
-   # Simplify access to the Riverbed SteelConnect REST API.
+   # Simplify access to the Riverbed SteelConnect CX REST API.
    #
    # https://pypi.org/project/steelconnection
    # https://github.com/grelleum/SteelConnection

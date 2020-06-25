@@ -29,10 +29,10 @@ Here is how code and errors should be posted when opening an issue on GitHub:
 
 
 
-SteelConnect API Reference:
+SteelConnect CX API Reference:
 ---------------------------
 
-The SteelConnect API is documented as two APIs:
+The SteelConnect CX API is documented as two APIs:
 
 | Config API: Read and change configuration.
 | https://support.riverbed.com/apis/scm_beta/scm-2.11.0/scm.config/index.html

@@ -4,7 +4,7 @@ Lookup
 
 Lookup methods provide simplified ways of finding objects.
 
-The SteelConnect Manager stores resources in a database with a uniquie
+The SteelConnect CX Manager stores resources in a database with a uniquie
 identifier (id). Many API calls require that you know the id number of
 the resource you are interested in, which you might not know off hand.
 SteelConnection provides a collection of ``lookup`` functions to look
@@ -22,7 +22,7 @@ These are the available lookup functions:
    <object>.lookup.model(model)
 
 These functions are accessed directly from the object you created and
-are specific to the SteelConnect API.
+are specific to the SteelConnect CX API.
 
 
 Lookup Organization

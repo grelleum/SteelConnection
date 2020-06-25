@@ -12,13 +12,13 @@ get_ports.py
    #
    #
    # SteelConnection
-   # Simplify access to the Riverbed SteelConnect REST API.
+   # Simplify access to the Riverbed SteelConnect CX REST API.
    #
    # https://pypi.org/project/steelconnection
    # https://github.com/grelleum/SteelConnection
    
    
-   """List port information for a SteelConnect appliance."""
+   """List port information for a SteelConnect CX appliance."""
    
    from __future__ import print_function
    

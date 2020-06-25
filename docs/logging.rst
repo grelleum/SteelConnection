@@ -12,7 +12,7 @@ of your script.
    logger = logging.getLogger(__name__)
 
 This will provide details on what has been sent to and received from the
-SteelConnect manager.
+SteelConnect CX manager.
 
 The code above will display logging to standard output (the screen).
 Here is alternative code that can be used to log to a file:

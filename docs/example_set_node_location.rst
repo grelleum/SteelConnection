@@ -14,13 +14,13 @@ set_node_location.py
    #
    #
    # SteelConnection
-   # Simplify access to the Riverbed SteelConnect REST API.
+   # Simplify access to the Riverbed SteelConnect CX REST API.
    #
    # https://pypi.org/project/steelconnection
    # https://github.com/grelleum/SteelConnection
    
    
-   """Update SteelConnect nodes within a specified Org
+   """Update SteelConnect CX nodes within a specified Org
    by copying the site name to the location field
    for those nodes where the location is unset.
    
@@ -104,18 +104,18 @@ set_node_location.py
    def arguments(argv):
        """Get command line arguments."""
        description = (
-           "Update SteelConnect nodes within a specified Org "
+           "Update SteelConnect CX nodes within a specified Org "
            "by copying the site name to the location field "
            "for those nodes where the location is unset."
        )
        parser = argparse.ArgumentParser(description=description)
-       parser.add_argument("realm", type=str, help="Domain name of SteelConnect Manager")
+       parser.add_argument("realm", type=str, help="Domain name of SteelConnect CX Manager")
        parser.add_argument("organization", type=str, help="Name of target organization")
        parser.add_argument(
-           "-u", "--username", help="Username for SteelConnect Manager (optional)"
+           "-u", "--username", help="Username for SteelConnect CX Manager (optional)"
        )
        parser.add_argument(
-           "-p", "--password", help="Password for SteelConnect Manager (optional)"
+           "-p", "--password", help="Password for SteelConnect CX Manager (optional)"
        )
        return parser.parse_args()
    

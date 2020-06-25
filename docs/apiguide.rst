@@ -4,14 +4,14 @@ API Guide
 Realms and Organizations
 ------------------------
 
-There is a one to one relationship between a Realm and a SteelConnect
-Manager. The SteelConnect Manager acts as the controller for a the
+There is a one to one relationship between a Realm and a SteelConnect CX
+Manager. The SteelConnect CX Manager acts as the controller for a the
 realm. A newly created realm would not have any organizations, otherwise
 a realm will have one or more organizations. Each oganization within a
 realm acts an autonomous network system. In practice, most REST API
 operations are performed within a specific organization.
 
-| You normally access the SteelConnect Manager (SCM) using a web
+| You normally access the SteelConnect CX Manager (SCM) using a web
   browser.
 | The URL you use includes the realm and organization that you are
   managing and takes the form:
@@ -23,8 +23,8 @@ operations are performed within a specific organization.
 Understanding the API
 ---------------------
 
-The Riverbed SteelConnect REST API allows HTTPS access to the
-SteelConnect Manager (SCM) via the use of GET, POST, PUT, and DELETE
+The Riverbed SteelConnect CX REST API allows HTTPS access to the
+SteelConnect CX Manager (SCM) via the use of GET, POST, PUT, and DELETE
 commands. SteelConneciton (this module) acts to simplify coding by
 providing an object that remembers your realm, version, and
 authentication and builds the HTTPS requests based on that information.
@@ -53,7 +53,7 @@ A Tale of Two APIs
 ------------------
 
 | Riverbed divides the REST API into two APIs: \* Config: used to make
-  configurations changes and get information about SteelConnect
+  configurations changes and get information about SteelConnect CX
   resources.
 | https://support.riverbed.com/apis/scm_beta/scm-2.11.1/scm.config/index.html
   \* Reporting: used to get current status information about a resource.
@@ -110,7 +110,7 @@ a native Python dictionary (``isinstance(data, dict)``). The Riverbed
 documentation will specify the format of the data as a “Model Schema”.
 Not everything listed in the model schema is required. Generally, you
 can determine the minimum required data by checking the equivalent
-function in SteelConnect Manager web GUI.
+function in SteelConnect CX Manager web GUI.
 
 
 Retrieving Data

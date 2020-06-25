@@ -3,7 +3,7 @@ about.py
 """
 
 name = "steelconnection"
-description = "Simplify access to the Riverbed SteelConnect REST API."
+description = "Simplify access to the Riverbed SteelConnect CX REST API."
 version = "1.1.7"  # update via bump_version.py
 author = "Greg Mueller"
 author_email = "steelconnection@grelleum.com"

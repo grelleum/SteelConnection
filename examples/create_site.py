@@ -7,7 +7,7 @@
 #
 #
 # SteelConnection
-# Simplify access to the Riverbed SteelConnect REST API.
+# Simplify access to the Riverbed SteelConnect CX REST API.
 #
 # https://pypi.org/project/steelconnection
 # https://github.com/grelleum/SteelConnection
@@ -19,7 +19,7 @@ from pprint import pprint
 import steelconnection
 
 # Change the below values to match the realm and org
-# as seen in the URL for your SteelConnect Manager.
+# as seen in the URL for your SteelConnect CX Manager.
 # for example:  https://realm.riverbed.cc/admin/TestLab
 scm_name = "realm.riverbed.cc"
 org_name = "TestLab"

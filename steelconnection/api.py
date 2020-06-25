@@ -3,7 +3,7 @@
 """SteelConnection
 
 Convienience objects for making REST API calls
-to Riverbed SteelConnect Manager.
+to Riverbed SteelConnect CX Manager.
 
 Usage:
     sc = steelconnection.SConnect(scm_name, username, password)
@@ -58,11 +58,11 @@ logger = logging.getLogger(__name__)
 
 
 class SConnect(object):
-    r"""Make REST API calls to Riverbed SteelConnect Manager.
+    r"""Make REST API calls to Riverbed SteelConnect CX Manager.
 
     Attributes:
-        realm (str): FQDN of SteelConnect Manager.
-        api_version (str): SteelConnect Manager REST API version.
+        realm (str): FQDN of SteelConnect CX Manager.
+        api_version (str): SteelConnect CX Manager REST API version.
         ascii_art (str): Project logo.
         timeout (float or tuple): Timeout values for requests.
         result: Contains last result returned from a request.
@@ -85,7 +85,7 @@ class SConnect(object):
         r"""Initialize a new steelconnection object.
 
         Args:
-            realm (str): (optional) FQDN of SteelConnect Manager.
+            realm (str): (optional) FQDN of SteelConnect CX Manager.
             username (str): (optional) Admin account name.
             password (str): (optional) Admin account password.
             use_netrc (bool): (optional) Get credentials from .netrc file.
@@ -155,7 +155,7 @@ class SConnect(object):
 
     def _get_realm(self, realm, connection_attempts):
         """Prompt user for realm if not supplied."""
-        prompt = "Enter SteelConnect Manager fully qualified domain name: "
+        prompt = "Enter SteelConnect CX Manager fully qualified domain name: "
         if realm:
             return realm
         for _ in range(connection_attempts):
@@ -169,13 +169,13 @@ class SConnect(object):
                 print("Error:", e)
                 print("Cannot connect to", realm)
             except InvalidResource as e:
-                # Connected to a webserver, but not SteelConnect.
+                # Connected to a webserver, but not SteelConnect CX.
                 print(e)
-                print(realm, "is not a SteelConnect Manager.")
+                print(realm, "is not a SteelConnect CX Manager.")
             except AuthenticationError:
                 return realm
         else:
-            error = "Could not connect to SteelConnect Manager."
+            error = "Could not connect to SteelConnect CX Manager."
             raise RuntimeError(error)
 
     def _set_session_auth(self, username, password, connection_attempts):
@@ -199,7 +199,7 @@ class SConnect(object):
     # Primary methods:
 
     def get(self, resource, params=None, api="scm.config"):
-        r"""Send a GET request to the SteelConnect.Config API.
+        r"""Send a GET request to the SteelConnect CX.Config API.
 
         :param str resource: api resource to get.
         :param dict params: (optional) Dictionary of query parameters.
@@ -217,7 +217,7 @@ class SConnect(object):
         return self.result
 
     def getstatus(self, resource, params=None):
-        r"""Send a GET request to the SteelConnect.Reporting API.
+        r"""Send a GET request to the SteelConnect CX.Reporting API.
 
         :param str resource: api resource to get.
         :param dict params: (optional) Dictionary of query parameters.
@@ -227,7 +227,7 @@ class SConnect(object):
         return self.get(resource, params, api="scm.reporting")
 
     def delete(self, resource, data=None, params=None, api="scm.config"):
-        r"""Send a DELETE request to the SteelConnect.Config API.
+        r"""Send a DELETE request to the SteelConnect CX.Config API.
 
         :param str resource: api resource to get.
         :param dict data: (optional) Dictionary of 'body' data to be sent.
@@ -247,7 +247,7 @@ class SConnect(object):
         return self.result
 
     def post(self, resource, data=None, api="scm.config"):
-        r"""Send a POST request to the SteelConnect.Config API.
+        r"""Send a POST request to the SteelConnect CX.Config API.
 
         :param str resource: api resource to get.
         :param dict data: (optional) Dictionary of 'body' data to be sent.
@@ -265,7 +265,7 @@ class SConnect(object):
         return self.result
 
     def put(self, resource, data=None, params=None, api="scm.config"):
-        r"""Send a PUT request to the SteelConnect.Config API.
+        r"""Send a PUT request to the SteelConnect CX.Config API.
 
         :param str resource: api resource to get.
         :param dict data: (optional) Dictionary of 'body' data to be sent.
@@ -431,9 +431,9 @@ class SConnect(object):
 
     @property
     def scm_version(self):
-        """Return version and build number of SteelConnect Manager.
+        """Return version and build number of SteelConnect CX Manager.
 
-        :returns: SteelConnect Manager version and build number.
+        :returns: SteelConnect CX Manager version and build number.
         :rtype: str
         """
         if self.__scm_version is None:
@@ -444,7 +444,7 @@ class SConnect(object):
                 self.__scm_version = "unavailable"
             else:
                 if not info.get("scm_id"):
-                    self.__scm_version = "Not a SteelConnect Manager"
+                    self.__scm_version = "Not a SteelConnect CX Manager"
         return self.__scm_version
 
     @property

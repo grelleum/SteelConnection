@@ -4,7 +4,7 @@ Getting Started
 Prerequisites
 -------------
 
--  Make sure the REST API is enabled on your SteelConnect realm before
+-  Make sure the REST API is enabled on your SteelConnect CX realm before
    trying to access the REST API.
 
 -  Use pip to install steelconnection as shown above.

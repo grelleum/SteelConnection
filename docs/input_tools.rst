@@ -2,7 +2,7 @@ Input functions
 ===============
 
 These functions are accessed directly from the imported module and can
-be used independently of the SteelConnect API.
+be used independently of the SteelConnect CX API.
 
 Get Input
 ---------

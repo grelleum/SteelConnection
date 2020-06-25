@@ -1,7 +1,7 @@
 Authentication
 ==============
 
-SteelConnect REST API version 1.0 uses 'Basic Auth', which requires
+SteelConnect CX REST API version 1.0 uses 'Basic Auth', which requires
 a username and password are required for every request made.
 The steelconnection object can store the username and pssword for you,
 or you can use a .netrc file as detailed below.
@@ -91,7 +91,7 @@ making a ‘status’ call against the REST API.
 
    >>> import steelconnection
    >>> sc = steelconnection.SConnect()
-   Enter SteelConnect Manager fully qualified domain name: REALM.riverbed.cc
+   Enter SteelConnect CX Manager fully qualified domain name: REALM.riverbed.cc
    Enter username: admin
    Enter password:
    >>>

@@ -7,7 +7,7 @@ IP address on the uplinks and deploy a virtual gateway to that site.
 Finding the realm and org name
 ------------------------------
 
-When you manage an organization in the SteelConnect Manager via a web browser,
+When you manage an organization in the SteelConnect CX Manager via a web browser,
 the URL will look something like this:
 
 https://<REALM_FQDN>/admin/<ORG_SHORT_NAME>
@@ -36,7 +36,7 @@ Find the ID for our Organization
 --------------------------------
 
 We need to know the Org ID for our Organization.  This is easy since we got
-the Org short name from the SteelConnect URL.
+the Org short name from the SteelConnect CX URL.
 
 The ``.lookup.org`` method will return a dictionary representing the org
 object.  That dictionary will include a key called ``id`` that holds the
@@ -99,13 +99,13 @@ uplink, we can access the uplink ID using index zero.
    # Get the uplink ID from the site object, index 0.
    uplink_id = site['uplinks'][0]
 
-   # Get uplink object from SteelConnect Manager.
+   # Get uplink object from SteelConnect CX Manager.
    uplink = sc.get('uplink/' + uplink_id)
 
 Next, we will change the uplink type from 'dhcp' to 'static', and configure
 an IP address and default gateway.  The change we are making is to the
 local dictionary object, so we will need to upload the changes to the
-SteelConnect Manager.
+SteelConnect CX Manager.
 
 .. code:: python
 
@@ -130,7 +130,7 @@ that model, as well as the site ID.
    # Create dictionary with minimum required information.
    new_node = { 'site': site['id'], 'model': 'yogi' }
 
-   # POST request to SteelConnect Manager.
+   # POST request to SteelConnect CX Manager.
    node = sc.post('/org/' + org_id + '/node/virtual/register', data=new_node)
 
 
@@ -158,7 +158,7 @@ The zone will be assigned to the network interface.
    # we take the first one (index zero).
    net_id = site['networks'][0]
 
-   # Retreive the network from SteelConnect Manager.
+   # Retreive the network from SteelConnect CX Manager.
    network = sc.get('/network/' + net_id)
 
    # Get Zone ID from the network object.
@@ -169,7 +169,7 @@ The zone will be assigned to the network interface.
    # Note that since indexes start at zero, the third port is at index '2'.
    port_id = node['ports'][2]
 
-   # Retreive the port from SteelConnect Manager.
+   # Retreive the port from SteelConnect CX Manager.
    port = sc.get('/port/' + port_id)
 
    # Set the 'segment' key to the zone ID.
@@ -179,7 +179,7 @@ The zone will be assigned to the network interface.
    # It should already be disabled, since that it the default state.
    port['tagged'] = 0
 
-   # Upload port to the SteelConnect Manager.
+   # Upload port to the SteelConnect CX Manager.
    result = sc.put('/port/' + port_id, data=port)
 
 
