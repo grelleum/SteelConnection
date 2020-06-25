@@ -77,5 +77,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    result = main(sys.argv[1:])
+    main()
 
