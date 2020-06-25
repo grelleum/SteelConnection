@@ -3,7 +3,7 @@ import re
 
 
 name = "steelconnection"
-description = "Simplify access to the Riverbed SteelConnect REST API."
+description = "Simplify access to the Riverbed SteelConnect CX REST API."
 version = "1.1.7"
 author = "Greg Mueller"
 author_email = "steelconnection@grelleum.com"
@@ -28,7 +28,7 @@ setup(
     long_description_content_type="text/x-rst",
     long_description=long_description,
     install_requires=["requests>=2.12.1"],
-    keywords=["SteelConnect", "REST", "API", "Riverbed", "Grelleum"],
+    keywords=["SteelConnect CX", "REST", "API", "Riverbed", "Grelleum"],
     packages=["steelconnection"],
     classifiers=[
         "Programming Language :: Python :: 2",
@@ -55,7 +55,7 @@ setup(
 #     "long_description_content_type": "text/x-rst",
 #     "long_description": long_description,
 #     "install_requires": ["requests>=2.12.1"],
-#     "keywords": ["SteelConnect", "REST", "API", "Riverbed", "Grelleum"],
+#     "keywords": ["SteelConnect CX", "REST", "API", "Riverbed", "Grelleum"],
 #     "packages": ["steelconnection"],
 #     "classifiers": [
 #         "Programming Language :: Python :: 2",

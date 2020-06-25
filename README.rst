@@ -15,7 +15,7 @@ Welcome to SteelConnection!
         :target: https://codecov.io/gh/grelleum/steelconnection
 
 
-Simplify access to the Riverbed SteelConnect REST API.
+Simplify access to the Riverbed SteelConnect CX REST API.
 
 .. code::
 
