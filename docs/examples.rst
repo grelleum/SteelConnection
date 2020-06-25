@@ -9,5 +9,6 @@ Examples scripts to get you started.
    example_create_site.rst
    example_get_ports.rst
    example_set_node_location.rst
+   example_ssh_to_appliance.rst
    example_virtual_image_download.rst
 
