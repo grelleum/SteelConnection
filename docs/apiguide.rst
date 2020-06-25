@@ -61,7 +61,7 @@ A Tale of Two APIs
 
 By nature, the Reporting API only requires the HTTP GET method, where-as
 the more commonly used Confg API requires GET, POST, PUT and DELETE.
-SteelConnections combines the two APIs by implementing ``.get``,
+SteelConnection combines the two APIs by implementing ``.get``,
 ``.post``, ``.put``, and ``.delete`` methods to access to Config API and
 the ``.getstatus`` method to access the Reporting API.
 
