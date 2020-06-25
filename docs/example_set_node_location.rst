@@ -7,11 +7,12 @@ set_node_location.py
    
    # coding: utf-8
    
-   #    ______          _______                       __  _
-   #   / __/ /____ ___ / / ___/__  ___  ___  ___ ____/ /_(_)__  ___
-   #  _\ \/ __/ -_) -_) / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
-   # /___/\__/\__/\__/_/\___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
-   #
+   #         ______          __
+   #        / __/ /____ ___ / /
+   #    ____\ \/ __/ -_) -_) /      __  _
+   #   / _____/\__/\__/\__/_/_ ____/ /_(_)__  ___
+   #  / /__/ _ \/ _ \/ _ \/ -_) __/ __/ / _ \/ _ \
+   #  \___/\___/_//_/_//_/\__/\__/\__/_/\___/_//_/
    #
    # SteelConnection
    # Simplify access to the Riverbed SteelConnect CX REST API.
@@ -109,7 +110,9 @@ set_node_location.py
            "for those nodes where the location is unset."
        )
        parser = argparse.ArgumentParser(description=description)
-       parser.add_argument("realm", type=str, help="Domain name of SteelConnect CX Manager")
+       parser.add_argument(
+           "realm", type=str, help="Domain name of SteelConnect CX Manager"
+       )
        parser.add_argument("organization", type=str, help="Name of target organization")
        parser.add_argument(
            "-u", "--username", help="Username for SteelConnect CX Manager (optional)"
